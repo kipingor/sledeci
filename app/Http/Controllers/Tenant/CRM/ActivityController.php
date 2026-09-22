@@ -1,66 +1,60 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Tenant\CRM;
 
-use App\Http\Requests\StoreActivityRequest;
-use App\Http\Requests\UpdateActivityRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\CRM\StoreActivityRequest;
 use App\Models\Activity;
+use App\Models\Contact;
+use App\Models\Deal;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class ActivityController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Log an activity against a contact or deal.
+     * The actable is determined by ?for=contact,{id} or ?for=deal,{id}.
      */
-    public function index()
+    public function store(StoreActivityRequest $request): RedirectResponse
     {
-        //
+        $data = $request->validated();
+
+        [$type, $id] = explode(',', $request->input('for', ','));
+
+        if ($type === 'contact') {
+            $actable = Contact::findOrFail((int) $id);
+        } elseif ($type === 'deal') {
+            $actable = Deal::findOrFail((int) $id);
+        } else {
+            abort(422, 'Invalid actable type.');
+        }
+
+        $activity = new Activity($data);
+        $activity->owner_id = $data['owner_id'] ?? auth()->id();
+        $actable->activities()->save($activity);
+
+        return back()->with('success', 'Activity logged.');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function update(Request $request, Activity $activity): RedirectResponse
     {
-        //
+        $activity->update($request->only(['subject', 'body', 'due_at', 'done_at']));
+
+        return back()->with('success', 'Activity updated.');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreActivityRequest $request)
+    public function markDone(Activity $activity): RedirectResponse
     {
-        //
+        $activity->markDone();
+
+        return back()->with('success', 'Activity marked as done.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Activity $activity)
+    public function destroy(Activity $activity): RedirectResponse
     {
-        //
-    }
+        $activity->delete();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Activity $activity)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateActivityRequest $request, Activity $activity)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Activity $activity)
-    {
-        //
+        return back()->with('success', 'Activity deleted.');
     }
 }

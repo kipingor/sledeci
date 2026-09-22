@@ -2,9 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Stancl\Tenancy\Database\Models\Domain as BaseDomain;
 
-class Domain extends Model
+/**
+ * Central (platform-level) Domain model.
+ *
+ * @property int $id
+ * @property string $domain
+ * @property string $tenant_id
+ */
+class Domain extends BaseDomain
 {
     //
 }

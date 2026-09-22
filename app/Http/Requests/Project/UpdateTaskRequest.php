@@ -3,7 +3,9 @@
 namespace App\Http\Requests\Project;
 
 use Illuminate\Contracts\Validation\ValidationRule;
+use App\Models\Task;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateTaskRequest extends FormRequest
 {
@@ -12,7 +14,7 @@ class UpdateTaskRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,8 +24,19 @@ class UpdateTaskRequest extends FormRequest
      */
     public function rules(): array
     {
+        $tenantId = tenancy()->tenant?->getTenantKey();
+        $task = $this->route('task');
+        $projectId = $task?->project_id;
+
         return [
-            //
+            'title'          => ['required', 'string', 'max:255'],
+            'description'    => ['nullable', 'string', 'max:10000'],
+            'status'         => ['required', Rule::in(Task::STATUSES)],
+            'priority'       => ['required', Rule::in(Task::PRIORITIES)],
+            'start_date'     => ['nullable', 'date'],
+            'due_date'       => ['nullable', 'date', 'after_or_equal:start_date'],
+            'assignee_id'    => ['nullable', Rule::exists('users', 'id')->where('tenant_id', $tenantId)],
+            'parent_task_id' => ['nullable', Rule::exists('tasks', 'id')->where('tenant_id', $tenantId)->where('project_id', $projectId)],
         ];
     }
 }
