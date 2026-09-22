@@ -13,7 +13,7 @@ class DashboardController extends Controller
     {
         $tenant = tenancy()->initialized ? tenancy()->tenant : null;
 
-        return Inertia::render('Dashboard/Index', [
+        return Inertia::render('dashboard/index', [
             'tenant' => $tenant ? [
                 'name' => $tenant->name,
                 'plan' => $tenant->plan,

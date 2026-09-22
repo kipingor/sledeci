@@ -37,7 +37,7 @@ class DealController extends Controller
                     ->get();
             }
 
-            return Inertia::render('CRM/Deals/Pipeline', [
+            return Inertia::render('crm/deals/pipeline', [
                 'byStage'     => $byStage,
                 'stages'      => Deal::STAGES,
                 'teamMembers' => User::select('id', 'name')->get(),
@@ -46,7 +46,7 @@ class DealController extends Controller
             ]);
         }
 
-        return Inertia::render('CRM/Deals/Index', [
+        return Inertia::render('crm/deals/index', [
             'deals'       => $query->latest()->paginate(20)->withQueryString(),
             'stages'      => Deal::STAGES,
             'teamMembers' => User::select('id', 'name')->get(),
@@ -56,7 +56,7 @@ class DealController extends Controller
 
     public function create(): Response
     {
-        return Inertia::render('CRM/Deals/Form', [
+        return Inertia::render('crm/deals/form', [
             'contacts'    => Contact::select('id', 'first_name', 'last_name')->get()->map(fn ($c) => ['id' => $c->id, 'name' => $c->full_name]),
             'companies'   => Company::select('id', 'name')->orderBy('name')->get(),
             'teamMembers' => User::select('id', 'name')->get(),
@@ -79,7 +79,7 @@ class DealController extends Controller
     {
         $deal->load(['contact', 'company', 'owner', 'activities.owner']);
 
-        return Inertia::render('CRM/Deals/Show', [
+        return Inertia::render('crm/deals/show', [
             'deal'          => $deal,
             'stages'        => Deal::STAGES,
             'activityTypes' => ['call', 'email', 'meeting', 'note', 'task'],
@@ -88,7 +88,7 @@ class DealController extends Controller
 
     public function edit(Deal $deal): Response
     {
-        return Inertia::render('CRM/Deals/Form', [
+        return Inertia::render('crm/deals/form', [
             'deal'        => $deal,
             'contacts'    => Contact::select('id', 'first_name', 'last_name')->get()->map(fn ($c) => ['id' => $c->id, 'name' => $c->full_name]),
             'companies'   => Company::select('id', 'name')->orderBy('name')->get(),

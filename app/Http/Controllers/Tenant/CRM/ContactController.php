@@ -30,7 +30,7 @@ class ContactController extends Controller
             ->when($request->input('owner_id'), fn ($q, $id) => $q->where('owner_id', $id))
             ->latest();
 
-        return Inertia::render('CRM/Contacts/Index', [
+        return Inertia::render('crm/contacts/index', [
             'contacts'  => $query->paginate(20)->withQueryString(),
             'stages'    => ['lead', 'prospect', 'customer', 'churned'],
             'filters'   => $request->only(['search', 'stage', 'owner_id']),
@@ -40,7 +40,7 @@ class ContactController extends Controller
 
     public function create(): Response
     {
-        return Inertia::render('CRM/Contacts/Form', [
+        return Inertia::render('crm/contacts/form', [
             'companies'   => Company::select('id', 'name')->orderBy('name')->get(),
             'teamMembers' => User::select('id', 'name')->get(),
             'stages'      => ['lead', 'prospect', 'customer', 'churned'],
@@ -63,7 +63,7 @@ class ContactController extends Controller
     {
         $contact->load(['company', 'owner', 'activities.owner', 'deals.owner']);
 
-        return Inertia::render('CRM/Contacts/Show', [
+        return Inertia::render('crm/contacts/show', [
             'contact'      => $contact,
             'activityTypes' => ['call', 'email', 'meeting', 'note', 'task'],
         ]);
@@ -71,7 +71,7 @@ class ContactController extends Controller
 
     public function edit(Contact $contact): Response
     {
-        return Inertia::render('CRM/Contacts/Form', [
+        return Inertia::render('crm/contacts/form', [
             'contact'     => $contact,
             'companies'   => Company::select('id', 'name')->orderBy('name')->get(),
             'teamMembers' => User::select('id', 'name')->get(),

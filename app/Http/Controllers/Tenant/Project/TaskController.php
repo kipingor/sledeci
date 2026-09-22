@@ -26,7 +26,7 @@ class TaskController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        return Inertia::render('Tasks/Index', [
+        return Inertia::render('tasks/index', [
             'tasks'      => $tasks,
             'statuses'   => Task::STATUSES,
             'priorities' => Task::PRIORITIES,
@@ -38,7 +38,7 @@ class TaskController extends Controller
 
     public function create(Project $project): Response
     {
-        return Inertia::render('Tasks/Form', [
+        return Inertia::render('tasks/form', [
             'project'     => $project->only(['id', 'name']),
             'taskStatuses' => Task::STATUSES,
             'priorities'  => Task::PRIORITIES,
@@ -65,7 +65,7 @@ class TaskController extends Controller
     {
         $task->load('project');
 
-        return Inertia::render('Tasks/Form', [
+        return Inertia::render('tasks/form', [
             'task'        => $task,
             'project'     => $task->project->only(['id', 'name']),
             'taskStatuses' => Task::STATUSES,

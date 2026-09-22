@@ -24,7 +24,7 @@ class CompanyController extends Controller
             )
             ->latest();
 
-        return Inertia::render('CRM/Companies/Index', [
+        return Inertia::render('crm/companies/index', [
             'companies'   => $query->paginate(20)->withQueryString(),
             'filters'     => $request->only(['search']),
             'teamMembers' => User::select('id', 'name')->get(),
@@ -33,7 +33,7 @@ class CompanyController extends Controller
 
     public function create(): Response
     {
-        return Inertia::render('CRM/Companies/Form', [
+        return Inertia::render('crm/companies/form', [
             'teamMembers' => User::select('id', 'name')->get(),
             'industries'  => [
                 'Technology', 'Finance', 'Healthcare', 'Agriculture',
@@ -57,14 +57,14 @@ class CompanyController extends Controller
     {
         $company->load(['owner', 'contacts.owner', 'deals.owner']);
 
-        return Inertia::render('CRM/Companies/Show', [
+        return Inertia::render('crm/companies/show', [
             'company' => $company,
         ]);
     }
 
     public function edit(Company $company): Response
     {
-        return Inertia::render('CRM/Companies/Form', [
+        return Inertia::render('crm/companies/form', [
             'company'     => $company,
             'teamMembers' => User::select('id', 'name')->get(),
             'industries'  => [

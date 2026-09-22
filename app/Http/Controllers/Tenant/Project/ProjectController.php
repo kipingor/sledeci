@@ -29,7 +29,7 @@ class ProjectController extends Controller
             ->paginate(12)
             ->withQueryString();
 
-        return Inertia::render('Projects/Index', [
+        return Inertia::render('projects/index', [
             'projects'    => $projects,
             'statuses'    => Project::STATUSES,
             'priorities'  => Project::PRIORITIES,
@@ -40,7 +40,7 @@ class ProjectController extends Controller
 
     public function create(): Response
     {
-        return Inertia::render('Projects/Form', [
+        return Inertia::render('projects/form', [
             'statuses'    => Project::STATUSES,
             'priorities'  => Project::PRIORITIES,
             'teamMembers' => User::select('id', 'name')->orderBy('name')->get(),
@@ -64,7 +64,7 @@ class ProjectController extends Controller
             'tasks' => fn ($query) => $query->with('assignee')->orderByRaw("CASE WHEN status = 'done' THEN 1 ELSE 0 END")->orderBy('due_date'),
         ]);
 
-        return Inertia::render('Projects/Show', [
+        return Inertia::render('projects/show', [
             'project'     => $project,
             'statuses'    => Project::STATUSES,
             'priorities'  => Project::PRIORITIES,
@@ -75,7 +75,7 @@ class ProjectController extends Controller
 
     public function edit(Project $project): Response
     {
-        return Inertia::render('Projects/Form', [
+        return Inertia::render('projects/form', [
             'project'     => $project,
             'statuses'    => Project::STATUSES,
             'priorities'  => Project::PRIORITIES,

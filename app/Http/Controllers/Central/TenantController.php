@@ -23,7 +23,7 @@ class TenantController extends Controller
             ->latest()
             ->paginate(25);
 
-        return Inertia::render('Central/Tenants/Index', [
+        return Inertia::render('central/tenants/index', [
             'tenants' => $tenants,
             'stats'   => [
                 'total'     => Tenant::withoutGlobalScopes()->count(),
@@ -38,7 +38,7 @@ class TenantController extends Controller
     {
         $tenant->load('domains');
 
-        return Inertia::render('Central/Tenants/Show', [
+        return Inertia::render('central/tenants/show', [
             'tenant' => $tenant,
         ]);
     }
