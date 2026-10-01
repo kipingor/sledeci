@@ -29,18 +29,18 @@ Route::get('/', fn () => inertia('landing/index'))->name('home');
 
 // Auth views (Fortify handles the POST actions)
 Route::middleware('guest')->group(function (): void {
-    Route::get('/login', fn () => inertia('Auth/Login', [
+    Route::get('/login', fn () => inertia('auth/login', [
         'canResetPassword' => true,
         'status'           => session('status'),
     ]))->name('login');
 
-    Route::get('/register', fn () => inertia('Auth/Register'))->name('register');
+    Route::get('/register', fn () => inertia('auth/register'))->name('register');
 
-    Route::get('/forgot-password', fn () => inertia('Auth/ForgotPassword', [
+    Route::get('/forgot-password', fn () => inertia('auth/forgot-password', [
         'status' => session('status'),
     ]))->name('password.request');
 
-    Route::get('/reset-password/{token}', fn () => inertia('Auth/ResetPassword', [
+    Route::get('/reset-password/{token}', fn () => inertia('auth/reset-password', [
         'token' => request()->route('token'),
         'email' => request()->email,
     ]))->name('password.reset');

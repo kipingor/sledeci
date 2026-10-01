@@ -36,7 +36,7 @@ class UserController extends Controller
                 'created_at' => $u->created_at->toDateString(),
             ]);
 
-        return Inertia::render('Users/Index', compact('users'));
+        return Inertia::render('users/index', compact('users'));
     }
 
     public function create(): InertiaResponse
