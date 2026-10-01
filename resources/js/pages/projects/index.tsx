@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import AppLayout from '@/components/AppLayout';
+import AppLayout from '@/layouts/app-layout';
 import { Plus, Search, FolderKanban, CalendarDays, CheckCircle2, UserRound } from 'lucide-react';
 
 interface Project {

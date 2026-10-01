@@ -1,6 +1,6 @@
 import React from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
-import AppLayout from '@/components/AppLayout';
+import AppLayout from '@/layouts/app-layout';
 import { ArrowLeft } from 'lucide-react';
 
 interface Project { id?: number; name: string; code: string; description: string; status: string; priority: string; start_date: string; due_date: string; budget: string; currency: string; owner_id: string; }

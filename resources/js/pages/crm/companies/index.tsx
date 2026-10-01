@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import AppLayout from '@/components/AppLayout';
+import AppLayout from '@/layouts/app-layout';
 import { Plus, Search, ChevronRight, Globe, Phone, Users, Briefcase } from 'lucide-react';
 
 interface Company {

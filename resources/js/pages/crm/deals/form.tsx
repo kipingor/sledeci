@@ -1,6 +1,6 @@
 import React from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
-import AppLayout from '@/components/AppLayout';
+import AppLayout from '@/layouts/app-layout';
 import { ArrowLeft } from 'lucide-react';
 
 interface Deal {

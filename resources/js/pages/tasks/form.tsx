@@ -1,6 +1,6 @@
 import React from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
-import AppLayout from '@/components/AppLayout';
+import AppLayout from '@/layouts/app-layout';
 import { ArrowLeft } from 'lucide-react';
 interface Task { id?: number; title: string; description: string; status: string; priority: string; start_date: string; due_date: string; assignee_id: string; parent_task_id: string; project_id: number; project?: { id: number; name: string }; }
 interface Props { task?: Task; project: { id: number; name: string }; taskStatuses: string[]; priorities: string[]; teamMembers: { id: number; name: string }[]; parentTasks: { id: number; title: string }[]; }

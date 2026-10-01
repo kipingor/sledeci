@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Head, Link, useForm, router } from '@inertiajs/react';
-import AppLayout from '@/components/AppLayout';
+import AppLayout from '@/layouts/app-layout';
 import { ArrowLeft, Building2, Phone, Mail, Edit, Trash2, Plus, CheckCircle2, Circle, Tag } from 'lucide-react';
 
 interface Activity {

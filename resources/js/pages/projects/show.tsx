@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import AppLayout from '@/components/AppLayout';
+import AppLayout from '@/layouts/app-layout';
 import { ArrowLeft, Edit, Trash2, Plus, CheckCircle2, Circle, CalendarDays, UserRound, MoreHorizontal } from 'lucide-react';
 
 interface Task { id: number; title: string; description: string | null; status: string; priority: string; due_date: string | null; completed_at: string | null; assignee: { id: number; name: string } | null; }

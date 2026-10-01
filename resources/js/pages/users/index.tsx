@@ -1,5 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import AppLayout from '@/components/AppLayout';
+import AppLayout from '@/layouts/app-layout';
 import { UserPlus, MoreHorizontal, UserCheck, UserX, Trash2, Pencil } from 'lucide-react';
 import { useState } from 'react';
 

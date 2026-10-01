@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import AppLayout from '@/components/AppLayout';
+import AppLayout from '@/layouts/app-layout';
 import { Search, CheckCircle2, Circle, CalendarDays, UserRound } from 'lucide-react';
 interface Task { id: number; title: string; status: string; priority: string; due_date: string | null; project: { id: number; name: string }; assignee: { id: number; name: string } | null; }
 interface Props { tasks: { data: Task[]; links: { url: string | null; label: string; active: boolean }[]; meta: { total: number } }; statuses: string[]; priorities: string[]; projects: { id: number; name: string }[]; teamMembers: { id: number; name: string }[]; filters: { search?: string; status?: string; project_id?: string; assignee_id?: string }; }

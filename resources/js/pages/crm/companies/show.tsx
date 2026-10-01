@@ -1,6 +1,6 @@
 import React from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import AppLayout from '@/components/AppLayout';
+import AppLayout from '@/layouts/app-layout';
 import { ArrowLeft, Globe, Phone, Mail, MapPin, Edit, Trash2, Users, Briefcase } from 'lucide-react';
 
 interface Contact { id: number; first_name: string; last_name: string | null; stage: string; job_title: string | null; }

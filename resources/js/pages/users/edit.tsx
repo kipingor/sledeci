@@ -1,5 +1,5 @@
 import { useForm, Head, Link } from '@inertiajs/react';
-import AppLayout from '@/components/AppLayout';
+import AppLayout from '@/layouts/app-layout';
 import { Loader2, ArrowLeft } from 'lucide-react';
 
 interface UserData {

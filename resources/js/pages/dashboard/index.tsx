@@ -1,5 +1,5 @@
 import { Head, usePage } from '@inertiajs/react';
-import AppLayout from '@/components/AppLayout';
+import AppLayout from '@/layouts/app-layout';
 import { type PageProps } from '@/types';
 import {
     Users, FolderKanban, Receipt, TrendingUp,
