@@ -13,8 +13,18 @@ return new class extends Migration
     {
         Schema::create('milestones', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('project_id')->constrained('projects')->cascadeOnDelete();
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->date('due_date')->nullable();
+            $table->date('completed_at')->nullable();
+            $table->enum('status', ['pending', 'achieved', 'overdue'])->default('pending');
             $table->timestamps();
-        });
+            $table->softDeletes();
+
+            $table->index(['project_id']);
+            $table->index(['status']);
+        });        
     }
 
     /**
