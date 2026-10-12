@@ -130,6 +130,5 @@ return new class extends Migration
         Schema::dropIfExists('time_logs');
         Schema::dropIfExists('task_dependencies');
         Schema::dropIfExists('tasks');
-        Schema::dropIfExists('milestones');
     }
 };
