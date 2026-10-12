@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('hr_leave_requests', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('staff_profile_id')->constrained('staff_profiles')->cascadeOnDelete();
+            $table->date('from_date');
+            $table->date('to_date');
+            $table->string('type')->nullable(); // annual, sick, unpaid
+            $table->text('reason')->nullable();
+            $table->enum('status', ['pending', 'approved', 'rejected', 'cancelled'])->default('pending');
+            $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->text('admin_notes')->nullable();
             $table->timestamps();
         });
     }
