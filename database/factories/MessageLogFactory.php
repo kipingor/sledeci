@@ -18,7 +18,11 @@ class MessageLogFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'sender_id' => User::factory(),
+            'receiver_id' => User::factory(),
+            'body' => $this->faker->sentence(),
+            'metadata' => [],
+            'read_at' => null,
         ];
     }
 }
