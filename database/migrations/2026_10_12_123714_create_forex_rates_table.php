@@ -13,7 +13,17 @@ return new class extends Migration
     {
         Schema::create('forex_rates', function (Blueprint $table) {
             $table->id();
+            $table->string('auditable_type')->nullable(); // model class
+            $table->unsignedBigInteger('auditable_id')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+            $table->string('event')->nullable(); // created, updated, deleted
+            $table->json('old_values')->nullable();
+            $table->json('new_values')->nullable();
+            $table->text('ip_address')->nullable();
+            $table->text('user_agent')->nullable();
             $table->timestamps();
+
+            $table->index(['auditable_type', 'auditable_id']);
         });
     }
 
