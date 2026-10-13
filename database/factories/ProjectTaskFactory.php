@@ -3,22 +3,22 @@
 namespace Database\Factories;
 
 use App\Models\ProjectTask;
+use App\Models\Project;
+use App\Models\Task;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<ProjectTask>
- */
 class ProjectTaskFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition(): array
+    protected $model = ProjectTask::class;
+
+    public function definition()
     {
         return [
-            //
+            'project_id' => Project::factory(),
+            'task_id' => Task::factory(),
+            'assigned_by' => User::factory(),
+            'assigned_at' => now(),
         ];
     }
 }
