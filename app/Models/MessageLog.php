@@ -2,34 +2,39 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class MessageLog extends Model
 {
-    /** @use HasFactory<\Database\Factories\MessageLogFactory> */
-    use HasFactory;
-
     protected $fillable = [
-        'sender_id',
-        'receiver_id',
-        'body',
-        'metadata',
-        'read_at',
+        'messageable_type', 'messageable_id',
+        'sent_by', 'channel', 'to_phone', 'to_email', 'to_name',
+        'template', 'body', 'status',
+        'provider_message_id', 'provider_error', 'cost',
+        'sent_at', 'delivered_at', 'read_at',
     ];
 
     protected $casts = [
-        'metadata' => 'array',
-        'read_at'  => 'datetime',
+        'cost'         => 'decimal:6',
+        'sent_at'      => 'datetime',
+        'delivered_at' => 'datetime',
+        'read_at'      => 'datetime',
     ];
 
-    public function sender()
+    public function messageable(): MorphTo
     {
-        return $this->belongsTo(User::class, 'sender_id');
+        return $this->morphTo();
     }
 
-    public function receiver()
+    public function sentBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'receiver_id');
+        return $this->belongsTo(User::class, 'sent_by');
+    }
+
+    public function isDelivered(): bool
+    {
+        return in_array($this->status, ['delivered', 'read']);
     }
 }
