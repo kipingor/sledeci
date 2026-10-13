@@ -111,6 +111,45 @@ return new class extends Migration
             $table->index(['type']);
             $table->index(['status']);
         });
+
+        Schema::create('stock_movements', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
+
+            // Who / what triggered this movement
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->nullableMorphs('source');  // e.g. Delivery, Invoice, Adjustment
+
+            $table->enum('type', [
+                'receipt',       // goods received from supplier (PO delivery)
+                'sale',          // stock sold to client (invoice line)
+                'adjustment',    // manual correction (stocktake)
+                'return_in',     // goods returned by client
+                'return_out',    // goods returned to supplier
+                'write_off',     // damaged / expired / lost
+                'transfer_in',   // moved in from another location
+                'transfer_out',  // moved out to another location
+            ]);
+
+            // Signed quantity: positive = in, negative = out
+            $table->integer('quantity')
+                ->comment('Signed delta: +receipt, -sale, ±adjustment');
+
+            // Snapshot of stock level AFTER this movement
+            $table->integer('quantity_after')
+                ->comment('Running balance for audit trail');
+
+            $table->string('reference')->nullable()
+                ->comment('PO number, invoice number, adjustment ref, etc.');
+            $table->decimal('unit_cost', 15, 4)->nullable()
+                ->comment('Cost at time of movement (for FIFO/AVCO costing)');
+            $table->text('notes')->nullable();
+
+            $table->timestamps();
+
+            $table->index(['product_id', 'created_at']);
+            $table->index(['type']);
+        });
     }
 
     /**
@@ -118,6 +157,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('stock_movements');
         Schema::dropIfExists('delivery_documents');
         Schema::dropIfExists('deliveries');
         Schema::dropIfExists('purchase_orders');
