@@ -365,6 +365,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('forex_rates');
         Schema::dropIfExists('payments');
         Schema::dropIfExists('invoices');
         Schema::dropIfExists('expenses');
