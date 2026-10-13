@@ -3,22 +3,20 @@
 namespace Database\Factories;
 
 use App\Models\ProjectMilestone;
+use App\Models\Project;
+use App\Models\Milestone;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<ProjectMilestone>
- */
 class ProjectMilestoneFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition(): array
+    protected $model = ProjectMilestone::class;
+
+    public function definition()
     {
         return [
-            //
+            'project_id' => Project::factory(),
+            'milestone_id' => Milestone::factory(),
+            'assigned_at' => now(),
         ];
     }
 }
