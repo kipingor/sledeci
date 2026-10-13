@@ -24,8 +24,19 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $firstNames = ['Otieno', 'Kamau', 'Achieng', 'Njeri', 'Wanjiku', 'Kiptoo', 'Chebet', 'Njenga', 'Wambui', 'Kiplimo'];
+        $lastNames = ['Mwangi', 'Ochieng', 'Mutua', 'Kiplagat', 'Odhiambo', 'Ndegwa', 'Wangari', 'Kipkorir', 'Akinyi', 'Cheruiyot'];
+
+        $counties = [
+            'Nairobi',
+            'Kiambu',
+            'Nakuru',
+            'Kisumu',
+            'Uasin Gishu'
+        ];
         return [
-            'name' => fake()->name(),
+            'name' => $this->faker->randomElement($firstNames) . ' ' .
+                      $this->faker->randomElement($lastNames),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
