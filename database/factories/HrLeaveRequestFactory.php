@@ -18,7 +18,14 @@ class HrLeaveRequestFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'staff_profile_id' => StaffProfile::factory(),
+            'from_date' => $this->faker->date(),
+            'to_date' => $this->faker->date(),
+            'type' => $this->faker->randomElement(['annual', 'sick', 'unpaid']),
+            'reason' => $this->faker->sentence(),
+            'status' => 'pending',
+            'approved_by' => null,
+            'admin_notes' => null,
         ];
     }
 }
