@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->morphs('commentable');          // commentable_type + commentable_id
+            $table->text('body');
+            $table->string('type', 50)->default('comment'); // comment | note | mitigation
+            $table->json('metadata')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
