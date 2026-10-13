@@ -13,7 +13,20 @@ return new class extends Migration
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
+            $table->string('name', 100)->unique();
+            $table->string('color', 30)->nullable();
             $table->timestamps();
+        });
+
+        Schema::create('lead_tag', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('lead_id')->constrained('leads')->cascadeOnDelete();
+            $table->foreignId('tag_id')->constrained('tags')->cascadeOnDelete();
+            $table->timestamps();
+
+            $table->unique(['lead_id', 'tag_id']);
+            $table->index('lead_id');
+            $table->index('tag_id');
         });
     }
 
@@ -22,6 +35,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('lead_tag');
         Schema::dropIfExists('tags');
     }
 };
