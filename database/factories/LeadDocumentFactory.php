@@ -2,14 +2,18 @@
 
 namespace Database\Factories;
 
+use App\Enums\LeadDocumentStatus;
 use App\Models\LeadDocument;
+use App\Models\Lead;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<LeadDocument>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\LeadDocument>
  */
 class LeadDocumentFactory extends Factory
 {
+    protected $model = LeadDocument::class;
+
     /**
      * Define the model's default state.
      *
@@ -17,8 +21,20 @@ class LeadDocumentFactory extends Factory
      */
     public function definition(): array
     {
+        $lead = Lead::inRandomOrder()->first()?->id ?? Lead::factory()->create()->id;
+
         return [
-            //
+            'lead_id' => $lead,
+            'filename' => $this->faker->word . '.' . $this->faker->fileExtension(),
+            'original_name' => $this->faker->word . '.' . $this->faker->fileExtension(),
+            'mime_type' => $this->faker->mimeType(),
+            'size'=> $this->faker->numberBetween(1, 1000),
+            'storage_path' => $this->faker->word . '.' . $this->faker->fileExtension(),
+            'status' => $this->faker->randomElement(LeadDocumentStatus::cases()),
+            'extracted_text' => ['text' => $this->faker->paragraph()],
+            'ai_summary' => $this->faker->paragraph(),
+
+
         ];
     }
 }
