@@ -2,23 +2,25 @@
 
 namespace Database\Factories;
 
-use App\Models\Activity;
+use App\Models\ActivityLog;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<Activity>
- */
-class ActivityFactory extends Factory
+class ActivityLogFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition(): array
+    protected $model = ActivityLog::class;
+
+    public function definition()
     {
         return [
-            //
+            'auditable_type' => 'App\\Models\\Lead',
+            'auditable_id' => 1,
+            'user_id' => User::factory(),
+            'event' => 'updated',
+            'old_values' => [],
+            'new_values' => [],
+            'ip_address' => $this->faker->ipv4(),
+            'user_agent' => $this->faker->userAgent(),
         ];
     }
 }
