@@ -2,11 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class TaxCode extends Model
 {
-    /** @use HasFactory<\Database\Factories\TaxCodeFactory> */
-    use HasFactory;
+    protected $fillable = [
+        'code',
+        'name',
+        'type',
+        'rate',
+        'input_account_id',
+        'output_account_id',
+        'is_active',
+        'is_default',
+        'jurisdiction'
+    ];
+
+    protected $casts = [
+        'is_active'     => 'boolean',
+        'is_default'    => 'boolean',
+    ];
 }
