@@ -13,6 +13,7 @@ use Illuminate\Support\Carbon;
 use Laravel\Fortify\Contracts\PasskeyUser;
 use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
  * @property int $id
@@ -27,12 +28,12 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password', 'avatar', 'is_client', 'client_since', 'company', 'phone', 'address', 'website', 'notes'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;
+    use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable, HasRoles;
 
     /**
      * Get the attributes that should be cast.
@@ -44,7 +45,99 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_client'         => 'boolean',
             'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    // ── Client Scopes (replaces Client model) ─────────────────────────────────
+
+    /**
+     * Scope to only client users.
+     * Usage: User::clients()->get()
+     */
+    public function scopeClients(Builder $query): Builder
+    {
+        return $query->where('is_client', true);
+    }
+
+    /**
+     * Scope to a single client.
+     * Usage: User::client()->find($id)
+     */
+    public function scopeClient(Builder $query): Builder
+    {
+        return $query->where('is_client', true);
+    }
+
+    /**
+     * Convert this user into a client.
+     */
+    public function convertToClient(): static
+    {
+        $this->update([
+            'is_client'    => true,
+            'client_since' => $this->client_since ?? now(),
+        ]);
+        return $this;
+    }
+
+    // ── Relations ─────────────────────────────────────────────────────────────
+
+    /** Projects where this user is the client. */
+    public function projects(): HasMany
+    {
+        return $this->hasMany(Project::class, 'client_id');
+    }
+
+    /** Invoices issued to this client. */
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class, 'client_id');
+    }
+
+    /** Follow-up tasks for this client. */
+    public function clientFollowUps(): HasMany
+    {
+        return $this->hasMany(ClientFollowUp::class, 'client_id');
+    }
+
+    /** Reports generated for this client. */
+    public function clientReports(): HasMany
+    {
+        return $this->hasMany(ClientReport::class, 'client_id');
+    }
+
+    /** Leads associated with this client. */
+    public function leads(): HasMany
+    {
+        return $this->hasMany(Lead::class, 'client_id');
+    }
+
+    public function fieldAgent(): HasOne
+    {
+        return $this->hasOne(FieldAgent::class);
+    }
+
+     public function saccoMember(): HasOne
+    {
+        return $this->hasOne(SaccoMember::class);
+    }
+
+     public function employee(): HasOne
+    {
+        return $this->hasOne(Employee::class);
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
+    public function getIsClientAttribute(): bool
+    {
+        return (bool) $this->attributes['is_client'];
+    }
+
+    public function getDisplayRoleAttribute(): string
+    {
+        return $this->is_client ? 'Client' : ucfirst($this->role ?? 'user');
     }
 }
