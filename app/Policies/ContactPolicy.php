@@ -2,65 +2,48 @@
 
 namespace App\Policies;
 
-use App\Models\Contact;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use App\Models\Contact;
 
 class ContactPolicy
 {
     /**
-     * Determine whether the user can view any models.
+     * Determine whether the user can view any contacts.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $user->hasAnyRole(['admin', 'sales', 'manager']);
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Determine whether the user can view the contact.
      */
     public function view(User $user, Contact $contact): bool
     {
-        return false;
+        return $user->id === $contact->owner_id || $user->hasRole('admin');
     }
 
     /**
-     * Determine whether the user can create models.
+     * Determine whether the user can create contacts.
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->hasAnyRole(['admin', 'sales']);
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Determine whether the user can update the contact.
      */
     public function update(User $user, Contact $contact): bool
     {
-        return false;
+        return $user->id === $contact->owner_id || $user->hasRole('admin');
     }
 
     /**
-     * Determine whether the user can delete the model.
+     * Determine whether the user can delete the contact.
      */
     public function delete(User $user, Contact $contact): bool
     {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Contact $contact): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Contact $contact): bool
-    {
-        return false;
+        return $user->id === $contact->owner_id || $user->hasRole('admin');
     }
 }

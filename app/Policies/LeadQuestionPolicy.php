@@ -2,65 +2,25 @@
 
 namespace App\Policies;
 
-use App\Models\LeadQuestion;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use App\Models\LeadQuestion;
 
 class LeadQuestionPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, LeadQuestion $leadQuestion): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can create models.
-     */
     public function create(User $user): bool
     {
-        return false;
+        return $user->hasAnyRole(['admin', 'sales']);
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, LeadQuestion $leadQuestion): bool
+    public function update(User $user, LeadQuestion $question): bool
     {
-        return false;
+        return $user->hasRole('admin') ||
+               $question->lead->owner_id === $user->id;
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, LeadQuestion $leadQuestion): bool
+    public function delete(User $user, LeadQuestion $question): bool
     {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, LeadQuestion $leadQuestion): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, LeadQuestion $leadQuestion): bool
-    {
-        return false;
+        return $user->hasRole('admin') ||
+               $question->lead->created_by === $user->id;
     }
 }

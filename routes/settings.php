@@ -1,34 +1,52 @@
 <?php
 
+use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
-use App\Http\Controllers\Settings\SecurityController;
-use Illuminate\Auth\Middleware\RequirePassword;
+use App\Http\Controllers\Settings\TwoFactorAuthenticationController;
+use App\Http\Controllers\Settings\SettingsController;
+use App\Http\Controllers\Settings\CompanySettingsController;
+use App\Http\Controllers\Web\ApprovalController;
+use App\Http\Controllers\Web\EtimsController;
+use App\Http\Controllers\Web\RfpController;
+use App\Http\Controllers\Web\TenderController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware('auth')->group(function () {
     Route::redirect('settings', '/settings/profile');
+
+    // Main settings dashboard
+    Route::get('settings/dashboard', [SettingsController::class, 'index'])
+        ->name('settings.index');
 
     Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('settings/profile', [ProfileController::class, 'update'])->name('profile.update');
-});
-
-Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('settings/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('settings/security', [SecurityController::class, 'edit'])
-        ->middleware(RequirePassword::class)
-        ->name('security.edit');
+    Route::get('settings/password', [PasswordController::class, 'edit'])->name('user-password.edit');
 
-    Route::put('settings/password', [SecurityController::class, 'update'])
+    Route::put('settings/password', [PasswordController::class, 'update'])
         ->middleware('throttle:6,1')
         ->name('user-password.update');
 
-    Route::inertia('settings/appearance', 'settings/appearance')->name('appearance.edit');
-});
+    Route::get('settings/appearance', function () {
+        return Inertia::render('settings/appearance');
+    })->name('appearance.edit');
 
-Route::get('.well-known/passkey-endpoints', function () {
-    return response()->json([
-        'enroll' => route('security.edit'),
-        'manage' => route('security.edit'),
-    ]);
-})->name('well-known.passkeys');
+    Route::get('settings/two-factor', [TwoFactorAuthenticationController::class, 'show'])
+        ->name('two-factor.show');
+
+    // Company-wide settings (admin only — add 'role:admin' middleware as needed)
+    Route::get('settings/company', [CompanySettingsController::class, 'edit'])
+        ->name('settings.company')
+        ->middleware('role:admin');
+    Route::patch('settings/company', [CompanySettingsController::class, 'update'])
+        ->name('settings.company.update')
+        ->middleware('role:admin');
+    Route::post('settings/company/logo', [CompanySettingsController::class, 'uploadLogo'])
+        ->name('settings.company.logo')
+        ->middleware('role:admin');
+    Route::get('settings/company/test-etims', [CompanySettingsController::class, 'testEtims'])
+        ->name('settings.company.test-etims')
+        ->middleware('role:admin');
+});
