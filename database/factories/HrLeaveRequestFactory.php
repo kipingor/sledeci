@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\StaffProfile;
 use App\Models\HrLeaveRequest;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

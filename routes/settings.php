@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
+use App\Http\Controllers\Settings\SecurityController;
 use App\Http\Controllers\Settings\TwoFactorAuthenticationController;
 use App\Http\Controllers\Settings\SettingsController;
 use App\Http\Controllers\Settings\CompanySettingsController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Web\RfpController;
 use App\Http\Controllers\Web\TenderController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Laravel\Fortify\Features;
 
 Route::middleware('auth')->group(function () {
     Route::redirect('settings', '/settings/profile');
@@ -21,17 +23,28 @@ Route::middleware('auth')->group(function () {
 
     Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('settings/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('settings/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::delete('settings/profile', [ProfileController::class, 'destroy'])->middleware('verified')->name('profile.destroy');
 
     Route::get('settings/password', [PasswordController::class, 'edit'])->name('user-password.edit');
 
-    Route::put('settings/password', [PasswordController::class, 'update'])
-        ->middleware('throttle:6,1')
+    // Security page (password, two-factor, passkeys) - used by the settings layout nav.
+    Route::get('settings/security', [SecurityController::class, 'edit'])
+        ->middleware(array_merge(
+            ['verified'],
+            Features::canManageTwoFactorAuthentication()
+                && Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword')
+                    ? ['password.confirm']
+                    : []
+        ))
+        ->name('security.edit');
+
+    Route::put('settings/password', [SecurityController::class, 'update'])
+        ->middleware(['verified', 'throttle:6,1'])
         ->name('user-password.update');
 
     Route::get('settings/appearance', function () {
         return Inertia::render('settings/appearance');
-    })->name('appearance.edit');
+    })->middleware('verified')->name('appearance.edit');
 
     Route::get('settings/two-factor', [TwoFactorAuthenticationController::class, 'show'])
         ->name('two-factor.show');

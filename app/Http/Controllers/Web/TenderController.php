@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Support\SqlOrder;
 use App\Http\Controllers\Controller;
 use App\Jobs\AnalyzeTenderJob;
 use App\Models\CompanySetting;
@@ -40,7 +41,7 @@ class TenderController extends Controller
         }
 
         $paginator = $query
-            ->orderByRaw("FIELD(status, 'reviewing', 'drafting', 'submitted', 'won', 'lost', 'withdrawn')")
+            ->orderByRaw(SqlOrder::byList('status', ['reviewing', 'drafting', 'submitted', 'won', 'lost', 'withdrawn']))
             ->orderBy('submission_deadline')
             ->paginate(20)->withQueryString();
 

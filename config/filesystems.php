@@ -38,6 +38,16 @@ return [
             'report' => false,
         ],
 
+        // Non-public uploads (lead documents, receipts, tender files). Same location as the
+        // default "local" disk, but never served over HTTP.
+        'private' => [
+            'driver' => 'local',
+            'root' => storage_path('app/private'),
+            'visibility' => 'private',
+            'throw' => false,
+            'report' => false,
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

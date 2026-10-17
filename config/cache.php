@@ -129,8 +129,17 @@ return [
     | storage. By default, no PHP classes will be unserialized from your
     | cache to prevent gadget chain attacks if your APP_KEY is leaked.
     |
+    | Only these value classes may round-trip through the cache. Cache arrays,
+    | scalars or raw model attributes for anything else (see CompanySetting::current()).
+    |
     */
 
-    'serializable_classes' => false,
+    'serializable_classes' => [
+        \Illuminate\Support\Collection::class,
+        \Illuminate\Database\Eloquent\Collection::class,
+        \Illuminate\Support\Carbon::class,
+        \Carbon\Carbon::class,
+        \Carbon\CarbonImmutable::class,
+    ],
 
 ];

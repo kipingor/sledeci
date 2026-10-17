@@ -17,7 +17,7 @@ class SaccoAccount extends Model
     /**
      * Apply a signed delta to the balance and record the transaction.
      */
-    public function applyTransaction(float $amount, string $type, string $reference = null, string $notes = null, int $createdBy = null): SaccoTransaction
+    public function applyTransaction(float $amount, string $type, ?string $reference = null, ?string $notes = null, ?int $createdBy = null): SaccoTransaction
     {
         $this->increment('balance', $amount);
         $this->refresh();

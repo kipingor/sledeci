@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\StaffProfile;
-use App\Models\LeaveRequest;
+use App\Models\HrLeaveRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -21,7 +21,7 @@ class HRController extends Controller
                 'available'     => StaffProfile::where('is_available', true)->count(),
                 'contractors'   => StaffProfile::where('is_contractor', true)->count(),
                 // BUG FIX: LeaveRequest now maps to leave_requests — this works correctly
-                'pending_leave' => LeaveRequest::where('status', 'pending')->count(),
+                'pending_leave' => HrLeaveRequest::where('status', 'pending')->count(),
             ],
         ]);
     }
@@ -124,8 +124,8 @@ class HRController extends Controller
     public function leave(Request $request): Response
     {
         // BUG FIX: 'staffProfile' relation previously didn't exist on LeaveRequest.
-        // Now LeaveRequest::$table = 'leave_requests' with staffProfile() relation.
-        $leaves = LeaveRequest::with('staffProfile.user:id,name,avatar', 'approver:id,name')
+        // Now HrLeaveRequest::$table = 'leave_requests' with staffProfile() relation.
+        $leaves = HrLeaveRequest::with('staffProfile.user:id,name,avatar', 'approver:id,name')
             ->when($request->filled('status'), fn ($q) => $q->where('status', $request->status))
             ->latest('from_date')
             ->paginate(20)
@@ -135,14 +135,14 @@ class HRController extends Controller
             'leaves'  => $leaves,
             'filters' => $request->only(['status']),
             'stats'   => [
-                'pending'  => LeaveRequest::pending()->count(),
+                'pending'  => HrLeaveRequest::pending()->count(),
                 // BUG FIX: was 'to_date' field on wrong model — now uses correct column name
-                'approved' => LeaveRequest::active()->count(),
+                'approved' => HrLeaveRequest::active()->count(),
             ],
         ]);
     }
 
-    public function approveLeave(Request $request, LeaveRequest $leave)
+    public function approveLeave(Request $request, HrLeaveRequest $leave)
     {
         $leave->update([
             'status'      => 'approved',
@@ -153,7 +153,7 @@ class HRController extends Controller
         return back()->with('success', 'Leave request approved.');
     }
 
-    public function rejectLeave(Request $request, LeaveRequest $leave)
+    public function rejectLeave(Request $request, HrLeaveRequest $leave)
     {
         $leave->update([
             'status'      => 'rejected',

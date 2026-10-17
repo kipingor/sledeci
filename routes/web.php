@@ -499,4 +499,3 @@ Route::middleware(['auth', 'verified', 'module.access'])->name('web.')->group(fu
 // Keeping them here ensures they work even if middleware is misconfigured.
 
 require __DIR__ . '/settings.php';
-require __DIR__ . '/channels.php';

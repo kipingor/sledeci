@@ -1,6 +1,6 @@
 import { Head } from '@inertiajs/react';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
-import { dashboard } from '@/routes';
+import { dashboard } from '@/routes/web';
 
 export default function Dashboard() {
     return (

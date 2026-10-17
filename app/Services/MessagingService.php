@@ -99,7 +99,7 @@ class MessagingService
     /**
      * Send a free-form message to any phone number.
      */
-    public function sendCustom(string $phone, string $body, string $template = 'custom', object $subject = null): MessageLog
+    public function sendCustom(string $phone, string $body, string $template = 'custom', ?object $subject = null): MessageLog
     {
         return $this->send($phone, $body, $template, $subject);
     }

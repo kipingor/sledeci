@@ -125,7 +125,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('lead_questions');
-        Schema::dropIfExists('lead_documents')
+        Schema::dropIfExists('lead_documents');
         Schema::dropIfExists('leads');
     }
 };

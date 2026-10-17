@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Lead\StoreLeadQuestionRequest;
 use App\Models\Lead;
+use App\Models\AuditLog;
 use App\Models\LeadQuestion;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -34,10 +35,7 @@ class LeadQuestionController extends Controller
             'asked_by' => $request->user()->id,
         ]);
 
-        activity()
-            ->performedOn($question->lead)
-            ->causedBy($request->user())
-            ->log("Question added: {$question->question}");
+        AuditLog::record($question->lead, 'question_added', [], ['question' => $question->question], $request->user()->id);
 
         return response()->json([
             'message' => 'Question created successfully',
@@ -59,10 +57,7 @@ class LeadQuestionController extends Controller
             'answered' => true,
         ]);
 
-        activity()
-            ->performedOn($question->lead)
-            ->causedBy($request->user())
-            ->log("Question answered: {$question->question}");
+        AuditLog::record($question->lead, 'question_answered', [], ['question' => $question->question], $request->user()->id);
 
         return response()->json([
             'message' => 'Question updated successfully',
@@ -77,10 +72,7 @@ class LeadQuestionController extends Controller
     {
         $question->delete();
 
-        activity()
-            ->performedOn($question->lead)
-            ->causedBy($request->user())
-            ->log("Question deleted: {$question->question}");
+        AuditLog::record($question->lead, 'question_deleted', [], ['question' => $question->question], $request->user()->id);
 
         return response()->json(['message' => 'Question deleted successfully']);
     }

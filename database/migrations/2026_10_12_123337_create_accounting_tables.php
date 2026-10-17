@@ -340,7 +340,7 @@ return new class extends Migration
 
             $table->index('invoice_id');
             $table->index('project_id');
-            $table->index('mobile_money_code');
+            $table->unique('mobile_money_code');  // one payment per telco receipt (NULLs allowed)
             $table->index('reconciliation_status');
         });
 

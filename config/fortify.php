@@ -160,6 +160,12 @@ return [
     |
     */
 
+    /*
+    | Runtime switch for self-service sign-up (see EnsureRegistrationEnabled).
+    | Self-registered accounts have no role and therefore no module access until an admin assigns one.
+    */
+    'registration_enabled' => env('REGISTRATION_ENABLED', true),
+
     'features' => [
         Features::registration(),
         Features::resetPasswords(),

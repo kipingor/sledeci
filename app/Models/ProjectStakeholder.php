@@ -2,63 +2,90 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ProjectTask extends Pivot
+/**
+ * Stakeholder Register entry — PMBOK §13.
+ *
+ * @property int         $id
+ * @property int         $project_id
+ * @property int|null    $user_id
+ * @property string      $name
+ * @property string      $influence           low|medium|high  (power axis)
+ * @property string      $interest            low|medium|high
+ * @property string      $current_engagement  unaware|resistant|neutral|supportive|leading
+ * @property string      $desired_engagement  unaware|resistant|neutral|supportive|leading
+ * @property bool        $is_active
+ */
+class ProjectStakeholder extends Model
 {
-    public const STATUS_PENDING = 'pending';
-    public const STATUS_IN_PROGRESS = 'in_progress';
-    public const STATUS_COMPLETED = 'completed';
-    public const STATUS_DELAYED = 'delayed';
+    use HasFactory, SoftDeletes;
 
-    public const STATUSES = [
-        self::STATUS_PENDING,
-        self::STATUS_IN_PROGRESS,
-        self::STATUS_COMPLETED,
-        self::STATUS_DELAYED,
-    ];
+    protected $table = 'project_stakeholders';
 
-    public const METADATA_KEYS = [
-        'priority',
-        'tags',
-        'due_date',
-        'assignee',
-    ];
+    public const INFLUENCE_LEVELS = ['low', 'medium', 'high'];
 
-    public const METADATA_KEYS_TYPES = [
-        'priority' => 'string',
-        'tags' => 'array',
-        'due_date' => 'date',
-        'assignee' => 'string',
-    ];
+    public const INTEREST_LEVELS = ['low', 'medium', 'high'];
+
+    /** Ordered from least to most engaged (PMBOK Stakeholder Engagement Assessment Matrix). */
+    public const ENGAGEMENT_LEVELS = ['unaware', 'resistant', 'neutral', 'supportive', 'leading'];
 
     protected $fillable = [
         'project_id',
-        'task_id',
-        'assigned_by',
-        'assigned_at',
-        'status',
-        'metadata',
+        'user_id',
+        'name',
+        'email',
+        'organization',
+        'role',
+        'influence',
+        'interest',
+        'current_engagement',
+        'desired_engagement',
+        'preferred_communication',
+        'communication_frequency',
+        'expectations',
+        'concerns',
+        'engagement_strategy',
+        'notes',
+        'is_active',
     ];
 
     protected $casts = [
-        'assigned_at' => 'datetime',
+        'is_active' => 'boolean',
     ];
 
-    public $timestamps = true;
+    /** Exposed to the Inertia pages (resources/js/pages/projects/show.tsx). */
+    protected $appends = ['display_name', 'management_strategy', 'has_engagement_gap'];
 
-    public function project()
+    public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
     }
 
-    public function task()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Task::class);
+        return $this->belongsTo(User::class);
     }
 
-    public function assigner()
+    public function getDisplayNameAttribute(): string
     {
-        return $this->belongsTo(User::class, 'assigned_by');
+        return $this->user?->name ?? $this->name;
+    }
+
+    /** The UI calls this "management strategy"; it is stored as engagement_strategy. */
+    public function getManagementStrategyAttribute(): ?string
+    {
+        return $this->engagement_strategy;
+    }
+
+    public function getHasEngagementGapAttribute(): bool
+    {
+        $levels = self::ENGAGEMENT_LEVELS;
+
+        return array_search($this->current_engagement, $levels, true)
+            < array_search($this->desired_engagement, $levels, true);
     }
 }

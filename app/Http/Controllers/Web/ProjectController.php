@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Support\SqlOrder;
 use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
 use App\Models\Opportunity;
@@ -107,15 +108,15 @@ class ProjectController extends Controller
                 ->orderByRaw('probability * impact DESC'),
             'issues' => fn ($q) => $q
                 ->with('owner:id,name,avatar')
-                ->orderByRaw("FIELD(severity,'critical','high','medium','low')")
+                ->orderByRaw(SqlOrder::byList('severity', ['critical', 'high', 'medium', 'low']))
                 ->orderBy('raised_date', 'desc'),
             'changes' => fn ($q) => $q
                 ->with('requestedBy:id,name,avatar', 'reviewedBy:id,name,avatar')
                 ->latest(),
             'stakeholders' => fn ($q) => $q
                 ->with('user:id,name,email,avatar')
-                ->orderByRaw("FIELD(influence,'high','medium','low')")
-                ->orderByRaw("FIELD(interest,'high','medium','low')"),
+                ->orderByRaw(SqlOrder::byList('influence', ['high', 'medium', 'low']))
+                ->orderByRaw(SqlOrder::byList('interest', ['high', 'medium', 'low'])),
             'lessons' => fn ($q) => $q
                 ->with('createdBy:id,name,avatar')
                 ->latest(),

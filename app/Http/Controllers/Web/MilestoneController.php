@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Support\SqlOrder;
 use App\Http\Controllers\Controller;
 use App\Models\Milestone;
 use App\Models\Project;
@@ -23,7 +24,7 @@ class MilestoneController extends Controller
             ->when($request->filled('search'),     fn ($q) => $q->where('title', 'like', "%{$request->search}%"));
 
         // Order: incomplete first, then by due date ascending
-        $query->orderByRaw("FIELD(status,'pending','in_progress','missed','completed')")
+        $query->orderByRaw(SqlOrder::byList('status', ['pending', 'in_progress', 'missed', 'completed']))
               ->orderBy('due_date');
 
         $milestones = $query->paginate(30)->withQueryString();

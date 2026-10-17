@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Models\LeaveRequest;
+use App\Models\HrLeaveRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -25,7 +25,7 @@ class LeaveRequestController extends Controller
 {
     public function index(): JsonResponse
     {
-        $leaves = LeaveRequest::with('staffProfile.user:id,name,avatar', 'approver:id,name')
+        $leaves = HrLeaveRequest::with('staffProfile.user:id,name,avatar', 'approver:id,name')
             ->latest()
             ->paginate(20);
 
@@ -50,7 +50,7 @@ class LeaveRequestController extends Controller
             'reason'           => ['nullable', 'string', 'max:1000'],
         ]);
 
-        $leave = LeaveRequest::create($data);
+        $leave = HrLeaveRequest::create($data);
 
         return response()->json([
             'success' => true,
@@ -58,7 +58,7 @@ class LeaveRequestController extends Controller
         ], 201);
     }
 
-    public function show(LeaveRequest $leave): JsonResponse
+    public function show(HrLeaveRequest $leave): JsonResponse
     {
         return response()->json([
             'success' => true,
@@ -66,7 +66,7 @@ class LeaveRequestController extends Controller
         ]);
     }
 
-    public function update(Request $request, LeaveRequest $leave): JsonResponse
+    public function update(Request $request, HrLeaveRequest $leave): JsonResponse
     {
         // FIX: was $request->all() — no validation, mass-assignment risk
         $data = $request->validate([
@@ -88,13 +88,13 @@ class LeaveRequestController extends Controller
         ]);
     }
 
-    public function destroy(LeaveRequest $leave): JsonResponse
+    public function destroy(HrLeaveRequest $leave): JsonResponse
     {
         $leave->delete();
         return response()->json(['success' => true], 204);
     }
 
-    private function transform(LeaveRequest $leave): array
+    private function transform(HrLeaveRequest $leave): array
     {
         return [
             'id'           => $leave->id,

@@ -81,10 +81,13 @@ class ProcessLeadDocument implements ShouldQueue
             $document->status = LeadDocumentStatus::SUCCEEDED;
             $document->save();
 
-            activity()
-                ->performedOn($document->lead)
-                ->causedBy($document->lead->owner ?? null)
-                ->log('AI generated document summary');
+            \App\Models\AuditLog::record(
+                $document->lead,
+                'document_summarized',
+                [],
+                ['description' => 'AI generated document summary', 'document_id' => $document->id],
+                $document->lead->owner->id ?? null,
+            );
 
             // Broadcast the result so UI can update in real-time
             event(new \App\Events\LeadDocumentProcessed($document, LeadDocumentStatus::SUCCEEDED->value));

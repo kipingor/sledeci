@@ -5,7 +5,7 @@ namespace App\Traits;
 use App\Services\Ocr\ReceiptOcrService;
 use App\Models\Expense;
 use Illuminate\Http\Request;
-use Illiminate\Facade\Storage;
+use Illuminate\Support\Facades\Storage;
 
 trait ExpenseOcrAddendum
 {

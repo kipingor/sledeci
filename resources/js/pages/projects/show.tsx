@@ -781,7 +781,7 @@ function StakeholdersTab({ project, canManage, engagementLevels }: any) {
         name: '', role: '', organization: '', email: '', phone: '',
         influence: 'medium', interest: 'medium',
         current_engagement: 'neutral', desired_engagement: 'supportive',
-        management_strategy: '', notes: '',
+        engagement_strategy: '', notes: '',
     });
     const submit = () => { post(`/projects/${project.id}/stakeholders`, { onSuccess: () => { reset(); setOpen(false); } }); };
 
@@ -832,7 +832,7 @@ function StakeholdersTab({ project, canManage, engagementLevels }: any) {
                                         </Select>
                                     </div>
                                 </div>
-                                <div><Label>Management Strategy</Label><Textarea value={data.management_strategy} onChange={e => setData('management_strategy', e.target.value)} rows={2} /></div>
+                                <div><Label>Management Strategy</Label><Textarea value={data.engagement_strategy} onChange={e => setData('engagement_strategy', e.target.value)} rows={2} /></div>
                                 <div className="flex justify-end gap-2 pt-2">
                                     <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
                                     <Button onClick={submit} disabled={processing}>Add Stakeholder</Button>

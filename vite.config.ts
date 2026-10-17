@@ -28,6 +28,12 @@ export default defineConfig({
             formVariants: true,
         }),
     ]),
+    test: {
+        environment: 'jsdom',
+        globals: true,
+        setupFiles: ['resources/js/test-setup.ts'],
+        include: ['resources/js/**/*.{test,spec}.{ts,tsx}'],
+    },
     server: {
         watch: {
             ignored: [

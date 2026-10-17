@@ -78,7 +78,10 @@ class DocumentExtractionService
      */
     protected function extractFromPdf(string $filePath): string
     {
-        // Using Smalot PdfParser or similar library
+        if (! class_exists(\Smalot\PdfParser\Parser::class)) {
+            throw new \Exception('PDF extraction requires the smalot/pdfparser package.');
+        }
+
         try {
             $parser = new \Smalot\PdfParser\Parser();
             $pdf = $parser->parseFile($filePath);
@@ -90,28 +93,60 @@ class DocumentExtractionService
     }
 
     /**
-     * Extract text from Word document
+     * Extract text from Word document (.doc / .docx) using PhpWord.
      */
-    protected function extractFromWord(string $filePath): array
+    protected function extractFromWord(string $filePath): string
     {
-        // Using PhpWord or similar library
+        if (! class_exists(\PhpOffice\PhpWord\IOFactory::class)) {
+            throw new \Exception('Word extraction requires the phpoffice/phpword package.');
+        }
+
         try {
-            $text = \PhpOffice\PhpWord\IOFactory::extractVariables($filePath);
-            // $text = '';
-            
-            // foreach ($phpWord->getSections() as $section) {
-            //     foreach ($section->getElements() as $element) {
-            //         if (method_exists($element, 'getText')) {
-            //             $text .= $element->getText() . "\n";
-            //         }
-            //     }
-            // }
-            
-            return $text;
+            $reader  = strtolower(pathinfo($filePath, PATHINFO_EXTENSION)) === 'doc' ? 'MsDoc' : 'Word2007';
+            $phpWord = \PhpOffice\PhpWord\IOFactory::load($filePath, $reader);
+
+            $lines = [];
+            foreach ($phpWord->getSections() as $section) {
+                foreach ($section->getElements() as $element) {
+                    $text = $this->extractTextFromElement($element);
+                    if ($text !== '') {
+                        $lines[] = $text;
+                    }
+                }
+            }
+
+            return trim(implode("\n", $lines));
         } catch (\Exception $e) {
             Log::error('Word extraction failed', ['error' => $e->getMessage()]);
             throw new \Exception('Failed to extract text from Word document');
         }
+    }
+
+    /**
+     * Recursively pull text out of a PhpWord element (Text, TextRun, Table ...).
+     */
+    private function extractTextFromElement(object $element): string
+    {
+        if (method_exists($element, 'getText') && is_string($text = $element->getText())) {
+            return $text;
+        }
+
+        $parts = [];
+        if (method_exists($element, 'getElements')) {
+            foreach ($element->getElements() as $child) {
+                $parts[] = $this->extractTextFromElement($child);
+            }
+        } elseif (method_exists($element, 'getRows')) {
+            foreach ($element->getRows() as $row) {
+                foreach ($row->getCells() as $cell) {
+                    foreach ($cell->getElements() as $child) {
+                        $parts[] = $this->extractTextFromElement($child);
+                    }
+                }
+            }
+        }
+
+        return trim(implode(' ', array_filter($parts, fn ($p) => $p !== '')));
     }
 
     /**

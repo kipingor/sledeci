@@ -127,3 +127,9 @@ export interface NavItem {
 }
 
 export default {};
+
+// `@/types` resolves to this file (a file wins over the `types/` directory). Re-export the
+// starter-kit types (Auth, AppLayoutProps, AppVariant, AuthLayoutProps, FlashToast, NavItem ...)
+// so layouts/components that import them from '@/types' type-check. Declarations above take
+// precedence over same-named re-exports (User, BreadcrumbItem, ...).
+export type * from './types/index';

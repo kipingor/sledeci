@@ -18,7 +18,7 @@ class WorkflowEmail extends Mailable
      * Create a new message instance.
      */
     public function __construct(
-        public string $subject,
+        public string $emailSubject,
         public string $body,
         public Lead $lead
     ) {}
@@ -29,7 +29,7 @@ class WorkflowEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: $this->subject,
+            subject: $this->emailSubject,
         );
     }
 
@@ -41,7 +41,7 @@ class WorkflowEmail extends Mailable
         return new Content(
             view: 'emails.workflow-email',
             with: [
-                'subject' => $this->subject,
+                'subject' => $this->emailSubject,
                 'body' => $this->body,
                 'lead' => $this->lead,
             ],

@@ -35,4 +35,77 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | AI providers (bound in AppServiceProvider)
+    |--------------------------------------------------------------------------
+    */
+    'openai' => [
+        'api_key' => env('OPENAI_API_KEY'),
+    ],
+
+    'anthropic' => [
+        'api_key' => env('ANTHROPIC_API_KEY'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Inbound webhooks
+    |--------------------------------------------------------------------------
+    | 'webhooks.secret' authenticates M-Pesa / Airtel / MTN callbacks
+    | (App\Http\Middleware\VerifyWebhookToken). Required outside local/testing.
+    */
+    'webhooks' => [
+        'secret' => env('WEBHOOK_SECRET'),
+    ],
+
+    'mailgun' => [
+        // Signing key used to verify inbound-email webhooks (MailgunWebhookController).
+        'webhook_signing_key' => env('MAILGUN_WEBHOOK_SIGNING_KEY'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Mobile money
+    |--------------------------------------------------------------------------
+    */
+    'mpesa' => [
+        'consumer_key'    => env('MPESA_CONSUMER_KEY'),
+        'consumer_secret' => env('MPESA_CONSUMER_SECRET'),
+        'shortcode'       => env('MPESA_SHORTCODE'),
+        'passkey'         => env('MPESA_PASSKEY'),
+    ],
+
+    'airtel' => [
+        'client_id'     => env('AIRTEL_CLIENT_ID'),
+        'client_secret' => env('AIRTEL_CLIENT_SECRET'),
+    ],
+
+    'mtn_momo' => [
+        'api_user'         => env('MTN_MOMO_API_USER'),
+        'api_key'          => env('MTN_MOMO_API_KEY'),
+        'subscription_key' => env('MTN_MOMO_SUBSCRIPTION_KEY'),
+        'environment'      => env('MTN_MOMO_ENVIRONMENT', 'sandbox'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Messaging
+    |--------------------------------------------------------------------------
+    */
+    'whatsapp' => [
+        'token'           => env('WHATSAPP_TOKEN'),
+        'phone_number_id' => env('WHATSAPP_PHONE_NUMBER_ID'),
+    ],
+
+    'africas_talking' => [
+        'username'  => env('AFRICAS_TALKING_USERNAME'),
+        'api_key'   => env('AFRICAS_TALKING_API_KEY'),
+        'sender_id' => env('AFRICAS_TALKING_SENDER_ID'),
+    ],
+
+    'exchangerate_api' => [
+        'key' => env('EXCHANGERATE_API_KEY'),
+    ],
+
 ];

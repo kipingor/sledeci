@@ -67,9 +67,13 @@ class CompanySetting extends Model
 
     public static function current(): self
     {
-        return Cache::remember(self::CACHE_KEY, 3600, function () {
-            return static::firstOrCreate([], ['company_name' => config('app.name')]);
+        // Laravel 13 refuses to unserialize arbitrary classes from the cache
+        // (cache.serializable_classes), so cache the raw attributes, not the model.
+        $attributes = Cache::remember(self::CACHE_KEY, 3600, function () {
+            return static::firstOrCreate([], ['company_name' => config('app.name')])->getAttributes();
         });
+
+        return (new self)->newFromBuilder($attributes);
     }
 
     public static function clearCache(): void
