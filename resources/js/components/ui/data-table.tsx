@@ -295,7 +295,9 @@ export function DataTable<T extends Record<string, any>>({
                                 <TableHead className="w-12">
                                     <Checkbox
                                         checked={isAllSelected}
-                                        onCheckedChange={handleSelectAll}
+                                        onCheckedChange={(checked) =>
+                                            handleSelectAll(checked === true)
+                                        }
                                         aria-label="Select all"
                                         className={cn(
                                             isSomeSelected && "data-[state=checked]:bg-primary/50"

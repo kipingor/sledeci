@@ -236,7 +236,7 @@ export function usePipeline(initialData?: {
 export function useMoveLead() {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  return useMutation<any, Error, { leadId: number; stageId: number }, { prev?: Lead[] }>({
     mutationFn: async ({ leadId, stageId }: { leadId: number; stageId: number }) => {
       const { data } = await api.put(`/leads/${leadId}/move`, { 
         stage: stageId.toString(),

@@ -1,22 +1,4 @@
 // Auto-generated shims to silence TypeScript module not found errors during CI checks
-declare module '@/*';
-declare module '@/routes';
-declare module '@/routes/*';
-// keep '@/types' resolved to the actual file in the project (don't shadow it here)
-declare module '@/components/*';
-declare module '@testing-library/react';
-declare module 'msw';
-declare module 'msw/node';
-declare module 'axios';
-declare module '@/lib/axios' {
-    import axios from 'axios';
-    const api: axios.AxiosInstance;
-    export default api;
-}
-declare module '@/lib/echo' {
-    export const echo: any;
-}
-
 declare var toast: ((opts: { title: string; description?: string; variant?: string }) => void) | undefined;
 
 declare interface Window {

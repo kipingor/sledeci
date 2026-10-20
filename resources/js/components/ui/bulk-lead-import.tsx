@@ -99,13 +99,13 @@ export function BulkLeadImport({ onComplete }: BulkLeadImportProps) {
             // Make the actual upload request
             await new Promise<void>((resolve, reject) => {
                 router.post(
-                    route('leads.import'),
+                    route('web.leads.import'),
                     formData,
                     {
                         forceFormData: true,
                         preserveState: true,
                         onProgress: (progress) => {
-                            setImportProgress(Math.floor(progress.percentage || 0));
+                            setImportProgress(Math.floor(progress?.percentage ?? 0));
                         },
                         onSuccess: (page: any) => {
                             clearInterval(progressInterval);

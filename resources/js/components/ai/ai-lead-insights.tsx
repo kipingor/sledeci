@@ -297,7 +297,7 @@ export function AILeadInsights({ leadId, onActionTaken }: AILeadInsightsProps) {
                             <div
                                 key={similar.id}
                                 className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 cursor-pointer"
-                                onClick={() => router.visit(route('leads.show', similar.id))}
+                                onClick={() => router.visit(route('web.leads.show', similar.id))}
                             >
                                 <div className="flex-1">
                                     <div className="font-medium text-sm">{similar.title}</div>

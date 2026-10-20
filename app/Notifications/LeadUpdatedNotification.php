@@ -33,17 +33,17 @@ class LeadUpdatedNotification extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $url = route('leads.show', $this->lead);
+        $url = route('web.leads.show', $this->lead);
         $changes = $this->getChanges();
 
         $message = (new MailMessage)
             ->subject("Lead Updated: {$this->lead->title}")
             ->greeting("Hello {$notifiable->name}!")
-            ->line("A lead assigned to you has been updated.");
+            ->line('A lead assigned to you has been updated.');
 
         // Add changes
         foreach ($changes as $change) {
-            $message->line("• " . $change);
+            $message->line('• '.$change);
         }
 
         return $message
@@ -61,7 +61,7 @@ class LeadUpdatedNotification extends Notification implements ShouldQueue
             'lead_title' => $this->lead->title,
             'changes' => $this->getChanges(),
             'message' => "Lead '{$this->lead->title}' has been updated",
-            'action_url' => route('leads.show', $this->lead),
+            'action_url' => route('web.leads.show', $this->lead),
         ];
     }
 
@@ -77,15 +77,15 @@ class LeadUpdatedNotification extends Notification implements ShouldQueue
         }
 
         if (isset($this->originalData['owner_id']) && $this->originalData['owner_id'] !== $this->lead->owner_id) {
-            $changes[] = "Owner was changed";
+            $changes[] = 'Owner was changed';
         }
 
         if (isset($this->originalData['pipeline_stage_id']) && $this->originalData['pipeline_stage_id'] !== $this->lead->pipeline_stage_id) {
-            $changes[] = "Pipeline stage was updated";
+            $changes[] = 'Pipeline stage was updated';
         }
 
         if (empty($changes)) {
-            $changes[] = "Lead information was updated";
+            $changes[] = 'Lead information was updated';
         }
 
         return $changes;

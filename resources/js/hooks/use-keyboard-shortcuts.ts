@@ -1,5 +1,6 @@
 import { router } from '@inertiajs/react';
 import { useEffect } from 'react';
+import type { Lead } from '@/types';
 
 export function useKeyboardShortcuts() {
     useEffect(() => {
@@ -26,7 +27,7 @@ export function useKeyboardShortcuts() {
 }
 
 // Usage in leads/index.tsx
-export default function LeadsIndex({ leads }) {
+export default function LeadsIndex({ leads }: { leads: Lead[] }) {
     useKeyboardShortcuts();
     // ...
 }

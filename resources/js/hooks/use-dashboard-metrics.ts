@@ -45,14 +45,8 @@ export function useDashboardMetrics(refetchInterval: number = 30000) {
     return useQuery<DashboardMetrics>({
         queryKey: ['dashboard-metrics'],
         queryFn: async () => {
-            // Dashboard metrics are exposed as a web route at /api/v1/dashboard/metrics
-            // (this repo places them under web routes, not api/v1) — use fetch
-            const res = await api.fetch('dashboard/metrics', {
-                credentials: 'include',
-                headers: { Accept: 'application/json' },
-            });
-            if (!res.ok) throw new Error(`Failed to load dashboard metrics: ${res.status}`);
-            return (await res.json()) as DashboardMetrics;
+            const { data } = await api.get<DashboardMetrics>('/dashboard/metrics');
+            return data;
         },
         refetchInterval,
         staleTime: 10000,

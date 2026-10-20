@@ -6,12 +6,13 @@ export function useDashboardRealtime() {
     const queryClient = useQueryClient();
 
     useEffect(() => {
-        if (!echo) {
+        const echoClient = echo;
+        if (!echoClient) {
             return;
         }
 
         // Listen for dashboard metric updates
-        const metricsChannel = echo.channel('dashboard-metrics');
+        const metricsChannel = echoClient.channel('dashboard-metrics');
         
         metricsChannel.listen('MetricsUpdated', (data: any) => {
             // Invalidate and refetch dashboard metrics
@@ -19,7 +20,7 @@ export function useDashboardRealtime() {
         });
 
         // Listen for lead updates
-        const leadsChannel = echo.channel('leads');
+        const leadsChannel = echoClient.channel('leads');
         leadsChannel.listen('LeadCreated', () => {
             queryClient.invalidateQueries({ queryKey: ['dashboard-metrics'] });
         });
@@ -28,7 +29,7 @@ export function useDashboardRealtime() {
         });
 
         // Listen for opportunity updates
-        const opportunitiesChannel = echo.channel('opportunities');
+        const opportunitiesChannel = echoClient.channel('opportunities');
         opportunitiesChannel.listen('OpportunityCreated', () => {
             queryClient.invalidateQueries({ queryKey: ['dashboard-metrics'] });
         });
@@ -37,17 +38,17 @@ export function useDashboardRealtime() {
         });
 
         // Listen for task updates
-        const tasksChannel = echo.channel('tasks');
+        const tasksChannel = echoClient.channel('tasks');
         tasksChannel.listen('TaskUpdated', () => {
             queryClient.invalidateQueries({ queryKey: ['dashboard-metrics'] });
         });
 
         // Cleanup function
         return () => {
-            echo.leaveChannel('dashboard-metrics');
-            echo.leaveChannel('leads');
-            echo.leaveChannel('opportunities');
-            echo.leaveChannel('tasks');
+            echoClient.leaveChannel('dashboard-metrics');
+            echoClient.leaveChannel('leads');
+            echoClient.leaveChannel('opportunities');
+            echoClient.leaveChannel('tasks');
         };
     }, [queryClient]);
 }

@@ -32,15 +32,15 @@ class LeadCreatedNotification extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $url = route('leads.show', $this->lead);
+        $url = route('web.leads.show', $this->lead);
 
         return (new MailMessage)
             ->subject("New Lead Created: {$this->lead->title}")
             ->greeting("Hello {$notifiable->name}!")
-            ->line("A new lead has been created and assigned to you.")
+            ->line('A new lead has been created and assigned to you.')
             ->line("**Lead:** {$this->lead->title}")
-            ->line("**Type:** " . ucfirst($this->lead->type))
-            ->line("**Status:** " . ucfirst($this->lead->status))
+            ->line('**Type:** '.ucfirst($this->lead->type))
+            ->line('**Status:** '.ucfirst($this->lead->status))
             ->when($this->lead->description, function ($message) {
                 return $message->line("**Description:** {$this->lead->description}");
             })
@@ -59,7 +59,7 @@ class LeadCreatedNotification extends Notification implements ShouldQueue
             'lead_type' => $this->lead->type,
             'lead_status' => $this->lead->status,
             'message' => "New lead '{$this->lead->title}' has been assigned to you",
-            'action_url' => route('leads.show', $this->lead),
+            'action_url' => route('web.leads.show', $this->lead),
         ];
     }
 }

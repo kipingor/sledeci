@@ -4,19 +4,20 @@ import { Task } from "@/types";
 
 export function useTaskRealtime(onTaskUpdated: (task: Task) => void) {
   useEffect(() => {
-    if (!echo) {
+    const echoClient = echo;
+    if (!echoClient) {
       console.warn('Echo is not configured, skipping real-time updates');
       return;
     }
     
-    const channel = echo.channel("tasks");
+    const channel = echoClient.channel("tasks");
 
     channel.listen(".task.updated", (event: any) => {
       onTaskUpdated(event.task);
     });
 
     return () => {
-      echo.leaveChannel("tasks");
+      echoClient.leaveChannel("tasks");
     };
   }, [onTaskUpdated]);
 }

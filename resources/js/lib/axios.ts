@@ -64,7 +64,9 @@ api.interceptors.response.use(
           .then(() => axios.request(config))
           .catch(() => {
             // Show a user-facing UI offering a Retry or Login option.
-            return showAuthErrorUI()
+            const authPrompt = showAuthErrorUI();
+            if (!authPrompt) return Promise.reject(error);
+            return authPrompt
               .then(() => Promise.reject(error))
               .catch(() => Promise.reject(error));
           });
@@ -72,7 +74,9 @@ api.interceptors.response.use(
 
       // Already retried — show auth UI and then redirect to login if user chooses so.
       try {
-        return showAuthErrorUI().then(() => Promise.reject(error));
+        const authPrompt = showAuthErrorUI();
+        if (!authPrompt) return Promise.reject(error);
+        return authPrompt.then(() => Promise.reject(error));
       } catch (e) {
         try {
           window.location.href = '/login';
@@ -87,4 +91,3 @@ api.interceptors.response.use(
 );
 
 export default api;
-

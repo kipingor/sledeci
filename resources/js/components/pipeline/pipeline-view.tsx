@@ -3,20 +3,19 @@ import { router } from '@inertiajs/react';
 import {
     DndContext,
     closestCenter,
+    type DragEndEvent,
     PointerSensor,
     useSensor,
     useSensors,
 } from '@dnd-kit/core';
 import {
-    arrayMove,
     SortableContext,
-    sortableKeyboardCoordinates,
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { SortableItem } from './SortableItem';
+import type { Lead } from '@/types';
 
-// Layout
-const AppLayout = ({ children }) => (
+const AppLayout = ({ children }: React.PropsWithChildren) => (
     <div className="min-h-screen bg-gray-100 text-gray-900">
         <header className="bg-blue-500 text-white p-4">
             <h1 className="text-lg font-bold">Lead Management System</h1>
@@ -26,17 +25,23 @@ const AppLayout = ({ children }) => (
 );
 
 // Pipeline View Component
-const PipelineView = ({ leads }) => {
-    const stages = [
+const stages = [
         'New', 'Contacted', 'Qualified', 'Opportunity', 'Proposal Sent', 'Project Won', 'Project Lost'
-    ];
+    ] as const;
 
-    const initialData = stages.reduce((acc, stage) => {
+type PipelineStage = (typeof stages)[number];
+
+interface PipelineViewProps {
+    leads: Lead[];
+}
+
+const PipelineView = ({ leads }: PipelineViewProps) => {
+    const initialData = stages.reduce<Record<PipelineStage, Lead[]>>((acc, stage) => {
         acc[stage] = leads.filter((lead) => lead.status === stage);
         return acc;
-    }, {});
+    }, {} as Record<PipelineStage, Lead[]>);
 
-    const [pipeline, setPipeline] = useState(initialData);
+    const [pipeline, setPipeline] = useState<Record<PipelineStage, Lead[]>>(initialData);
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -46,33 +51,43 @@ const PipelineView = ({ leads }) => {
         })
     );
 
-    const handleDragEnd = async (event) => {
+    const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event;
         if (!over || active.id === over.id) return;
 
-        const activeStage = Object.keys(pipeline).find(stage => pipeline[stage].some(lead => lead.id.toString() === active.id));
-        const overStage = Object.keys(pipeline).find(stage => stage === over.id || pipeline[stage].some(lead => lead.id.toString() === over.id));
+        const activeId = String(active.id);
+        const overId = String(over.id);
+        const activeStage = stages.find((stage) =>
+            pipeline[stage].some((lead) => String(lead.id) === activeId),
+        );
+        const overStage = stages.find(
+            (stage) =>
+                stage === overId ||
+                pipeline[stage].some((lead) => String(lead.id) === overId),
+        );
 
         if (!activeStage || !overStage) return;
 
-        const activeLeadIndex = pipeline[activeStage].findIndex(lead => lead.id.toString() === active.id);
-        const [movedLead] = pipeline[activeStage].splice(activeLeadIndex, 1);
-        movedLead.status = overStage;
+        const sourceLeads = pipeline[activeStage];
+        const movedLead = sourceLeads.find((lead) => String(lead.id) === activeId);
+        if (!movedLead) return;
 
-        const newOverStageLeads = [...pipeline[overStage], movedLead];
+        const sourceWithoutLead = sourceLeads.filter(
+            (lead) => String(lead.id) !== activeId,
+        );
+        const moved = { ...movedLead, status: overStage };
+        const nextPipeline = activeStage === overStage
+            ? { ...pipeline, [activeStage]: [...sourceWithoutLead, moved] }
+            : {
+                ...pipeline,
+                [activeStage]: sourceWithoutLead,
+                [overStage]: [...pipeline[overStage], moved],
+            };
 
-        setPipeline({
-            ...pipeline,
-            [activeStage]: [...pipeline[activeStage]],
-            [overStage]: newOverStageLeads,
+        setPipeline(nextPipeline);
+        router.put(`/leads/${movedLead.id}`, { status: overStage }, {
+            onError: () => setPipeline(pipeline),
         });
-
-        try {
-            await router.put(`/leads/${movedLead.id}`, { status: overStage });
-        } catch (err) {
-            // router.put returns a visit; any errors are surfaced via Inertia flash/errors
-            console.error('Failed to update lead status', err);
-        }
     };
 
     return (
@@ -82,7 +97,7 @@ const PipelineView = ({ leads }) => {
                     {stages.map((stage) => (
                         <div key={stage} className="bg-gray-200 p-4 rounded-md min-h-[300px]">
                             <h2 className="text-lg font-semibold mb-2">{stage}</h2>
-                            <SortableContext items={pipeline[stage].map(l => l.id.toString())} strategy={verticalListSortingStrategy}>
+                            <SortableContext items={pipeline[stage].map((lead) => String(lead.id))} strategy={verticalListSortingStrategy}>
                                 {pipeline[stage].map((lead) => (
                                     <SortableItem key={lead.id} id={lead.id.toString()} lead={lead} />
                                 ))}

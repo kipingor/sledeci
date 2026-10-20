@@ -4,7 +4,6 @@
  * now renders the SF left-nav sidebar instead of plain buttons.
  * The only styling change is inside SettingsLayout itself (already delivered).
  */
-import PasswordController from '@/actions/App/Http/Controllers/Settings/PasswordController';
 import InputError from '@/components/input-error';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
@@ -43,7 +42,8 @@ export default function Password() {
                     </div>
 
                     <Form
-                        {...PasswordController.update.form()}
+                        action="/settings/password"
+                        method="put"
                         options={{ preserveScroll: true }}
                         resetOnError={['password', 'password_confirmation', 'current_password']}
                         resetOnSuccess

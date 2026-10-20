@@ -6,7 +6,7 @@ if (import.meta.env.DEV && typeof window !== 'undefined') {
     const host = new URL(origin).host; // includes port when present
     const hostname = window.location.hostname; // without port
     const raw = import.meta.env.VITE_SANCTUM_STATEFUL_DOMAINS || '';
-    const list = raw.split(',').map((s) => s.trim()).filter(Boolean);
+    const list = raw.split(',').map((s: string) => s.trim()).filter(Boolean);
 
     const included = list.includes(host) || list.includes(hostname) || list.includes(origin);
     if (!included) {

@@ -18,7 +18,9 @@ export default function ActivityFeed() {
                 >
                     <p className="font-medium">{item.description}</p>
                     <p className="text-sm text-muted-foreground">
-                        {new Date(item.created_at).toLocaleString()}
+                        {item.created_at
+                            ? new Date(item.created_at).toLocaleString()
+                            : '—'}
                     </p>
                 </div>
             ))}

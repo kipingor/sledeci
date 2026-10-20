@@ -257,7 +257,9 @@ export default function ProjectsIndex({ projects, filters, statistics }: Project
                                             {/* Phase */}
                                             <td className="px-4 py-2.5">
                                                 <span className="text-xs text-muted-foreground">
-                                                    {PHASE_LABEL[project.phase] ?? project.phase}
+                                                    {project.phase
+                                                        ? PHASE_LABEL[project.phase] ?? project.phase
+                                                        : '—'}
                                                 </span>
                                             </td>
 
@@ -271,7 +273,7 @@ export default function ProjectsIndex({ projects, filters, statistics }: Project
                                                 {project.client ? (
                                                     <div className="flex items-center gap-1.5">
                                                         <Avatar className="h-5 w-5">
-                                                            <AvatarImage src={project.client.avatar} />
+                                                            <AvatarImage src={project.client.avatar ?? undefined} />
                                                             <AvatarFallback className="text-[9px] bg-muted">
                                                                 {project.client.name?.charAt(0)}
                                                             </AvatarFallback>
@@ -288,7 +290,7 @@ export default function ProjectsIndex({ projects, filters, statistics }: Project
                                                 {project.owner ? (
                                                     <div className="flex items-center gap-1.5">
                                                         <Avatar className="h-5 w-5">
-                                                            <AvatarImage src={project.owner.avatar} />
+                                                            <AvatarImage src={project.owner.avatar ?? undefined} />
                                                             <AvatarFallback className="text-[9px] bg-primary/10 text-primary">
                                                                 {project.owner.name?.charAt(0)}
                                                             </AvatarFallback>

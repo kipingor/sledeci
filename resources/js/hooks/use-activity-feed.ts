@@ -4,14 +4,15 @@ import { ActivityLog } from "@/types";
 
 export function useActivityFeed(onNewActivity: (activity: ActivityLog) => void) {
     useEffect(() => {
-        if (!echo) return; // Safety check
+        const echoClient = echo;
+        if (!echoClient) return;
 
-        const channel = echo.channel("activity");
+        const channel = echoClient.channel("activity");
 
         channel.listen(".activity.created", (payload: any) => {
             onNewActivity(payload);
         });
 
-        return () => echo.leaveChannel("activity");
+        return () => echoClient.leaveChannel("activity");
     }, [onNewActivity]);
 }

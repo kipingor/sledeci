@@ -36,7 +36,12 @@ export function useTasks(projectId?: number | string) {
     const tasks = data ?? EMPTY_TASKS;
 
     /** ──────── Update status (Optimistic UI) ──────── **/
-    const updateTaskStatus = useMutation({
+    const updateTaskStatus = useMutation<
+        void,
+        Error,
+        { taskId: number; newStatus: string },
+        { previousTasks?: Task[] }
+    >({
         mutationFn: async ({ taskId, newStatus }: { taskId: number; newStatus: string }) => {
             await api.put(`/tasks/${taskId}`, { status: newStatus });
         },

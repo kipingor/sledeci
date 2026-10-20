@@ -4,7 +4,7 @@
  *   route('web.opportunities.show', id)  → `/opportunities/${id}`
  *   route('web.opportunities.edit', id)  → `/opportunities/${id}/edit`
  *   route('web.opportunities.destroy',id) → DELETE `/opportunities/${id}`
- *   route('leads.show', id)              → `/leads/${id}`
+ *   route('web.leads.show', id)          → `/leads/${id}`
  *   route('projects.show', id)           → `/projects/${id}`
  *
  * All replaced with direct URL strings.

@@ -29,7 +29,7 @@ export function useBulkLeadOperations(): UseBulkLeadOperationsReturn {
         try {
             return await new Promise<BulkOperationResult>((resolve) => {
                 router.delete(
-                    route('leads.bulk-delete'),
+                    route('web.leads.bulk-delete'),
                     {
                         data: { lead_ids: leadIds },
                         preserveState: true,
@@ -85,7 +85,7 @@ export function useBulkLeadOperations(): UseBulkLeadOperationsReturn {
             // Create a form and submit it to trigger download
             const form = document.createElement('form');
             form.method = 'POST';
-            form.action = route('leads.bulk-export');
+            form.action = route('web.leads.bulk-export');
             form.style.display = 'none';
 
             // Add CSRF token
@@ -145,7 +145,7 @@ export function useBulkLeadOperations(): UseBulkLeadOperationsReturn {
         try {
             return await new Promise<BulkOperationResult>((resolve) => {
                 router.patch(
-                    route('leads.bulk-update-status'),
+                    route('web.leads.bulk-update-status'),
                     {
                         lead_ids: leadIds,
                         status: status,
@@ -203,7 +203,7 @@ export function useBulkLeadOperations(): UseBulkLeadOperationsReturn {
         try {
             return await new Promise<BulkOperationResult>((resolve) => {
                 router.patch(
-                    route('leads.bulk-assign'),
+                    route('web.leads.bulk-assign'),
                     {
                         lead_ids: leadIds,
                         owner_id: ownerId,
@@ -261,7 +261,7 @@ export function useBulkLeadOperations(): UseBulkLeadOperationsReturn {
         try {
             return await new Promise<BulkOperationResult>((resolve) => {
                 router.patch(
-                    route('leads.bulk-update-stage'),
+                    route('web.leads.bulk-update-stage'),
                     {
                         lead_ids: leadIds,
                         pipeline_stage_id: stageId,

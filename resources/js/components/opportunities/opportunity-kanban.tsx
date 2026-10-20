@@ -85,13 +85,14 @@ export function OpportunityKanban({ className }: OpportunityKanbanProps) {
         const oldColumn = updatedData[opportunity.stage];
         oldColumn.opportunities = oldColumn.opportunities.filter(opp => opp.id.toString() !== opportunityId);
         oldColumn.total_count--;
-        oldColumn.total_value -= opportunity.amount;
+        const amount = opportunity.amount ?? 0;
+        oldColumn.total_value -= amount;
         oldColumn.weighted_value -= opportunity.weighted_value || 0;
         const newColumn = updatedData[newStage];
         const updatedOpportunity = { ...opportunity, stage: newStage };
         newColumn.opportunities.push(updatedOpportunity);
         newColumn.total_count++;
-        newColumn.total_value += opportunity.amount;
+        newColumn.total_value += amount;
         newColumn.weighted_value += opportunity.weighted_value || 0;
         setKanbanData(updatedData);
 

@@ -8,11 +8,9 @@
 import { render, act, waitFor } from '@testing-library/react';
 import { beforeAll, afterEach, afterAll, describe, it, expect } from 'vitest';
 import { setupServer } from 'msw/node';
-import * as msw from 'msw';
+import { http, HttpResponse } from 'msw';
 import { vi } from 'vitest';
 import React from 'react';
-// use the http helper as 'rest' to create handlers (msw v2)
-const rest = (msw as any).http;
 
 // Mock the Echo client used by the hook so tests don't try to open websocket connections.
 vi.mock('@/lib/echo', () => {
@@ -54,37 +52,44 @@ const mockLeadsByStage: Record<string, Lead[]> = {
 // MSW Server Setup
 // ------------------------------
 const server = setupServer(
-    rest.get('/api/v1/pipelines', (_req, res, ctx) => {
+    http.get('/api/v1/pipelines', () => {
         // console for debugging in CI/local runs
         // eslint-disable-next-line no-console
         console.log('msw: GET /api/v1/pipelines called');
-        return res(
-            ctx.status(200),
-            ctx.json({
-                stages: mockStages,
-                leadsByStage: mockLeadsByStage,
-            })
-        );
+        return HttpResponse.json({
+            stages: mockStages,
+            leadsByStage: mockLeadsByStage,
+        });
     }),
 
-    rest.post('/api/v1/pipelines/move', (_req, res, ctx) => {
+    http.post('/api/v1/pipelines/move', () => {
         // Return a deterministic successful response
-        return res(
-            ctx.status(200),
-            ctx.json({ updated_lead: { id: 1, name: 'John Doe', pipeline_stage_key: 'contacted' } })
-        );
+        return HttpResponse.json({
+            updated_lead: {
+                id: 1,
+                name: 'John Doe',
+                pipeline_stage_key: 'contacted',
+            },
+        });
     }),
 
     // handler for moving a lead (used by optimistic update test)
-    rest.put('/api/v1/leads/:id/move', async (req, res, ctx) => {
-        // In MSW/node the parsed body is available as `req.body`
-        const body = req.body as any;
+    http.put('/api/v1/leads/:id/move', async ({ request, params }) => {
+        const body = await request.json() as {
+            lead_id?: number;
+            to_stage_key?: string;
+            toStageKey?: string;
+            to_stage?: string;
+        };
         const toStage = body?.to_stage_key ?? body?.toStageKey ?? body?.to_stage;
-        const id = Number(req.params.id ?? (body?.lead_id ?? 1));
-        return res(
-            ctx.status(200),
-            ctx.json({ updated_lead: { id, name: 'John Doe', pipeline_stage_key: toStage || 'contacted' } })
-        );
+        const id = Number(params.id ?? body?.lead_id ?? 1);
+        return HttpResponse.json({
+            updated_lead: {
+                id,
+                name: 'John Doe',
+                pipeline_stage_key: toStage || 'contacted',
+            },
+        });
     })
 );
 
@@ -120,8 +125,8 @@ describe('usePipeline hook', () => {
 
     it('handles API failure gracefully', async () => {
         server.use(
-            rest.get('/api/v1/pipelines', (_req, res, ctx) => {
-                return res(ctx.status(500), ctx.text('Server error'));
+            http.get('/api/v1/pipelines', () => {
+                return new HttpResponse('Server error', { status: 500 });
             })
         );
 
@@ -190,6 +195,6 @@ describe('usePipeline hook', () => {
         putSpy.mockRestore();
 
         // After rollback, lead should remain in "new"
-        expect(ref.current.itemsByStage.new.find((l) => l.id === 1)).toBeTruthy();
+        expect(ref.current.itemsByStage.new.find((lead: Lead) => lead.id === 1)).toBeTruthy();
     });
 });

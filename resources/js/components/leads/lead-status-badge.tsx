@@ -3,9 +3,24 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
-export function LeadStatusBadge({ lead, onTransition }) {
+type BadgeVariant = React.ComponentProps<typeof Badge>['variant'];
+
+interface LeadStatusBadgeProps {
+    lead: {
+        id: string | number;
+        status_color: BadgeVariant;
+        status_label: string;
+        availableTransitions?: Array<{
+            value: string;
+            color: BadgeVariant;
+            label: string;
+        }>;
+    };
+    onTransition: (leadId: string | number, status: string) => void;
+}
+
+export function LeadStatusBadge({ lead, onTransition }: LeadStatusBadgeProps) {
     const [open, setOpen] = useState(false);
-    // Fetch available transitions from lead object directly, defaulting to empty array if unavailable
     const availableTransitions = lead.availableTransitions || [];
     
     return (

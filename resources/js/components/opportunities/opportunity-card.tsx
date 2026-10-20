@@ -281,7 +281,7 @@ export function OpportunityCard({
                 {opportunity.owner && (
                     <div className="flex items-center gap-2 pt-3 border-t">
                         <Avatar className="h-6 w-6">
-                            <AvatarImage src={opportunity.owner.avatar} />
+                            <AvatarImage src={opportunity.owner.avatar ?? undefined} />
                             <AvatarFallback className="text-xs">
                                 {opportunity.owner.name.charAt(0)}
                             </AvatarFallback>

@@ -18,7 +18,7 @@ export interface User {
 
 export interface BreadcrumbItem {
     title: string;
-    href?: any;
+    href: NonNullable<InertiaLinkProps['href']>;
 }
 
 export interface PipelineStage {    
@@ -118,6 +118,7 @@ export interface SharedData {
 
 import type { ComponentType } from 'react';
 import type { LucideProps } from 'lucide-react';
+import type { InertiaLinkProps } from '@inertiajs/react';
 
 export interface NavItem {
     title: string;
