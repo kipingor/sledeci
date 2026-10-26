@@ -32,7 +32,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { router } from '@inertiajs/react';
-import { route } from 'ziggy-js';
+import * as workflowRoutes from '@/routes/web/workflows';
 
 export interface WorkflowAction {
     type: 'send_email' | 'assign_owner' | 'change_status' | 'add_tag' | 'schedule_task';
@@ -124,7 +124,7 @@ export function WorkflowBuilder({ workflow, onSave, onCancel }: WorkflowBuilderP
             if (workflow?.id) {
                 // Update existing workflow
                 router.put(
-                    route('workflows.update', workflow.id),
+                    workflowRoutes.update(workflow.id).url,
                     { 
                         ...workflowData, 
                         trigger: JSON.stringify(workflowData.trigger), // Serialize trigger property
@@ -143,7 +143,7 @@ export function WorkflowBuilder({ workflow, onSave, onCancel }: WorkflowBuilderP
             } else {
                 // Create new workflow
                 router.post(
-                    route('workflows.store'),
+                    workflowRoutes.store().url,
                     { 
                         ...workflowData, 
                         trigger: JSON.stringify(workflowData.trigger), // Serialize trigger property
@@ -473,7 +473,7 @@ export function WorkflowList({ workflows }: { workflows: Workflow[] }) {
     const { toast } = useToast();
 
     const handleToggle = useCallback((workflow: Workflow) => {
-        router.patch(route('workflows.toggle', workflow.id), {
+        router.patch(workflowRoutes.toggle(workflow.id).url, {
             enabled: !workflow.enabled,
         }, {
             onSuccess: () => {

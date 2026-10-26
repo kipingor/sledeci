@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * BUG FIX 1 — $fillable was missing all accounting columns.
@@ -65,11 +65,11 @@ class Payment extends Model
     ];
 
     protected $casts = [
-        'amount'       => 'decimal:2',
-        'exchange_rate'=> 'decimal:10',
-        'functional_amount'     => 'decimal:4',
-        'mobile_money_payload'  => 'array',
-        'paid_at'      => 'datetime',
+        'amount' => 'decimal:2',
+        'exchange_rate' => 'decimal:10',
+        'functional_amount' => 'decimal:4',
+        'mobile_money_payload' => 'array',
+        'paid_at' => 'datetime',
     ];
 
     // ── Helpers ────────────────────────────────────────────────────────────────
@@ -92,15 +92,15 @@ class Payment extends Model
     public function channelLabel(): string
     {
         return match ($this->channel) {
-            'mpesa'        => 'M-Pesa',
+            'mpesa' => 'M-Pesa',
             'airtel_money' => 'Airtel Money',
-            'mtn_momo'     => 'MTN MoMo',
-            'bank'         => 'Bank Transfer',
-            'cash'         => 'Cash',
-            'card'         => 'Card',
-            'cheque'       => 'Cheque',
-            'crypto'       => 'Crypto',
-            default        => ucfirst($this->channel ?? $this->method),
+            'mtn_momo' => 'MTN MoMo',
+            'bank' => 'Bank Transfer',
+            'cash' => 'Cash',
+            'card' => 'Card',
+            'cheque' => 'Cheque',
+            'crypto' => 'Crypto',
+            default => ucfirst($this->channel ?? $this->method),
         };
     }
 

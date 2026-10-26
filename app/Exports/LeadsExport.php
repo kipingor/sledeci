@@ -3,14 +3,16 @@
 namespace App\Exports;
 
 use App\Models\Lead;
+use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStyles;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class LeadsExport implements FromQuery, WithHeadings, WithMapping, WithStyles, ShouldAutoSize
+class LeadsExport implements FromQuery, ShouldAutoSize, WithHeadings, WithMapping, WithStyles
 {
     protected $filters;
 
@@ -20,37 +22,37 @@ class LeadsExport implements FromQuery, WithHeadings, WithMapping, WithStyles, S
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function query()
     {
         $query = Lead::with(['owner', 'pipelineStage']);
 
         // Apply filters
-        if (!empty($this->filters['status'])) {
+        if (! empty($this->filters['status'])) {
             $query->where('status', $this->filters['status']);
         }
 
-        if (!empty($this->filters['owner_id'])) {
+        if (! empty($this->filters['owner_id'])) {
             $query->where('owner_id', $this->filters['owner_id']);
         }
 
-        if (!empty($this->filters['pipeline_stage_id'])) {
+        if (! empty($this->filters['pipeline_stage_id'])) {
             $query->where('pipeline_stage_id', $this->filters['pipeline_stage_id']);
         }
 
-        if (!empty($this->filters['search'])) {
+        if (! empty($this->filters['search'])) {
             $query->where(function ($q) {
-                $q->where('title', 'like', '%' . $this->filters['search'] . '%')
-                  ->orWhere('description', 'like', '%' . $this->filters['search'] . '%');
+                $q->where('title', 'like', '%'.$this->filters['search'].'%')
+                    ->orWhere('description', 'like', '%'.$this->filters['search'].'%');
             });
         }
 
-        if (!empty($this->filters['created_from'])) {
+        if (! empty($this->filters['created_from'])) {
             $query->where('created_at', '>=', $this->filters['created_from']);
         }
 
-        if (!empty($this->filters['created_to'])) {
+        if (! empty($this->filters['created_to'])) {
             $query->where('created_at', '<=', $this->filters['created_to']);
         }
 
@@ -119,8 +121,8 @@ class LeadsExport implements FromQuery, WithHeadings, WithMapping, WithStyles, S
             1 => [
                 'font' => ['bold' => true, 'size' => 12],
                 'fill' => [
-                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                    'startColor' => ['rgb' => 'E2E8F0']
+                    'fillType' => Fill::FILL_SOLID,
+                    'startColor' => ['rgb' => 'E2E8F0'],
                 ],
             ],
         ];

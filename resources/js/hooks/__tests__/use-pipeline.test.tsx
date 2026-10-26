@@ -6,10 +6,10 @@
  *  - Mock Service Worker (MSW) for API mocking
  */
 import { render, act, waitFor } from '@testing-library/react';
-import { beforeAll, afterEach, afterAll, describe, it, expect } from 'vitest';
+import { beforeAll, afterEach, afterAll, describe, it, expect } from 'vite-plus/test';
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
-import { vi } from 'vitest';
+import { vi } from 'vite-plus/test';
 import React from 'react';
 
 // Mock the Echo client used by the hook so tests don't try to open websocket connections.

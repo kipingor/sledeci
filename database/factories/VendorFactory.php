@@ -27,16 +27,16 @@ class VendorFactory extends Factory
                 'Equipment Supply',
                 'Electrical',
                 'General Contractor',
-                'Other'
+                'Other',
             ]),
             'contact_info' => [
                 'email' => fake()->companyEmail(),
-                'phone' => '+2547' . $this->faker->numberBetween(10000000, 99999999),
+                'phone' => '+2547'.$this->faker->numberBetween(10000000, 99999999),
                 'address' => fake()->address(),
             ],
             'metadata' => [
                 'tax_pin' => strtoupper(Str::random(8)),
-                'contract_reference' => 'CTR-' . strtoupper(Str::random(6)),
+                'contract_reference' => 'CTR-'.strtoupper(Str::random(6)),
                 'notes' => fake()->sentence(),
             ],
             'status' => fake()->randomElement(['active', 'inactive']),
@@ -50,7 +50,7 @@ class VendorFactory extends Factory
      */
     public function active(): Factory
     {
-        return $this->state(fn() => ['status' => 'active']);
+        return $this->state(fn () => ['status' => 'active']);
     }
 
     /**
@@ -58,6 +58,6 @@ class VendorFactory extends Factory
      */
     public function inactive(): Factory
     {
-        return $this->state(fn() => ['status' => 'inactive']);
+        return $this->state(fn () => ['status' => 'inactive']);
     }
 }

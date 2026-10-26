@@ -3,12 +3,12 @@
 namespace Database\Factories;
 
 use App\Enums\LeadDocumentStatus;
-use App\Models\LeadDocument;
 use App\Models\Lead;
+use App\Models\LeadDocument;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\LeadDocument>
+ * @extends Factory<LeadDocument>
  */
 class LeadDocumentFactory extends Factory
 {
@@ -25,15 +25,14 @@ class LeadDocumentFactory extends Factory
 
         return [
             'lead_id' => $lead,
-            'filename' => $this->faker->word . '.' . $this->faker->fileExtension(),
-            'original_name' => $this->faker->word . '.' . $this->faker->fileExtension(),
+            'filename' => $this->faker->word.'.'.$this->faker->fileExtension(),
+            'original_name' => $this->faker->word.'.'.$this->faker->fileExtension(),
             'mime_type' => $this->faker->mimeType(),
-            'size'=> $this->faker->numberBetween(1, 1000),
-            'storage_path' => $this->faker->word . '.' . $this->faker->fileExtension(),
+            'size' => $this->faker->numberBetween(1, 1000),
+            'storage_path' => $this->faker->word.'.'.$this->faker->fileExtension(),
             'status' => $this->faker->randomElement(LeadDocumentStatus::cases()),
             'extracted_text' => ['text' => $this->faker->paragraph()],
             'ai_summary' => $this->faker->paragraph(),
-
 
         ];
     }

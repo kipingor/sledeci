@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Pipeline;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Enums\PipelineStage;
+use Illuminate\Foundation\Http\FormRequest;
 
 class MovePipelineRequest extends FormRequest
 {
@@ -28,6 +28,7 @@ class MovePipelineRequest extends FormRequest
     {
         $stageId = $this->input('stage_id');
         $stageModel = \App\Models\PipelineStage::findOrFail($stageId);
+
         return PipelineStage::from($stageModel->key);
     }
 }

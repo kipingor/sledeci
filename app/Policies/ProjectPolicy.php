@@ -2,14 +2,14 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use App\Models\Project;
+use App\Models\User;
 
 class ProjectPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->hasAnyRole(['admin', 'manager', 'project-manager']);
+        return $user->hasAnyRole(['admin', 'manager', 'project manager']);
     }
 
     public function view(User $user, Project $project): bool
@@ -28,7 +28,7 @@ class ProjectPolicy
 
     public function create(User $user): bool
     {
-        return $user->hasAnyRole(['admin', 'project-manager']);
+        return $user->hasAnyRole(['admin', 'project manager']);
     }
 
     public function update(User $user, Project $project): bool

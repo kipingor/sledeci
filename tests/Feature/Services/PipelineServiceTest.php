@@ -2,13 +2,13 @@
 
 namespace Tests\Feature\Services;
 
-use Tests\TestCase;
-use App\Models\Lead;
-use App\Models\User;
-use App\Models\PipelineStage as PipelineStageModel;
-use App\Services\Pipeline\PipelineService;
 use App\Enums\PipelineStage;
+use App\Models\Lead;
+use App\Models\PipelineStage as PipelineStageModel;
+use App\Models\User;
+use App\Services\Pipeline\PipelineService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class PipelineServiceTest extends TestCase
 {

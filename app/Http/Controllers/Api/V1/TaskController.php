@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Events\TaskUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\Project;
@@ -27,16 +26,16 @@ class TaskController extends Controller
         $this->authorize('create', Task::class);
 
         $data = $request->validate([
-            'project_id'      => 'required|integer|exists:projects,id',
-            'title'           => 'required|string|max:255',
-            'description'     => 'nullable|string',
-            'assigned_to'     => 'nullable|exists:users,id',
-            'priority'        => 'nullable|in:low,medium,high',
-            'status'          => 'nullable|in:todo,in_progress,review,done',
-            'startAt'         => 'nullable|date',
-            'endAt'           => 'nullable|date',
+            'project_id' => 'required|integer|exists:projects,id',
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'assigned_to' => 'nullable|exists:users,id',
+            'priority' => 'nullable|in:low,medium,high',
+            'status' => 'nullable|in:todo,in_progress,review,done',
+            'startAt' => 'nullable|date',
+            'endAt' => 'nullable|date',
             'estimated_hours' => 'nullable|integer',
-            'group'           => 'nullable|string|max:255',
+            'group' => 'nullable|string|max:255',
         ]);
 
         $task = $this->service->create($data);
@@ -57,18 +56,18 @@ class TaskController extends Controller
     public function update(Request $request, Task $task): JsonResponse
     {
         $data = $request->validate([
-            'title'           => 'nullable|string|max:255',
-            'description'     => 'nullable|string',
-            'status'          => 'nullable|in:todo,in_progress,review,done',
-            'priority'        => 'nullable|in:low,medium,high',
-            'assigned_to'     => 'nullable|exists:users,id',
-            'startAt'         => 'nullable|date',
-            'endAt'           => 'nullable|date',
+            'title' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'status' => 'nullable|in:todo,in_progress,review,done',
+            'priority' => 'nullable|in:low,medium,high',
+            'assigned_to' => 'nullable|exists:users,id',
+            'startAt' => 'nullable|date',
+            'endAt' => 'nullable|date',
             'estimated_hours' => 'nullable|integer',
-            'spent_hours'     => 'nullable|integer',
-            'group'           => 'nullable|string|max:255',
-            'delay_reason'    => 'nullable|string',
-            'mitigation'      => 'nullable|string',
+            'spent_hours' => 'nullable|integer',
+            'group' => 'nullable|string|max:255',
+            'delay_reason' => 'nullable|string',
+            'mitigation' => 'nullable|string',
         ]);
 
         $this->authorize('update', $task);
@@ -107,11 +106,11 @@ class TaskController extends Controller
         ]);
 
         $comment = Comment::create([
-            'user_id'          => $request->user()->id,
+            'user_id' => $request->user()->id,
             'commentable_type' => Task::class,
-            'commentable_id'   => $task->id,
-            'body'             => $data['body'],
-            'type'             => $data['type'] ?? 'comment',
+            'commentable_id' => $task->id,
+            'body' => $data['body'],
+            'type' => $data['type'] ?? 'comment',
         ]);
 
         $comment->load('user:id,name,avatar');

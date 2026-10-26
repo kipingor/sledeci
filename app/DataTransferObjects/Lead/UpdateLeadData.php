@@ -11,7 +11,6 @@ use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Casts\EnumCast;
 use Spatie\LaravelData\Data;
 
-
 class UpdateLeadData extends Data
 {
     #[MapName('first_name')]

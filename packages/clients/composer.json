@@ -1,0 +1,27 @@
+{
+    "name": "sledeci/clients",
+    "description": "Client management for the Sledeci suite: client profiles, follow-ups and client reports.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "sledeci/core": "^0.1 || @dev",
+        "inertiajs/inertia-laravel": "^3.0"
+    },
+    "suggest": {
+        "sledeci/accounting": "Shows invoices, payments and balances on client profiles and reports."
+    },
+    "autoload": {
+        "psr-4": {
+            "Sledeci\\Clients\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Sledeci\\Clients\\ClientsServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable"
+}

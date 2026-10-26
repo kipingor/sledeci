@@ -4,16 +4,26 @@ namespace App\Policies;
 
 use App\Models\Employee;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use Sledeci\Core\Policies\ChecksModuleRoles;
 
+/**
+ * Access follows the "payroll, hr" module in config/access.php.
+ */
 class EmployeePolicy
 {
+    use ChecksModuleRoles;
+
+    protected function modules(): array
+    {
+        return ['payroll', 'hr'];
+    }
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $this->canRead($user);
     }
 
     /**
@@ -21,7 +31,7 @@ class EmployeePolicy
      */
     public function view(User $user, Employee $employee): bool
     {
-        return false;
+        return $this->canRead($user) || ($employee->user_id !== null && $employee->user_id === $user->id);
     }
 
     /**
@@ -29,7 +39,7 @@ class EmployeePolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
     /**
@@ -37,7 +47,7 @@ class EmployeePolicy
      */
     public function update(User $user, Employee $employee): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
     /**
@@ -45,7 +55,7 @@ class EmployeePolicy
      */
     public function delete(User $user, Employee $employee): bool
     {
-        return false;
+        return $user->hasRole('human resource');
     }
 
     /**
@@ -53,11 +63,11 @@ class EmployeePolicy
      */
     public function restore(User $user, Employee $employee): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Permanent deletion is never allowed through the application.
      */
     public function forceDelete(User $user, Employee $employee): bool
     {

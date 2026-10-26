@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\ProjectTemplate;
-use App\Models\ProjectTemplateTask;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -15,9 +14,10 @@ class ProjectTemplateSeeder extends Seeder
     public function run(): void
     {
         $admin = User::first();
-        
-        if (!$admin) {
+
+        if (! $admin) {
             $this->command->warn('No users found. Please create a user first.');
+
             return;
         }
 
@@ -190,7 +190,7 @@ class ProjectTemplateSeeder extends Seeder
         }
 
         $this->command->info('Default project template created successfully!');
-        
+
         // Consulting Engagement Template
         $consultingTemplate = ProjectTemplate::create([
             'created_by' => $admin->id,

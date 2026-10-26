@@ -27,14 +27,14 @@ class AutomationService
             if ($rule->matchesConditions($triggerData)) {
                 try {
                     $rule->execute($lead);
-                    
-                    Log::info("Automation executed successfully", [
+
+                    Log::info('Automation executed successfully', [
                         'rule_id' => $rule->id,
                         'rule_name' => $rule->name,
                         'lead_id' => $lead->id,
                     ]);
                 } catch (\Exception $e) {
-                    Log::error("Automation failed", [
+                    Log::error('Automation failed', [
                         'rule_id' => $rule->id,
                         'rule_name' => $rule->name,
                         'lead_id' => $lead->id,
@@ -57,14 +57,14 @@ class AutomationService
         foreach ($rules as $rule) {
             try {
                 $rule->execute($opportunity);
-                
-                Log::info("Automation executed successfully", [
+
+                Log::info('Automation executed successfully', [
                     'rule_id' => $rule->id,
                     'rule_name' => $rule->name,
                     'opportunity_id' => $opportunity->id,
                 ]);
             } catch (\Exception $e) {
-                Log::error("Automation failed", [
+                Log::error('Automation failed', [
                     'rule_id' => $rule->id,
                     'rule_name' => $rule->name,
                     'opportunity_id' => $opportunity->id,

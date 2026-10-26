@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Pipeline\MovePipelineRequest;
-use App\Services\Pipeline\PipelineService;
 use App\Models\Lead;
+use App\Services\Pipeline\PipelineService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -13,8 +13,7 @@ class PipelineController extends Controller
 {
     public function __construct(
         protected PipelineService $pipelineService
-    ) {
-    }
+    ) {}
 
     /**
      * Get all pipeline stages with leads grouped by stage

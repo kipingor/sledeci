@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class Product extends Model
 {
@@ -34,13 +34,13 @@ class Product extends Model
     ];
 
     protected $casts = [
-        'unit_cost'     => 'decimal:2',
-        'unit_price'    => 'decimal:2',
-        'stock_qty'     => 'integer',
+        'unit_cost' => 'decimal:2',
+        'unit_price' => 'decimal:2',
+        'stock_qty' => 'integer',
         'reorder_point' => 'integer',
-        'reorder_qty'   => 'integer',
-        'active'        => 'boolean',
-        'metadata'      => 'array',
+        'reorder_qty' => 'integer',
+        'active' => 'boolean',
+        'metadata' => 'array',
     ];
 
     // ── Relations ──────────────────────────────────────────────────────────
@@ -60,34 +60,33 @@ class Product extends Model
     /**
      * Core method: record a stock movement and update stock_qty atomically.
      *
-     * @param  int    $quantity   Signed delta (+in, -out)
-     * @param  string $type       StockMovement type enum value
-     * @param  string|null $reference  PO number, invoice number, etc.
-     * @param  Model|null  $source     Polymorphic source (Delivery, Invoice…)
-     * @param  string|null $notes
+     * @param  int  $quantity  Signed delta (+in, -out)
+     * @param  string  $type  StockMovement type enum value
+     * @param  string|null  $reference  PO number, invoice number, etc.
+     * @param  Model|null  $source  Polymorphic source (Delivery, Invoice…)
      */
     public function adjustStock(
-        int    $quantity,
+        int $quantity,
         string $type,
         ?string $reference = null,
-        ?Model  $source    = null,
-        ?string $notes     = null,
+        ?Model $source = null,
+        ?string $notes = null,
     ): StockMovement {
         // Atomic increment / decrement
         $this->increment('stock_qty', $quantity);
         $this->refresh();
 
         $movement = StockMovement::create([
-            'product_id'     => $this->id,
-            'created_by'     => Auth::id(),
-            'source_type'    => $source ? get_class($source) : null,
-            'source_id'      => $source?->id,
-            'type'           => $type,
-            'quantity'       => $quantity,
+            'product_id' => $this->id,
+            'created_by' => Auth::id(),
+            'source_type' => $source ? get_class($source) : null,
+            'source_id' => $source?->id,
+            'type' => $type,
+            'quantity' => $quantity,
             'quantity_after' => $this->stock_qty,
-            'reference'      => $reference,
-            'unit_cost'      => $this->unit_cost,
-            'notes'          => $notes,
+            'reference' => $reference,
+            'unit_cost' => $this->unit_cost,
+            'notes' => $notes,
         ]);
 
         return $movement;
@@ -105,7 +104,10 @@ class Product extends Model
 
     public function marginPct(): int
     {
-        if ((float) $this->unit_cost <= 0) return 0;
+        if ((float) $this->unit_cost <= 0) {
+            return 0;
+        }
+
         return (int) round(($this->unit_price - $this->unit_cost) / $this->unit_cost * 100);
     }
 

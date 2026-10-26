@@ -16,9 +16,9 @@ class StockMovement extends Model
     ];
 
     protected $casts = [
-        'quantity'       => 'integer',
+        'quantity' => 'integer',
         'quantity_after' => 'integer',
-        'unit_cost'      => 'decimal:4',
+        'unit_cost' => 'decimal:4',
     ];
 
     // ── Relations ──────────────────────────────────────────────────────────
@@ -48,15 +48,15 @@ class StockMovement extends Model
     public function typeLabel(): string
     {
         return match ($this->type) {
-            'receipt'      => 'Goods Received',
-            'sale'         => 'Sale',
-            'adjustment'   => 'Stock Adjustment',
-            'return_in'    => 'Client Return',
-            'return_out'   => 'Supplier Return',
-            'write_off'    => 'Write-Off',
-            'transfer_in'  => 'Transfer In',
+            'receipt' => 'Goods Received',
+            'sale' => 'Sale',
+            'adjustment' => 'Stock Adjustment',
+            'return_in' => 'Client Return',
+            'return_out' => 'Supplier Return',
+            'write_off' => 'Write-Off',
+            'transfer_in' => 'Transfer In',
             'transfer_out' => 'Transfer Out',
-            default        => ucfirst($this->type),
+            default => ucfirst($this->type),
         };
     }
 }

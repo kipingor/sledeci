@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\TaxCode;
+use Sledeci\Accounting\Models\TaxCode;
 
 /**
  * TaxCodeSeeder

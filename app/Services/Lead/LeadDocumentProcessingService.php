@@ -2,12 +2,11 @@
 
 namespace App\Services\Lead;
 
-use App\Models\LeadDocument;
-use App\Models\Lead;
-use App\Services\AI\DocumentExtractionService;
 use App\Events\LeadDocumentProcessed;
+use App\Models\Lead;
+use App\Models\LeadDocument;
+use App\Services\AI\DocumentExtractionService;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class LeadDocumentProcessingService
 {
@@ -74,7 +73,7 @@ class LeadDocumentProcessingService
             ]);
 
             $this->documentService->markProcessingFailed($document, $e->getMessage());
-            
+
             throw $e;
         }
     }
@@ -87,7 +86,7 @@ class LeadDocumentProcessingService
         $metadata = $lead->metadata ?? [];
 
         // Add extracted entities to metadata
-        if (!empty($extractedData['entities'])) {
+        if (! empty($extractedData['entities'])) {
             $metadata['extracted_entities'] = array_merge(
                 $metadata['extracted_entities'] ?? [],
                 $extractedData['entities']
@@ -95,7 +94,7 @@ class LeadDocumentProcessingService
         }
 
         // Add keywords
-        if (!empty($extractedData['keywords'])) {
+        if (! empty($extractedData['keywords'])) {
             $metadata['keywords'] = array_unique(array_merge(
                 $metadata['keywords'] ?? [],
                 $extractedData['keywords']
@@ -103,17 +102,17 @@ class LeadDocumentProcessingService
         }
 
         // Extract budget/value if found
-        if (!empty($extractedData['budget'])) {
+        if (! empty($extractedData['budget'])) {
             $metadata['estimated_budget'] = $extractedData['budget'];
         }
 
         // Extract timeline if found
-        if (!empty($extractedData['timeline'])) {
+        if (! empty($extractedData['timeline'])) {
             $metadata['timeline'] = $extractedData['timeline'];
         }
 
         // Extract requirements
-        if (!empty($extractedData['requirements'])) {
+        if (! empty($extractedData['requirements'])) {
             $metadata['requirements'] = $extractedData['requirements'];
         }
 
@@ -166,7 +165,7 @@ class LeadDocumentProcessingService
     {
         return [
             'processed' => $document->processed,
-            'has_extracted_text' => !empty($document->extracted_text),
+            'has_extracted_text' => ! empty($document->extracted_text),
             'metadata' => $document->metadata,
             'file_info' => [
                 'name' => $document->file_name,
@@ -185,8 +184,8 @@ class LeadDocumentProcessingService
             return null;
         }
 
-        return substr($document->extracted_text, 0, $length) 
-            . (strlen($document->extracted_text) > $length ? '...' : '');
+        return substr($document->extracted_text, 0, $length)
+            .(strlen($document->extracted_text) > $length ? '...' : '');
     }
 
     /**
@@ -211,7 +210,7 @@ class LeadDocumentProcessingService
         while (($pos = strpos($textLower, $query, $offset)) !== false) {
             $contextStart = max(0, $pos - 50);
             $contextEnd = min(strlen($text), $pos + strlen($query) + 50);
-            
+
             $matches[] = [
                 'position' => $pos,
                 'context' => substr($text, $contextStart, $contextEnd - $contextStart),
@@ -221,7 +220,7 @@ class LeadDocumentProcessingService
         }
 
         return [
-            'found' => !empty($matches),
+            'found' => ! empty($matches),
             'count' => count($matches),
             'matches' => $matches,
         ];

@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\ChartOfAccount;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Sledeci\Accounting\Models\ChartOfAccount;
 
 /**
  * @extends Factory<ChartOfAccount>

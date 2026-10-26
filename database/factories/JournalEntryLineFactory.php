@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\JournalEntryLine;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Sledeci\Accounting\Models\JournalEntryLine;
 
 /**
  * @extends Factory<JournalEntryLine>

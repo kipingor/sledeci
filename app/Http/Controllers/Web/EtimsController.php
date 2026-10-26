@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\CompanySetting;
-use App\Models\Invoice;
 use App\Services\eTIMS\EtimsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Sledeci\Accounting\Models\Invoice;
 
 class EtimsController extends Controller
 {
@@ -18,7 +18,7 @@ class EtimsController extends Controller
      */
     public function submitInvoice(Request $request, Invoice $invoice)
     {
-        $this->authorize('update', $invoice);
+        $this->authorize('submitToEtims', $invoice);
 
         if (! CompanySetting::current()->etims_enabled) {
             return response()->json(['error' => 'eTIMS is not enabled.'], 422);
@@ -32,21 +32,23 @@ class EtimsController extends Controller
         if ($pin = $request->input('buyer_kra_pin')) {
             $invoice->update([
                 'buyer_kra_pin' => strtoupper($pin),
-                'buyer_name'    => $request->input('buyer_name'),
+                'buyer_name' => $request->input('buyer_name'),
             ]);
         }
 
         try {
             $result = $this->etims->submitInvoice($invoice);
+
             return response()->json([
-                'success'              => true,
-                'message'              => 'Invoice submitted to eTIMS successfully.',
+                'success' => true,
+                'message' => 'Invoice submitted to eTIMS successfully.',
                 'etims_invoice_number' => $result['etims_invoice_number'],
-                'cu_invoice_number'    => $result['cu_invoice_number'],
-                'qr_url'               => $result['qr_url'],
+                'cu_invoice_number' => $result['cu_invoice_number'],
+                'qr_url' => $result['qr_url'],
             ]);
         } catch (\Throwable $e) {
             Log::error('eTIMS submission failed', ['invoice' => $invoice->id, 'error' => $e->getMessage()]);
+
             return response()->json(['error' => $e->getMessage()], 422);
         }
     }
@@ -58,8 +60,8 @@ class EtimsController extends Controller
     {
         $request->validate(['invoice_ids' => 'required|array', 'invoice_ids.*' => 'integer|exists:invoices,id']);
 
-        $results    = [];
-        $invoices   = Invoice::whereIn('id', $request->input('invoice_ids'))
+        $results = [];
+        $invoices = Invoice::whereIn('id', $request->input('invoice_ids'))
             ->whereNotIn('etims_status', ['submitted', 'accepted'])
             ->get();
 
@@ -73,10 +75,11 @@ class EtimsController extends Controller
         }
 
         $successCount = collect($results)->where('success', true)->count();
+
         return response()->json([
             'submitted' => $successCount,
-            'failed'    => count($results) - $successCount,
-            'results'   => $results,
+            'failed' => count($results) - $successCount,
+            'results' => $results,
         ]);
     }
 
@@ -86,11 +89,11 @@ class EtimsController extends Controller
     public function invoiceStatus(Invoice $invoice)
     {
         return response()->json([
-            'etims_status'          => $invoice->etims_status,
-            'etims_invoice_number'  => $invoice->etims_invoice_number,
+            'etims_status' => $invoice->etims_status,
+            'etims_invoice_number' => $invoice->etims_invoice_number,
             'etims_cu_invoice_number' => $invoice->etims_cu_invoice_number,
-            'etims_submitted_at'    => $invoice->etims_submitted_at,
-            'etims_qr_url'          => $invoice->etims_qr_url,
+            'etims_submitted_at' => $invoice->etims_submitted_at,
+            'etims_qr_url' => $invoice->etims_qr_url,
         ]);
     }
 
@@ -101,6 +104,7 @@ class EtimsController extends Controller
     {
         try {
             $codes = $this->etims->fetchStandardCodes();
+
             return response()->json($codes);
         } catch (\Throwable $e) {
             return response()->json(['error' => $e->getMessage()], 422);
@@ -114,6 +118,7 @@ class EtimsController extends Controller
     {
         try {
             $result = $this->etims->testConnection();
+
             return response()->json($result);
         } catch (\Throwable $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 422);

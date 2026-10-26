@@ -4,9 +4,11 @@ namespace App\Services\AI;
 
 use App\Events\LeadMoved;
 use App\Events\LeadUpdated;
+use App\Models\AuditLog;
 use App\Models\Lead;
 use App\Models\PipelineStage;
-use App\Models\AuditLog;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -31,11 +33,12 @@ class LeadPipelineManager
      * 3. Creates an audit log entry
      * 4. Dispatches relevant events
      *
-     * @param int $leadId The ID of the lead to move
-     * @param string $toStageKey The key of the destination pipeline stage
-     * @param int|null $userId The ID of the user performing the action
+     * @param  int  $leadId  The ID of the lead to move
+     * @param  string  $toStageKey  The key of the destination pipeline stage
+     * @param  int|null  $userId  The ID of the user performing the action
      * @return Lead The updated lead with refreshed relationships
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     *
+     * @throws ModelNotFoundException
      */
     public function moveLead(int $leadId, string $toStageKey, ?int $userId = null): Lead
     {
@@ -76,23 +79,18 @@ class LeadPipelineManager
 
     /**
      * Move a lead by stage ID (alternative method)
-     *
-     * @param int $leadId
-     * @param int $toStageId
-     * @param int|null $userId
-     * @return Lead
      */
     public function moveLeadByStageId(int $leadId, int $toStageId, ?int $userId = null): Lead
     {
         $stage = PipelineStage::findOrFail($toStageId);
+
         return $this->moveLead($leadId, $stage->key, $userId);
     }
 
     /**
      * Get the movement history for a lead
      *
-     * @param int $leadId
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function getLeadMovementHistory(int $leadId)
     {
@@ -106,22 +104,18 @@ class LeadPipelineManager
 
     /**
      * Validate if a lead can move to a specific stage
-     *
-     * @param Lead $lead
-     * @param string $toStageKey
-     * @return bool
      */
     public function canMoveTo(Lead $lead, string $toStageKey): bool
     {
         $stage = PipelineStage::where('key', $toStageKey)->first();
-        
-        if (!$stage) {
+
+        if (! $stage) {
             return false;
         }
 
         // Add business logic here to validate stage transitions
         // For example: Can't move to closed_won without an opportunity
-        if ($stage->type === 'closed_won' && !$lead->opportunity) {
+        if ($stage->type === 'closed_won' && ! $lead->opportunity) {
             return false;
         }
 

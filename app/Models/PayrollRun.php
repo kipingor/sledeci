@@ -16,18 +16,25 @@ class PayrollRun extends Model
     ];
 
     protected $casts = [
-        'payment_date'       => 'date',
-        'total_gross'        => 'decimal:2',
-        'total_paye'         => 'decimal:2',
-        'total_nhif'         => 'decimal:2',
-        'total_nssf'         => 'decimal:2',
+        'payment_date' => 'date',
+        'total_gross' => 'decimal:2',
+        'total_paye' => 'decimal:2',
+        'total_nhif' => 'decimal:2',
+        'total_nssf' => 'decimal:2',
         'total_housing_levy' => 'decimal:2',
-        'total_net'          => 'decimal:2',
-        'total_employer_nssf'=> 'decimal:2',
+        'total_net' => 'decimal:2',
+        'total_employer_nssf' => 'decimal:2',
     ];
 
-    public function creator(): BelongsTo { return $this->belongsTo(User::class, 'created_by'); }
-    public function payslips(): HasMany  { return $this->hasMany(Payslip::class); }
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function payslips(): HasMany
+    {
+        return $this->hasMany(Payslip::class);
+    }
 
     public function periodLabel(): string
     {

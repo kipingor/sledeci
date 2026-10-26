@@ -2,14 +2,16 @@
 
 namespace App\Services;
 
-use App\Models\Task;
 use App\Events\TaskUpdated;
+use App\Models\Project;
+use App\Models\Task;
 
 class TaskService
 {
     public function create(array $data): Task
     {
         $task = Task::create($data);
+
         return $task;
     }
 
@@ -30,6 +32,7 @@ class TaskService
         } catch (\Throwable $e) {
             // ignore event failures
         }
+
         return $task->fresh();
     }
 
@@ -40,6 +43,6 @@ class TaskService
 
     public function listForProject(int $projectId)
     {
-        return \App\Models\Project::findOrFail($projectId)->tasks()->with('assignee:id,name')->get();
+        return Project::findOrFail($projectId)->tasks()->with('assignee:id,name')->get();
     }
 }

@@ -31,7 +31,7 @@ use Inertia\Response;
 class PosController extends Controller
 {
     public function __construct(
-        private InventoryService   $inventory,
+        private InventoryService $inventory,
         private MobileMoneyService $mobileMoney,
     ) {}
 
@@ -53,10 +53,10 @@ class PosController extends Controller
         $categories = $products->pluck('category')->filter()->unique()->values();
 
         return Inertia::render('pos/index', [
-            'products'   => $products,
+            'products' => $products,
             'categories' => $categories,
-            'openShift'  => $openShift,
-            'currency'   => CompanySetting::current()->default_currency ?? 'KES',
+            'openShift' => $openShift,
+            'currency' => CompanySetting::current()->default_currency ?? 'KES',
         ]);
     }
 
@@ -72,9 +72,9 @@ class PosController extends Controller
         $data = $request->validate(['opening_float' => 'required|numeric|min:0']);
 
         PosShift::create([
-            'cashier_id'    => Auth::id(),
+            'cashier_id' => Auth::id(),
             'opening_float' => $data['opening_float'],
-            'opened_at'     => now(),
+            'opened_at' => now(),
         ]);
 
         return back()->with('success', 'Shift opened.');
@@ -82,7 +82,9 @@ class PosController extends Controller
 
     public function closeShift(Request $request, PosShift $shift)
     {
-        if ($shift->cashier_id !== Auth::id()) abort(403);
+        if ($shift->cashier_id !== Auth::id()) {
+            abort(403);
+        }
 
         $data = $request->validate(['closing_float' => 'required|numeric|min:0', 'notes' => 'nullable|string']);
 
@@ -93,14 +95,14 @@ class PosController extends Controller
             ->sum('total');
 
         $expectedCash = (float) $shift->opening_float + (float) $cashSales;
-        $variance     = (float) $data['closing_float'] - $expectedCash;
+        $variance = (float) $data['closing_float'] - $expectedCash;
 
         $shift->update([
             'closing_float' => $data['closing_float'],
             'expected_cash' => $expectedCash,
             'cash_variance' => $variance,
-            'closed_at'     => now(),
-            'notes'         => $data['notes'] ?? null,
+            'closed_at' => now(),
+            'notes' => $data['notes'] ?? null,
         ]);
 
         return back()->with('success', sprintf(
@@ -114,20 +116,20 @@ class PosController extends Controller
     public function checkout(Request $request)
     {
         $data = $request->validate([
-            'items'                  => 'required|array|min:1',
-            'items.*.product_id'     => 'required|exists:products,id',
-            'items.*.quantity'       => 'required|integer|min:1',
-            'items.*.unit_price'     => 'required|numeric|min:0',
-            'items.*.discount'       => 'nullable|numeric|min:0',
-            'discount'               => 'nullable|numeric|min:0',
-            'tax_rate'               => 'nullable|numeric|min:0|max:100',
-            'payment_channel'        => 'required|in:cash,mpesa,airtel_money,mtn_momo,card,split',
-            'amount_tendered'        => 'nullable|numeric|min:0',
-            'mobile_money_code'      => 'nullable|string|max:50',
-            'mobile_money_phone'     => 'nullable|string|max:20',
-            'client_id'              => 'nullable|exists:users,id',
-            'walk_in_name'           => 'nullable|string|max:255',
-            'walk_in_phone'          => 'nullable|string|max:20',
+            'items' => 'required|array|min:1',
+            'items.*.product_id' => 'required|exists:products,id',
+            'items.*.quantity' => 'required|integer|min:1',
+            'items.*.unit_price' => 'required|numeric|min:0',
+            'items.*.discount' => 'nullable|numeric|min:0',
+            'discount' => 'nullable|numeric|min:0',
+            'tax_rate' => 'nullable|numeric|min:0|max:100',
+            'payment_channel' => 'required|in:cash,mpesa,airtel_money,mtn_momo,card,split',
+            'amount_tendered' => 'nullable|numeric|min:0',
+            'mobile_money_code' => 'nullable|string|max:50',
+            'mobile_money_phone' => 'nullable|string|max:20',
+            'client_id' => 'nullable|exists:users,id',
+            'walk_in_name' => 'nullable|string|max:255',
+            'walk_in_phone' => 'nullable|string|max:20',
         ]);
 
         // ── Stock validation before committing ──────────────────────────────
@@ -141,35 +143,34 @@ class PosController extends Controller
         }
 
         $sale = DB::transaction(function () use ($data) {
-            $subtotal = collect($data['items'])->sum(fn ($i) =>
-                ($i['quantity'] * $i['unit_price']) - ($i['discount'] ?? 0)
+            $subtotal = collect($data['items'])->sum(fn ($i) => ($i['quantity'] * $i['unit_price']) - ($i['discount'] ?? 0)
             );
-            $taxRate  = (float) ($data['tax_rate'] ?? 0);
-            $tax      = round($subtotal * $taxRate / 100, 2);
+            $taxRate = (float) ($data['tax_rate'] ?? 0);
+            $tax = round($subtotal * $taxRate / 100, 2);
             $discount = (float) ($data['discount'] ?? 0);
-            $total    = round($subtotal + $tax - $discount, 2);
+            $total = round($subtotal + $tax - $discount, 2);
 
             $amountTendered = $data['amount_tendered'] ?? null;
-            $changeGiven    = $data['payment_channel'] === 'cash' && $amountTendered
+            $changeGiven = $data['payment_channel'] === 'cash' && $amountTendered
                 ? max(0, round($amountTendered - $total, 2))
                 : null;
 
             $sale = PosSale::create([
-                'receipt_number'     => PosSale::generateReceiptNumber(),
-                'cashier_id'         => Auth::id(),
-                'client_id'          => $data['client_id'] ?? null,
-                'walk_in_name'       => $data['walk_in_name'] ?? null,
-                'walk_in_phone'      => $data['walk_in_phone'] ?? null,
-                'subtotal'           => $subtotal,
-                'tax'                => $tax,
-                'discount'           => $discount,
-                'total'              => $total,
-                'currency'           => CompanySetting::current()->default_currency ?? 'KES',
-                'payment_channel'    => $data['payment_channel'],
-                'mobile_money_code'  => $data['mobile_money_code'] ?? null,
-                'amount_tendered'    => $amountTendered,
-                'change_given'       => $changeGiven,
-                'status'             => 'completed',
+                'receipt_number' => PosSale::generateReceiptNumber(),
+                'cashier_id' => Auth::id(),
+                'client_id' => $data['client_id'] ?? null,
+                'walk_in_name' => $data['walk_in_name'] ?? null,
+                'walk_in_phone' => $data['walk_in_phone'] ?? null,
+                'subtotal' => $subtotal,
+                'tax' => $tax,
+                'discount' => $discount,
+                'total' => $total,
+                'currency' => CompanySetting::current()->default_currency ?? 'KES',
+                'payment_channel' => $data['payment_channel'],
+                'mobile_money_code' => $data['mobile_money_code'] ?? null,
+                'amount_tendered' => $amountTendered,
+                'change_given' => $changeGiven,
+                'status' => 'completed',
             ]);
 
             foreach ($data['items'] as $item) {
@@ -177,13 +178,13 @@ class PosController extends Controller
                 $lineTotal = ($item['quantity'] * $item['unit_price']) - ($item['discount'] ?? 0);
 
                 PosSaleItem::create([
-                    'pos_sale_id'  => $sale->id,
-                    'product_id'   => $item['product_id'],
+                    'pos_sale_id' => $sale->id,
+                    'product_id' => $item['product_id'],
                     'product_name' => $product->name,
-                    'quantity'     => $item['quantity'],
-                    'unit_price'   => $item['unit_price'],
-                    'discount'     => $item['discount'] ?? 0,
-                    'line_total'   => $lineTotal,
+                    'quantity' => $item['quantity'],
+                    'unit_price' => $item['unit_price'],
+                    'discount' => $item['discount'] ?? 0,
+                    'line_total' => $lineTotal,
                 ]);
             }
 
@@ -194,15 +195,15 @@ class PosController extends Controller
         $this->inventory->recordSale(
             collect($data['items'])->map(fn ($i) => [
                 'product_id' => $i['product_id'],
-                'quantity'   => $i['quantity'],
+                'quantity' => $i['quantity'],
             ])->toArray(),
             $sale->receipt_number
         );
 
         return response()->json([
-            'success'      => true,
-            'sale'         => $sale->load('items'),
-            'receipt_url'  => route('web.pos.receipt', $sale),
+            'success' => true,
+            'sale' => $sale->load('items'),
+            'receipt_url' => route('web.pos.receipt', $sale),
         ]);
     }
 
@@ -211,12 +212,13 @@ class PosController extends Controller
     public function mpesaPush(Request $request)
     {
         $data = $request->validate([
-            'phone'  => 'required|string',
+            'phone' => 'required|string',
             'amount' => 'required|numeric|min:1',
         ]);
 
         try {
             $result = $this->mobileMoney->posStkPush($data['phone'], (float) $data['amount']);
+
             return response()->json(['success' => true, ...$result]);
         } catch (\Throwable $e) {
             return response()->json(['error' => $e->getMessage()], 422);
@@ -228,6 +230,7 @@ class PosController extends Controller
     public function receipt(PosSale $sale): Response
     {
         $sale->load('items', 'cashier:id,name', 'client:id,name');
+
         return Inertia::render('pos/receipt', ['sale' => $sale]);
     }
 
@@ -238,9 +241,15 @@ class PosController extends Controller
         $query = PosSale::with('cashier:id,name', 'items')
             ->orderByDesc('created_at');
 
-        if ($request->filled('cashier_id')) $query->where('cashier_id', $request->cashier_id);
-        if ($request->filled('from'))       $query->whereDate('created_at', '>=', $request->from);
-        if ($request->filled('to'))         $query->whereDate('created_at', '<=', $request->to);
+        if ($request->filled('cashier_id')) {
+            $query->where('cashier_id', $request->cashier_id);
+        }
+        if ($request->filled('from')) {
+            $query->whereDate('created_at', '>=', $request->from);
+        }
+        if ($request->filled('to')) {
+            $query->whereDate('created_at', '<=', $request->to);
+        }
 
         $sales = $query->paginate(30)->withQueryString();
 
@@ -249,9 +258,9 @@ class PosController extends Controller
             ->sum('total');
 
         return Inertia::render('pos/history', [
-            'sales'      => $sales,
+            'sales' => $sales,
             'todayTotal' => $todayTotal,
-            'filters'    => $request->only(['cashier_id', 'from', 'to']),
+            'filters' => $request->only(['cashier_id', 'from', 'to']),
         ]);
     }
 
@@ -272,11 +281,11 @@ class PosController extends Controller
                 $product = $item->product;
                 if ($product) {
                     $product->adjustStock(
-                        quantity:  $item->quantity,
-                        type:      'return_in',
+                        quantity: $item->quantity,
+                        type: 'return_in',
                         reference: "VOID-{$sale->receipt_number}",
-                        source:    $sale,
-                        notes:     "Stock restored — sale voided: {$data['reason']}",
+                        source: $sale,
+                        notes: "Stock restored — sale voided: {$data['reason']}",
                     );
                 }
             }

@@ -2,11 +2,10 @@
 
 namespace App\Events;
 
-use App\Models\Lead;
 use App\Enums\LeadStatus;
+use App\Models\Lead;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -44,14 +43,14 @@ class LeadStatusChanged implements ShouldBroadcast
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
+     * @return array<int, Channel>
      */
     public function broadcastOn(): array
     {
         return [
             new PrivateChannel('leads'),
-            new PrivateChannel('lead.' . $this->lead->id),
-            new PrivateChannel('user.' . $this->lead->owner_id),
+            new PrivateChannel('lead.'.$this->lead->id),
+            new PrivateChannel('user.'.$this->lead->owner_id),
         ];
     }
 
@@ -128,7 +127,7 @@ class LeadStatusChanged implements ShouldBroadcast
             LeadStatus::WON,
         ];
 
-        return in_array($this->newStatus, $positiveStatuses, true) 
+        return in_array($this->newStatus, $positiveStatuses, true)
             && $this->newStatus !== LeadStatus::LOST;
     }
 }

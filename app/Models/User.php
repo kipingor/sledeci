@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Builder;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
@@ -17,6 +17,9 @@ use Laravel\Fortify\Contracts\PasskeyUser;
 use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
+use Sledeci\Accounting\Models\Invoice;
+use Sledeci\Clients\Models\ClientFollowUp;
+use Sledeci\Clients\Models\ClientReport;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
@@ -37,7 +40,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
 {
     /** @use HasFactory<UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable, HasRoles;
+    use HasApiTokens, HasFactory, HasRoles, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;
 
     /**
      * Get the attributes that should be cast.
@@ -49,7 +52,7 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'is_client'         => 'boolean',
+            'is_client' => 'boolean',
             'two_factor_confirmed_at' => 'datetime',
         ];
     }
@@ -80,9 +83,10 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
     public function convertToClient(): static
     {
         $this->update([
-            'is_client'    => true,
+            'is_client' => true,
             'client_since' => $this->client_since ?? now(),
         ]);
+
         return $this;
     }
 
@@ -123,12 +127,12 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
         return $this->hasOne(FieldAgent::class);
     }
 
-     public function saccoMember(): HasOne
+    public function saccoMember(): HasOne
     {
         return $this->hasOne(SaccoMember::class);
     }
 
-     public function employee(): HasOne
+    public function employee(): HasOne
     {
         return $this->hasOne(Employee::class);
     }

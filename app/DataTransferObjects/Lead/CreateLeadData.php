@@ -49,4 +49,3 @@ class CreateLeadData extends Data
 
     public ?string $description;
 }
-

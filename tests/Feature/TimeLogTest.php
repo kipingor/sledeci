@@ -23,9 +23,9 @@ class TimeLogTest extends TestCase
 
     public function test_logging_hours_derives_project_and_generated_duration(): void
     {
-        $user    = $this->pm();
+        $user = $this->pm();
         $project = Project::factory()->create();
-        $task    = Task::factory()->create(['project_id' => $project->id]);
+        $task = Task::factory()->create(['project_id' => $project->id]);
 
         $this->actingAs($user)->post('/time-logs', ['task_id' => $task->id, 'hours' => 1.5, 'notes' => 'Wireframes'])
             ->assertRedirect(route('web.time-logs.index'));

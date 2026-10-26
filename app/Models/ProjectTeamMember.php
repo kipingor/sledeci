@@ -22,8 +22,8 @@ class ProjectTeamMember extends Model
 
     protected $casts = [
         'allocation_percentage' => 'decimal:2',
-        'hourly_rate'           => 'decimal:2',
-        'joined_at'             => 'datetime',
+        'hourly_rate' => 'decimal:2',
+        'joined_at' => 'datetime',
     ];
 
     public function project(): BelongsTo

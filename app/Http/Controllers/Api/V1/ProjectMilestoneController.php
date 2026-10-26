@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Http\Controllers\Api\V1;
 
-use App\Models\Milestone;
-use App\Http\Resources\ProjectMilestoneResource;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Resources\ProjectMilestoneResource;
+use App\Models\Milestone;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 /**
  * FIX: update() used $request->all() — replaced with validated rules.
@@ -29,11 +30,11 @@ class ProjectMilestoneController extends Controller
     public function store(Request $request): JsonResponse
     {
         $data = $request->validate([
-            'project_id'    => ['required', 'exists:projects,id'],
-            'title'         => ['required', 'string', 'max:255'],
-            'description'   => ['nullable', 'string'],
-            'due_date'      => ['nullable', 'date'],
-            'status'        => ['nullable', 'string', 'in:pending,in_progress,completed,missed'],
+            'project_id' => ['required', 'exists:projects,id'],
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'due_date' => ['nullable', 'date'],
+            'status' => ['nullable', 'string', 'in:pending,in_progress,completed,missed'],
         ]);
 
         return response()->json(new ProjectMilestoneResource(Milestone::create($data)), 201);
@@ -48,11 +49,11 @@ class ProjectMilestoneController extends Controller
     {
         // FIX: was $request->all()
         $milestone->update($request->validate([
-            'title'          => ['sometimes', 'string', 'max:255'],
-            'description'    => ['nullable', 'string'],
-            'due_date'       => ['nullable', 'date'],
-            'completed_at'   => ['nullable', 'date'],
-            'status'         => ['nullable', 'string', 'in:pending,in_progress,completed,missed'],
+            'title' => ['sometimes', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'due_date' => ['nullable', 'date'],
+            'completed_at' => ['nullable', 'date'],
+            'status' => ['nullable', 'string', 'in:pending,in_progress,completed,missed'],
         ]));
 
         return response()->json(new ProjectMilestoneResource($milestone->fresh()));
@@ -61,6 +62,7 @@ class ProjectMilestoneController extends Controller
     public function destroy(Milestone $milestone): JsonResponse
     {
         $milestone->delete();
+
         return response()->json(null, 204);
     }
 }

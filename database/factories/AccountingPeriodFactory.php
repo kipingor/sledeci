@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\AccountingPeriod;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Sledeci\Accounting\Models\AccountingPeriod;
 
 /**
  * @extends Factory<AccountingPeriod>

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Models\Comment;
-use App\Http\Resources\CommentResource;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CommentResource;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller

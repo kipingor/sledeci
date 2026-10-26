@@ -17,7 +17,8 @@ import {
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
 import { router } from '@inertiajs/react';
-import { route } from 'ziggy-js';
+import * as aiRoutes from '@/routes/web/ai';
+import * as leadRoutes from '@/routes/web/leads';
 
 interface LeadScore {
     score: number; // 0-100
@@ -72,7 +73,7 @@ export function AILeadInsights({ leadId, onActionTaken }: AILeadInsightsProps) {
     const fetchInsights = useCallback(async () => {
         setIsLoading(true);
         try {
-            const response = await fetch(route('ai.lead-insights', leadId));
+            const response = await fetch(aiRoutes.leadInsights(leadId).url);
             const data = await response.json();
             setInsights(data);
         } catch (error) {
@@ -297,7 +298,7 @@ export function AILeadInsights({ leadId, onActionTaken }: AILeadInsightsProps) {
                             <div
                                 key={similar.id}
                                 className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 cursor-pointer"
-                                onClick={() => router.visit(route('web.leads.show', similar.id))}
+                                onClick={() => router.visit(leadRoutes.show(similar.id).url)}
                             >
                                 <div className="flex-1">
                                     <div className="font-medium text-sm">{similar.title}</div>
@@ -361,7 +362,7 @@ export function useBatchLeadScoring() {
         setIsProcessing(true);
 
         try {
-            const response = await fetch(route('ai.batch-score'), {
+            const response = await fetch(aiRoutes.batchScore().url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

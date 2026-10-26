@@ -2,13 +2,13 @@
 
 namespace App\Services\Project;
 
+use App\Events\ProjectCompleted;
+use App\Events\ProjectCreated;
 use App\Models\Project;
 use App\Models\User;
-use App\Events\ProjectCreated;
-use App\Events\ProjectCompleted;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 class ProjectService
 {
@@ -29,7 +29,7 @@ class ProjectService
         if (isset($filters['search'])) {
             $query->where(function ($q) use ($filters) {
                 $q->where('name', 'like', "%{$filters['search']}%")
-                  ->orWhere('description', 'like', "%{$filters['search']}%");
+                    ->orWhere('description', 'like', "%{$filters['search']}%");
             });
         }
 
@@ -53,6 +53,7 @@ class ProjectService
     {
         return DB::transaction(function () use ($project, $data) {
             $project->update($data);
+
             return $project->refresh()->load(['tasks', 'milestones']);
         });
     }
@@ -80,7 +81,7 @@ class ProjectService
         if ($status === 'completed') {
             $project->update([
                 'completed_at' => now(),
-                'phase'        => 'closing',
+                'phase' => 'closing',
             ]);
             event(new ProjectCompleted($project->id));
         }
@@ -109,13 +110,13 @@ class ProjectService
 
     public function calculateProgress(Project $project): array
     {
-        $totalTasks     = $project->tasks()->count();
+        $totalTasks = $project->tasks()->count();
         $completedTasks = $project->tasks()->whereNotNull('completed_at')->count();
 
-        $totalMilestones     = $project->milestones()->count();
+        $totalMilestones = $project->milestones()->count();
         $completedMilestones = $project->milestones()->whereNotNull('completed_at')->count();
 
-        $taskProgress      = $totalTasks > 0
+        $taskProgress = $totalTasks > 0
             ? round(($completedTasks / $totalTasks) * 100, 2) : 0;
         $milestoneProgress = $totalMilestones > 0
             ? round(($completedMilestones / $totalMilestones) * 100, 2) : 0;
@@ -124,16 +125,16 @@ class ProjectService
         $overallProgress = round(($taskProgress * 0.7) + ($milestoneProgress * 0.3), 2);
 
         return [
-            'overall'    => $overallProgress,
-            'tasks'      => [
-                'total'     => $totalTasks,
+            'overall' => $overallProgress,
+            'tasks' => [
+                'total' => $totalTasks,
                 'completed' => $completedTasks,
-                'progress'  => $taskProgress,
+                'progress' => $taskProgress,
             ],
             'milestones' => [
-                'total'     => $totalMilestones,
+                'total' => $totalMilestones,
                 'completed' => $completedMilestones,
-                'progress'  => $milestoneProgress,
+                'progress' => $milestoneProgress,
             ],
         ];
     }
@@ -161,9 +162,8 @@ class ProjectService
      *  1. Actual expense records (project_expenses table) if available.
      *  2. Otherwise, task spent_hours × an implied hourly rate (budget/estimated_hours).
      *
-     * @param  Project $project  Must have tasks loaded or will be queried.
-     * @param  float   $progress Overall progress percentage (0–100).
-     * @return array
+     * @param  Project  $project  Must have tasks loaded or will be queried.
+     * @param  float  $progress  Overall progress percentage (0–100).
      */
     public function calculateEVM(Project $project, float $progress): array
     {
@@ -180,32 +180,32 @@ class ProjectService
         $ac = $this->calculateActualCost($project);
 
         // Guard: avoid division-by-zero
-        $cpi  = $ac > 0   ? round($ev / $ac, 3)   : null;
-        $spi  = $pv > 0   ? round($ev / $pv, 3)   : null;
-        $cv   = round($ev - $ac, 2);
-        $sv   = round($ev - $pv, 2);
-        $eac  = ($cpi && $cpi > 0) ? round($bac / $cpi, 2) : null;
-        $etc  = $eac !== null ? round($eac - $ac, 2) : null;
-        $vac  = $eac !== null ? round($bac - $eac, 2) : null;
+        $cpi = $ac > 0 ? round($ev / $ac, 3) : null;
+        $spi = $pv > 0 ? round($ev / $pv, 3) : null;
+        $cv = round($ev - $ac, 2);
+        $sv = round($ev - $pv, 2);
+        $eac = ($cpi && $cpi > 0) ? round($bac / $cpi, 2) : null;
+        $etc = $eac !== null ? round($eac - $ac, 2) : null;
+        $vac = $eac !== null ? round($bac - $eac, 2) : null;
         $tcpi = ($bac > 0 && ($bac - $ac) > 0)
                 ? round(($bac - $ev) / ($bac - $ac), 3)
                 : null;
 
         return [
-            'bac'  => $bac,
-            'pv'   => $pv,
-            'ev'   => $ev,
-            'ac'   => $ac,
-            'cv'   => $cv,   // Cost Variance
-            'sv'   => $sv,   // Schedule Variance
-            'cpi'  => $cpi,  // Cost Performance Index
-            'spi'  => $spi,  // Schedule Performance Index
-            'eac'  => $eac,  // Estimate At Completion
-            'etc'  => $etc,  // Estimate To Complete
-            'vac'  => $vac,  // Variance At Completion
+            'bac' => $bac,
+            'pv' => $pv,
+            'ev' => $ev,
+            'ac' => $ac,
+            'cv' => $cv,   // Cost Variance
+            'sv' => $sv,   // Schedule Variance
+            'cpi' => $cpi,  // Cost Performance Index
+            'spi' => $spi,  // Schedule Performance Index
+            'eac' => $eac,  // Estimate At Completion
+            'etc' => $etc,  // Estimate To Complete
+            'vac' => $vac,  // Variance At Completion
             'tcpi' => $tcpi, // To-Complete Performance Index
             // Interpretations for the UI
-            'cost_status'     => $this->interpretIndex($cpi),
+            'cost_status' => $this->interpretIndex($cpi),
             'schedule_status' => $this->interpretIndex($spi),
         ];
     }
@@ -231,13 +231,14 @@ class ProjectService
 
         // 2. Hours-based proxy
         $estimatedHours = (float) $project->tasks()->sum('estimated_hours');
-        $spentHours     = (float) $project->tasks()->sum('spent_hours');
+        $spentHours = (float) $project->tasks()->sum('spent_hours');
 
         if ($estimatedHours <= 0 || $project->bac <= 0) {
             return 0.0;
         }
 
         $impliedRate = $project->bac / $estimatedHours; // cost per hour
+
         return round($spentHours * $impliedRate, 2);
     }
 
@@ -247,9 +248,16 @@ class ProjectService
      */
     protected function interpretIndex(?float $index): string
     {
-        if ($index === null) return 'unknown';
-        if ($index >= 1.0)   return 'on_track';
-        if ($index >= 0.8)   return 'at_risk';
+        if ($index === null) {
+            return 'unknown';
+        }
+        if ($index >= 1.0) {
+            return 'on_track';
+        }
+        if ($index >= 0.8) {
+            return 'at_risk';
+        }
+
         return 'critical';
     }
 
@@ -258,29 +266,29 @@ class ProjectService
     public function calculateBudgetUtilization(Project $project): array
     {
         $budgetHours = (int) $project->tasks()->sum('estimated_hours');
-        $spentHours  = (int) $project->tasks()->sum('spent_hours');
+        $spentHours = (int) $project->tasks()->sum('spent_hours');
 
         if ($budgetHours === 0 && $project->budget) {
             return [
-                'budget'      => (float) $project->budget,
-                'spent'       => 0,
-                'remaining'   => (float) $project->budget,
+                'budget' => (float) $project->budget,
+                'spent' => 0,
+                'remaining' => (float) $project->budget,
                 'utilization' => 0,
-                'mode'        => 'monetary',
+                'mode' => 'monetary',
             ];
         }
 
-        $remaining   = max(0, $budgetHours - $spentHours);
+        $remaining = max(0, $budgetHours - $spentHours);
         $utilization = $budgetHours > 0
             ? round(min(($spentHours / $budgetHours) * 100, 100), 1)
             : 0;
 
         return [
-            'budget'      => $budgetHours,
-            'spent'       => $spentHours,
-            'remaining'   => $remaining,
+            'budget' => $budgetHours,
+            'spent' => $spentHours,
+            'remaining' => $remaining,
             'utilization' => $utilization,
-            'mode'        => 'hours',
+            'mode' => 'hours',
         ];
     }
 
@@ -292,12 +300,12 @@ class ProjectService
             ->orderBy('due_date')
             ->get()
             ->map(fn ($m) => [
-                'id'           => $m->id,
-                'title'        => $m->title,
-                'due_date'     => $m->due_date,
-                'completed'    => $m->completed_at !== null,
+                'id' => $m->id,
+                'title' => $m->title,
+                'due_date' => $m->due_date,
+                'completed' => $m->completed_at !== null,
                 'completed_at' => $m->completed_at,
-                'type'         => 'milestone',
+                'type' => 'milestone',
             ]);
 
         $tasks = $project->tasks()
@@ -305,19 +313,19 @@ class ProjectService
             ->orderBy('due_date')
             ->get()
             ->map(fn ($t) => [
-                'id'           => $t->id,
-                'title'        => $t->title,
-                'due_date'     => $t->due_date,
-                'completed'    => $t->completed_at !== null,
+                'id' => $t->id,
+                'title' => $t->title,
+                'due_date' => $t->due_date,
+                'completed' => $t->completed_at !== null,
                 'completed_at' => $t->completed_at,
-                'type'         => 'task',
-                'wbs_code'     => $t->wbs_code ?? null,
+                'type' => 'task',
+                'wbs_code' => $t->wbs_code ?? null,
             ]);
 
         return [
-            'items'        => $milestones->merge($tasks)->sortBy('due_date')->values(),
-            'start_date'   => $project->start_date,
-            'end_date'     => $project->end_date,
+            'items' => $milestones->merge($tasks)->sortBy('due_date')->values(),
+            'start_date' => $project->start_date,
+            'end_date' => $project->end_date,
             'current_date' => now()->toDateString(),
         ];
     }
@@ -332,10 +340,10 @@ class ProjectService
         $risks = $project->risks()->where('status', '!=', 'closed')->get();
 
         return [
-            'total'       => $risks->count(),
-            'high'        => $risks->filter(fn ($r) => ($r->probability * $r->impact) >= 15)->count(),
-            'medium'      => $risks->filter(fn ($r) => ($r->probability * $r->impact) >= 6 && ($r->probability * $r->impact) < 15)->count(),
-            'low'         => $risks->filter(fn ($r) => ($r->probability * $r->impact) < 6)->count(),
+            'total' => $risks->count(),
+            'high' => $risks->filter(fn ($r) => ($r->probability * $r->impact) >= 15)->count(),
+            'medium' => $risks->filter(fn ($r) => ($r->probability * $r->impact) >= 6 && ($r->probability * $r->impact) < 15)->count(),
+            'low' => $risks->filter(fn ($r) => ($r->probability * $r->impact) < 6)->count(),
             'unmitigated' => $risks->whereNull('response_type')->count(),
         ];
     }
@@ -351,8 +359,8 @@ class ProjectService
         $progress = $this->calculateProgress($project);
 
         if ($project->start_date && $project->end_date) {
-            $totalDays    = max(1, $project->start_date->diffInDays($project->end_date));
-            $daysElapsed  = $project->start_date->diffInDays(now());
+            $totalDays = max(1, $project->start_date->diffInDays($project->end_date));
+            $daysElapsed = $project->start_date->diffInDays(now());
             $expectedProgress = ($daysElapsed / $totalDays) * 100;
 
             if ($progress['overall'] < ($expectedProgress - 20)) {
@@ -375,20 +383,20 @@ class ProjectService
     public function getStatistics(): array
     {
         return [
-            'total'      => Project::count(),
-            'by_status'  => collect(Project::STATUSES)
+            'total' => Project::count(),
+            'by_status' => collect(Project::STATUSES)
                 ->mapWithKeys(fn ($s) => [$s => Project::where('status', $s)->count()])
                 ->toArray(),
-            'by_phase'   => collect(Project::PHASES)
+            'by_phase' => collect(Project::PHASES)
                 ->mapWithKeys(fn ($p) => [$p => Project::where('phase', $p)->count()])
                 ->toArray(),
-            'overdue'    => Project::where('status', 'active')
+            'overdue' => Project::where('status', 'active')
                 ->whereNotNull('end_date')
                 ->where('end_date', '<', now())
                 ->count(),
-            'at_risk'   => $this->getAtRisk()->count(),
-            'total_budget'              => Project::sum('budget'),
-            'average_completion_time'   => $this->calculateAverageCompletionTime(),
+            'at_risk' => $this->getAtRisk()->count(),
+            'total_budget' => Project::sum('budget'),
+            'average_completion_time' => $this->calculateAverageCompletionTime(),
         ];
     }
 
@@ -398,9 +406,12 @@ class ProjectService
             ->whereNotNull('completed_at')
             ->get();
 
-        if ($completed->isEmpty()) return 0;
+        if ($completed->isEmpty()) {
+            return 0;
+        }
 
         $totalDays = $completed->sum(fn ($p) => $p->created_at->diffInDays($p->completed_at));
+
         return round($totalDays / $completed->count(), 2);
     }
 
@@ -411,9 +422,9 @@ class ProjectService
         return DB::transaction(function () use ($project, $includeTasks, $includeTeam) {
             $data = $project->only($project->getFillable());
             unset($data['id']);
-            $data['name']     = $data['name'] . ' (Copy)';
-            $data['status']   = 'planning';
-            $data['phase']    = 'initiating';
+            $data['name'] = $data['name'].' (Copy)';
+            $data['status'] = 'planning';
+            $data['phase'] = 'initiating';
             $data['completed_at'] = null;
 
             $newProject = Project::create($data);
@@ -431,10 +442,10 @@ class ProjectService
             if ($includeTeam) {
                 foreach ($project->teamMembers as $member) {
                     $newProject->teamMembers()->create([
-                        'user_id'               => $member->user_id,
-                        'role'                  => $member->role,
+                        'user_id' => $member->user_id,
+                        'role' => $member->role,
                         'allocation_percentage' => $member->allocation_percentage,
-                        'joined_at'             => now(),
+                        'joined_at' => now(),
                     ]);
                 }
             }
@@ -449,11 +460,12 @@ class ProjectService
     {
         return DB::transaction(function () use ($project) {
             $project->update([
-                'status'       => 'completed',
-                'phase'        => 'closing',
+                'status' => 'completed',
+                'phase' => 'closing',
                 'completed_at' => now(),
             ]);
             event(new ProjectCompleted($project->id));
+
             return $project->refresh();
         });
     }
@@ -463,9 +475,20 @@ class ProjectService
         return Project::where('status', $status)->with(['tasks', 'milestones'])->latest()->get();
     }
 
-    public function getActive(): Collection    { return $this->getByStatus('active'); }
-    public function getCompleted(): Collection { return $this->getByStatus('completed'); }
-    public function getOnHold(): Collection    { return $this->getByStatus('on_hold'); }
+    public function getActive(): Collection
+    {
+        return $this->getByStatus('active');
+    }
+
+    public function getCompleted(): Collection
+    {
+        return $this->getByStatus('completed');
+    }
+
+    public function getOnHold(): Collection
+    {
+        return $this->getByStatus('on_hold');
+    }
 
     public function getOverdue(): Collection
     {
@@ -492,8 +515,8 @@ class ProjectService
             $exists = $project->teamMembers()->where('user_id', $userId)->exists();
             if (! $exists) {
                 $project->teamMembers()->create([
-                    'user_id'   => $userId,
-                    'role'      => $role,
+                    'user_id' => $userId,
+                    'role' => $role,
                     'joined_at' => now(),
                 ]);
             }

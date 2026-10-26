@@ -2,11 +2,10 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use App\Services\Lead\LeadService;
 use App\Events\LeadCreated;
 use App\Models\User;
+use App\Services\Lead\LeadService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
@@ -20,7 +19,7 @@ class LeadServiceEventTest extends TestCase
 
         $user = User::factory()->create();
 
-        $service = new LeadService();
+        $service = new LeadService;
         $lead = $service->create([
             'title' => 'Test Lead',
             'type' => 'conversation',

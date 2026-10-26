@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Models\AuditLog;
 use App\Http\Controllers\Controller;
+use App\Models\AuditLog;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -18,18 +18,18 @@ class ActivityLogController extends Controller
     public function index(Request $request): JsonResponse
     {
         $logs = AuditLog::with('user:id,name,avatar')
-            ->when($request->filled('event'),   fn ($q) => $q->event($request->event))
+            ->when($request->filled('event'), fn ($q) => $q->event($request->event))
             ->when($request->filled('user_id'), fn ($q) => $q->byUser((int) $request->user_id))
             ->latest()
             ->paginate(20);
 
         return response()->json([
             'success' => true,
-            'data'    => $logs->through(fn ($log) => $this->transform($log)),
-            'meta'    => [
+            'data' => $logs->through(fn ($log) => $this->transform($log)),
+            'meta' => [
                 'current_page' => $logs->currentPage(),
-                'last_page'    => $logs->lastPage(),
-                'total'        => $logs->total(),
+                'last_page' => $logs->lastPage(),
+                'total' => $logs->total(),
             ],
         ]);
     }
@@ -40,27 +40,27 @@ class ActivityLogController extends Controller
 
         return response()->json([
             'success' => true,
-            'data'    => $this->transform($auditLog),
+            'data' => $this->transform($auditLog),
         ]);
     }
 
     private function transform(AuditLog $log): array
     {
         return [
-            'id'             => $log->id,
-            'event'          => $log->event,
+            'id' => $log->id,
+            'event' => $log->event,
             'auditable_type' => class_basename($log->auditable_type),
-            'auditable_id'   => $log->auditable_id,
-            'old_values'     => $log->old_values,
-            'new_values'     => $log->new_values,
-            'ip_address'     => $log->ip_address,
-            'user'           => $log->user ? [
-                'id'     => $log->user->id,
-                'name'   => $log->user->name,
+            'auditable_id' => $log->auditable_id,
+            'old_values' => $log->old_values,
+            'new_values' => $log->new_values,
+            'ip_address' => $log->ip_address,
+            'user' => $log->user ? [
+                'id' => $log->user->id,
+                'name' => $log->user->name,
                 'avatar' => $log->user->avatar,
             ] : null,
-            'summary'        => $log->change_summary,
-            'created_at'     => $log->created_at,
+            'summary' => $log->change_summary,
+            'created_at' => $log->created_at,
         ];
     }
 }

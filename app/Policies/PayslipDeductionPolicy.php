@@ -4,16 +4,34 @@ namespace App\Policies;
 
 use App\Models\PayslipDeduction;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use Sledeci\Core\Policies\ChecksModuleRoles;
 
+/**
+ * Append-only record: it is written by the system and cannot be changed or deleted
+ * through the application, not even by an administrator.
+ *
+ * Access follows the "payroll" module in config/access.php.
+ */
 class PayslipDeductionPolicy
 {
+    use ChecksModuleRoles;
+
+    protected function modules(): array
+    {
+        return ['payroll'];
+    }
+
+    protected function adminDenied(): array
+    {
+        return ['create', 'update', 'delete', 'restore', 'forceDelete'];
+    }
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $this->canRead($user);
     }
 
     /**
@@ -21,7 +39,7 @@ class PayslipDeductionPolicy
      */
     public function view(User $user, PayslipDeduction $payslipDeduction): bool
     {
-        return false;
+        return $this->canRead($user);
     }
 
     /**
@@ -57,7 +75,7 @@ class PayslipDeductionPolicy
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Permanent deletion is never allowed through the application.
      */
     public function forceDelete(User $user, PayslipDeduction $payslipDeduction): bool
     {

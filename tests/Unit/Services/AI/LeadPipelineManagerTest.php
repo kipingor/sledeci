@@ -9,6 +9,7 @@ use App\Models\Lead;
 use App\Models\PipelineStage;
 use App\Models\User;
 use App\Services\AI\LeadPipelineManager;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
@@ -22,7 +23,7 @@ class LeadPipelineManagerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->service = new LeadPipelineManager();
+        $this->service = new LeadPipelineManager;
     }
 
     /** @test */
@@ -110,7 +111,7 @@ class LeadPipelineManagerTest extends TestCase
     /** @test */
     public function it_throws_exception_when_lead_not_found()
     {
-        $this->expectException(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
+        $this->expectException(ModelNotFoundException::class);
 
         $stage = PipelineStage::factory()->create(['key' => 'qualified']);
         $this->service->moveLead(99999, 'qualified');
@@ -119,7 +120,7 @@ class LeadPipelineManagerTest extends TestCase
     /** @test */
     public function it_throws_exception_when_stage_not_found()
     {
-        $this->expectException(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
+        $this->expectException(ModelNotFoundException::class);
 
         $lead = Lead::factory()->create();
         $this->service->moveLead($lead->id, 'non_existent_stage');

@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * BUG FIX: The original file had a second class (JournalEntryLine) appended
@@ -26,11 +26,11 @@ class JournalEntry extends Model
     ];
 
     protected $casts = [
-        'entry_date'   => 'date',
+        'entry_date' => 'date',
         'posting_date' => 'date',
-        'posted_at'    => 'datetime',
-        'is_reversal'  => 'boolean',
-        'is_reversed'  => 'boolean',
+        'posted_at' => 'datetime',
+        'is_reversal' => 'boolean',
+        'is_reversed' => 'boolean',
     ];
 
     // ── Booted: auto-generate reference ──────────────────────────────────────
@@ -39,8 +39,8 @@ class JournalEntry extends Model
     {
         static::creating(function (JournalEntry $je) {
             if (empty($je->reference)) {
-                $year  = now()->year;
-                $seq   = static::whereYear('created_at', $year)->withTrashed()->count() + 1;
+                $year = now()->year;
+                $seq = static::whereYear('created_at', $year)->withTrashed()->count() + 1;
                 $je->reference = sprintf('JE-%d-%05d', $year, $seq);
             }
         });
@@ -85,6 +85,7 @@ class JournalEntry extends Model
     {
         return $this->status === 'posted';
     }
+
     public function isDraft(): bool
     {
         return $this->status === 'draft';

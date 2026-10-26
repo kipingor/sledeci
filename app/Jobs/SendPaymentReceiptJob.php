@@ -24,6 +24,7 @@ class SendPaymentReceiptJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 3;
+
     public int $backoff = 60; // seconds between retries
 
     public function __construct(private Payment $payment) {}
@@ -33,14 +34,14 @@ class SendPaymentReceiptJob implements ShouldQueue
         try {
             $log = $messaging->sendPaymentReceipt($this->payment);
             Log::info('Payment receipt sent', [
-                'payment'  => $this->payment->id,
-                'channel'  => $log->channel,
-                'status'   => $log->status,
+                'payment' => $this->payment->id,
+                'channel' => $log->channel,
+                'status' => $log->status,
             ]);
         } catch (\Throwable $e) {
             Log::error('Payment receipt send failed', [
                 'payment' => $this->payment->id,
-                'error'   => $e->getMessage(),
+                'error' => $e->getMessage(),
             ]);
             $this->fail($e);
         }

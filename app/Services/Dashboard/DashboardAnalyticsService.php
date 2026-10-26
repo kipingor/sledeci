@@ -2,12 +2,11 @@
 
 namespace App\Services\Dashboard;
 
-use App\Models\Lead;
-use App\Models\Activity;
-use App\Models\PipelineStage;
 use App\Enums\LeadStatus;
-use Illuminate\Support\Facades\DB;
+use App\Models\Activity;
+use App\Models\Lead;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DashboardAnalyticsService
 {
@@ -21,7 +20,7 @@ class DashboardAnalyticsService
 
         $query = Lead::query();
 
-        if (!empty($filters['owner_id'])) {
+        if (! empty($filters['owner_id'])) {
             $query->where('owner_id', $filters['owner_id']);
         }
 
@@ -63,11 +62,11 @@ class DashboardAnalyticsService
     {
         $query = Lead::query();
 
-        if (!empty($filters['owner_id'])) {
+        if (! empty($filters['owner_id'])) {
             $query->where('owner_id', $filters['owner_id']);
         }
 
-        if (!empty($filters['date_from'])) {
+        if (! empty($filters['date_from'])) {
             $query->where('created_at', '>=', $filters['date_from']);
         }
 
@@ -93,11 +92,11 @@ class DashboardAnalyticsService
     {
         $query = Lead::query();
 
-        if (!empty($filters['owner_id'])) {
+        if (! empty($filters['owner_id'])) {
             $query->where('owner_id', $filters['owner_id']);
         }
 
-        if (!empty($filters['date_from'])) {
+        if (! empty($filters['date_from'])) {
             $query->where('created_at', '>=', $filters['date_from']);
         }
 
@@ -125,7 +124,7 @@ class DashboardAnalyticsService
         $query = Lead::query()
             ->whereNotIn('status', [LeadStatus::WON, LeadStatus::LOST]);
 
-        if (!empty($filters['owner_id'])) {
+        if (! empty($filters['owner_id'])) {
             $query->where('owner_id', $filters['owner_id']);
         }
 
@@ -155,11 +154,11 @@ class DashboardAnalyticsService
     {
         $query = Lead::query();
 
-        if (!empty($filters['owner_id'])) {
+        if (! empty($filters['owner_id'])) {
             $query->where('owner_id', $filters['owner_id']);
         }
 
-        if (!empty($filters['date_from'])) {
+        if (! empty($filters['date_from'])) {
             $query->where('created_at', '>=', $filters['date_from']);
         }
 
@@ -210,7 +209,7 @@ class DashboardAnalyticsService
         $query = Lead::query()
             ->whereBetween('created_at', [$dateFrom, $dateTo]);
 
-        if (!empty($filters['owner_id'])) {
+        if (! empty($filters['owner_id'])) {
             $query->where('owner_id', $filters['owner_id']);
         }
 
@@ -262,7 +261,7 @@ class DashboardAnalyticsService
         $query = Activity::query()
             ->whereBetween('created_at', [$dateFrom, $dateTo]);
 
-        if (!empty($filters['owner_id'])) {
+        if (! empty($filters['owner_id'])) {
             $query->where('user_id', $filters['owner_id']);
         }
 
@@ -307,11 +306,11 @@ class DashboardAnalyticsService
             ->where('status', LeadStatus::WON)
             ->whereNotNull('won_at');
 
-        if (!empty($filters['owner_id'])) {
+        if (! empty($filters['owner_id'])) {
             $query->where('owner_id', $filters['owner_id']);
         }
 
-        if (!empty($filters['date_from'])) {
+        if (! empty($filters['date_from'])) {
             $query->where('created_at', '>=', $filters['date_from']);
         }
 
@@ -389,11 +388,11 @@ class DashboardAnalyticsService
         $query = Lead::query()
             ->whereIn('status', [LeadStatus::WON, LeadStatus::LOST]);
 
-        if (!empty($filters['owner_id'])) {
+        if (! empty($filters['owner_id'])) {
             $query->where('owner_id', $filters['owner_id']);
         }
 
-        if (!empty($filters['date_from'])) {
+        if (! empty($filters['date_from'])) {
             $query->where('created_at', '>=', $filters['date_from']);
         }
 

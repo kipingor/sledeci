@@ -23,16 +23,17 @@ class RefreshForexRatesJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $tries   = 2;
+    public int $tries = 2;
+
     public int $backoff = 300; // 5 min retry
 
     public function handle(ForexService $forex): void
     {
         $functional = config('company.functional_currency', 'KES');
-        $rates      = $forex->refreshRates($functional);
+        $rates = $forex->refreshRates($functional);
 
         Log::info('Forex rates refreshed via scheduled job', [
-            'base'  => $functional,
+            'base' => $functional,
             'count' => count($rates),
         ]);
     }

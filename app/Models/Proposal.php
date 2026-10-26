@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Proposal extends Model
@@ -55,7 +56,7 @@ class Proposal extends Model
     /**
      * Get the opportunity associated with this proposal.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function opportunity()
     {
@@ -65,7 +66,7 @@ class Proposal extends Model
     /**
      * Get the lead associated with this proposal.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function lead()
     {

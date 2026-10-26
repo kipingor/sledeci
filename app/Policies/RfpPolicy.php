@@ -7,9 +7,6 @@ use App\Models\User;
 
 class RfpPolicy
 {
-    /**
-     * 
-     */
     public function view(User $user, Rfp $rfp): bool
     {
         return $rfp->owner_id === $user->id || $user->hasRole(['admin', 'manager']);

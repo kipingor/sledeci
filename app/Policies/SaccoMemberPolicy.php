@@ -4,16 +4,26 @@ namespace App\Policies;
 
 use App\Models\SaccoMember;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use Sledeci\Core\Policies\ChecksModuleRoles;
 
+/**
+ * Access follows the "sacco" module in config/access.php.
+ */
 class SaccoMemberPolicy
 {
+    use ChecksModuleRoles;
+
+    protected function modules(): array
+    {
+        return ['sacco'];
+    }
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $this->canRead($user);
     }
 
     /**
@@ -21,7 +31,7 @@ class SaccoMemberPolicy
      */
     public function view(User $user, SaccoMember $saccoMember): bool
     {
-        return false;
+        return $this->canRead($user);
     }
 
     /**
@@ -29,7 +39,7 @@ class SaccoMemberPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
     /**
@@ -37,7 +47,7 @@ class SaccoMemberPolicy
      */
     public function update(User $user, SaccoMember $saccoMember): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
     /**
@@ -45,7 +55,7 @@ class SaccoMemberPolicy
      */
     public function delete(User $user, SaccoMember $saccoMember): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
     /**
@@ -53,11 +63,11 @@ class SaccoMemberPolicy
      */
     public function restore(User $user, SaccoMember $saccoMember): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Permanent deletion is never allowed through the application.
      */
     public function forceDelete(User $user, SaccoMember $saccoMember): bool
     {

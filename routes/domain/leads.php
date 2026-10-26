@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Web\LeadController;
 use App\Http\Controllers\Web\LeadDocumentController;
+use App\Http\Controllers\Web\LeadImportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,6 +21,7 @@ Route::prefix('leads')->name('leads.')->group(function () {
 
     // Register fixed paths before /{lead} so names like "bulk-delete" are
     // never interpreted as lead IDs.
+    Route::post('/import', [LeadImportController::class, 'store'])->name('bulk-import');
     Route::delete('/bulk-delete', [LeadController::class, 'bulkDelete'])->name('bulk-delete');
     Route::post('/bulk-export', [LeadController::class, 'bulkExport'])->name('bulk-export');
     Route::patch('/bulk-update-status', [LeadController::class, 'bulkUpdateStatus'])->name('bulk-update-status');
@@ -32,6 +34,7 @@ Route::prefix('leads')->name('leads.')->group(function () {
     Route::delete('/{lead}', [LeadController::class, 'destroy'])->name('destroy');
 
     // Lead status transitions
+    Route::post('/{lead}/restore', [LeadController::class, 'restore'])->name('restore');
     Route::post('/{lead}/transition', [LeadController::class, 'transition'])->name('transition');
 
     // Lead documents (nested resource)

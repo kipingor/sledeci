@@ -6,10 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Lead\StoreLeadDocumentRequest;
 use App\Models\Lead;
 use App\Models\LeadDocument;
+use App\Services\Lead\LeadDocumentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Services\Lead\LeadDocumentService;
 
 class LeadDocumentController extends Controller
 {
@@ -61,7 +61,7 @@ class LeadDocumentController extends Controller
     {
         $this->authorize('view', $document);
 
-        if (!$this->documentService->fileExists($document)) {
+        if (! $this->documentService->fileExists($document)) {
             return response()->json(['message' => 'Document file not found'], 404);
         }
 

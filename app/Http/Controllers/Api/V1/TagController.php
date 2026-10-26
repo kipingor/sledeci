@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Http\Controllers\Api\V1;
 
-use App\Models\Tag;
-use App\Http\Resources\TagResource;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Resources\TagResource;
+use App\Models\Tag;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class TagController extends Controller
 {
@@ -17,9 +18,10 @@ class TagController extends Controller
     public function store(Request $request): JsonResponse
     {
         $data = $request->validate([
-            'name'  => ['required', 'string', 'max:100', 'unique:tags,name'],
+            'name' => ['required', 'string', 'max:100', 'unique:tags,name'],
             'color' => ['nullable', 'string', 'max:20'],
         ]);
+
         return response()->json(new TagResource(Tag::create($data)), 201);
     }
 
@@ -32,15 +34,17 @@ class TagController extends Controller
     {
         // FIX: was $request->all()
         $tag->update($request->validate([
-            'name'  => ['sometimes', 'string', 'max:100', 'unique:tags,name,' . $tag->id],
+            'name' => ['sometimes', 'string', 'max:100', 'unique:tags,name,'.$tag->id],
             'color' => ['nullable', 'string', 'max:20'],
         ]));
+
         return response()->json(new TagResource($tag->fresh()));
     }
 
     public function destroy(Tag $tag): JsonResponse
     {
         $tag->delete();
+
         return response()->json(null, 204);
     }
 }

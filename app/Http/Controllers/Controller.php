@@ -18,21 +18,15 @@ abstract class Controller extends BaseController
      * $user->can() on the User model, but callable as $this->can()
      * from any controller method.
      *
-     * @param  string  $ability
-     * @param  mixed   $arguments  Model instance, class-string, or array
-     * @return bool
+     * @param  mixed  $arguments  Model instance, class-string, or array
      */
     public function can(string $ability, mixed $arguments = []): bool
     {
         return Gate::allows($ability, $arguments);
     }
- 
+
     /**
      * Determine if the currently authenticated user lacks a given ability.
-     *
-     * @param  string  $ability
-     * @param  mixed   $arguments
-     * @return bool
      */
     public function cannot(string $ability, mixed $arguments = []): bool
     {

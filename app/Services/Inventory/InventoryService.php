@@ -3,12 +3,12 @@
 namespace App\Services\Inventory;
 
 use App\Models\Delivery;
-use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\StockMovement;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
+use Sledeci\Accounting\Models\Invoice;
 
 /**
  * InventoryService
@@ -29,31 +29,34 @@ class InventoryService
      * Iterates the delivery's items array, finds the matching Product,
      * and creates a 'receipt' movement for each line that has a product_id.
      *
-     * @param  Delivery  $delivery
-     * @return int  Number of products updated
+     * @return int Number of products updated
      */
     public function receiveFromDelivery(Delivery $delivery): int
     {
-        $items   = $delivery->items ?? [];
+        $items = $delivery->items ?? [];
         $updated = 0;
-        $po      = $delivery->purchaseOrder;
+        $po = $delivery->purchaseOrder;
 
         DB::transaction(function () use ($delivery, $items, $po, &$updated) {
             foreach ($items as $item) {
                 $productId = $item['product_id'] ?? null;
-                $qty       = (int) ($item['quantity'] ?? $item['qty'] ?? 0);
+                $qty = (int) ($item['quantity'] ?? $item['qty'] ?? 0);
 
-                if (! $productId || $qty <= 0) continue;
+                if (! $productId || $qty <= 0) {
+                    continue;
+                }
 
                 $product = Product::find($productId);
-                if (! $product) continue;
+                if (! $product) {
+                    continue;
+                }
 
                 $product->adjustStock(
-                    quantity:  $qty,
-                    type:      'receipt',
+                    quantity: $qty,
+                    type: 'receipt',
                     reference: $po?->number ?? "DEL-{$delivery->number}",
-                    source:    $delivery,
-                    notes:     "Received via delivery {$delivery->number}",
+                    source: $delivery,
+                    notes: "Received via delivery {$delivery->number}",
                 );
 
                 // Notify if stock now above reorder point (just restocked)
@@ -71,8 +74,6 @@ class InventoryService
     /**
      * Deduct stock when an invoice is issued (optional — only if
      * CompanySetting::current()->deduct_stock_on_invoice is true).
-     *
-     * @param  Invoice  $invoice
      */
     public function deductForInvoice(Invoice $invoice): void
     {
@@ -81,19 +82,23 @@ class InventoryService
         DB::transaction(function () use ($invoice, $lines) {
             foreach ($lines as $line) {
                 $productId = $line['product_id'] ?? null;
-                $qty       = (int) ($line['quantity'] ?? 0);
+                $qty = (int) ($line['quantity'] ?? 0);
 
-                if (! $productId || $qty <= 0) continue;
+                if (! $productId || $qty <= 0) {
+                    continue;
+                }
 
                 $product = Product::find($productId);
-                if (! $product || ! $product->active) continue;
+                if (! $product || ! $product->active) {
+                    continue;
+                }
 
                 $product->adjustStock(
-                    quantity:  -$qty,
-                    type:      'sale',
+                    quantity: -$qty,
+                    type: 'sale',
                     reference: $invoice->number,
-                    source:    $invoice,
-                    notes:     "Sold via invoice {$invoice->number}",
+                    source: $invoice,
+                    notes: "Sold via invoice {$invoice->number}",
                 );
 
                 // Check low-stock after deduction
@@ -107,25 +112,22 @@ class InventoryService
     /**
      * Manual stock adjustment (stocktake, correction, write-off).
      *
-     * @param  Product  $product
-     * @param  int      $newQty     The correct quantity after adjustment
-     * @param  string   $type       adjustment | write_off | return_in | return_out
-     * @param  string   $reason
-     * @return StockMovement
+     * @param  int  $newQty  The correct quantity after adjustment
+     * @param  string  $type  adjustment | write_off | return_in | return_out
      */
     public function manualAdjustment(
         Product $product,
-        int     $newQty,
-        string  $type   = 'adjustment',
-        string  $reason = '',
+        int $newQty,
+        string $type = 'adjustment',
+        string $reason = '',
     ): StockMovement {
         $delta = $newQty - $product->stock_qty;
 
         return $product->adjustStock(
-            quantity:  $delta,
-            type:      $type,
-            reference: 'ADJ-' . now()->format('YmdHis'),
-            notes:     $reason ?: "Manual adjustment to {$newQty} units",
+            quantity: $delta,
+            type: $type,
+            reference: 'ADJ-'.now()->format('YmdHis'),
+            notes: $reason ?: "Manual adjustment to {$newQty} units",
         );
     }
 
@@ -133,22 +135,24 @@ class InventoryService
      * Record a POS sale movement for one or more line items.
      *
      * @param  array  $lines  [{product_id, quantity, unit_price}, ...]
-     * @param  string $reference  POS receipt reference
+     * @param  string  $reference  POS receipt reference
      */
     public function recordSale(array $lines, string $reference): void
     {
         DB::transaction(function () use ($lines, $reference) {
             foreach ($lines as $line) {
                 $product = Product::find($line['product_id'] ?? null);
-                if (! $product) continue;
+                if (! $product) {
+                    continue;
+                }
 
                 $qty = (int) ($line['quantity'] ?? 1);
 
                 $product->adjustStock(
-                    quantity:  -$qty,
-                    type:      'sale',
+                    quantity: -$qty,
+                    type: 'sale',
                     reference: $reference,
-                    notes:     "POS sale — {$reference}",
+                    notes: "POS sale — {$reference}",
                 );
 
                 if ($product->isLowStock()) {
@@ -161,7 +165,7 @@ class InventoryService
     /**
      * Get products that are at or below their reorder point.
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return Collection
      */
     public function getLowStockProducts()
     {

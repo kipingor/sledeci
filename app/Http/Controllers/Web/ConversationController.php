@@ -6,10 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Conversation;
 use App\Models\Lead;
 use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * ConversationController
@@ -20,7 +19,7 @@ class ConversationController extends Controller
     {
         $conversations = Conversation::with(['lead:id,title', 'sender'])
             ->when($request->filled('lead_id'), fn ($q) => $q->where('lead_id', $request->lead_id))
-            ->when($request->filled('search'),  fn ($q) => $q->where('message', 'like', "%{$request->search}%"))
+            ->when($request->filled('search'), fn ($q) => $q->where('message', 'like', "%{$request->search}%"))
             ->latest()
             ->paginate((int) $request->input('per_page', 20))
             ->withQueryString();
@@ -31,7 +30,7 @@ class ConversationController extends Controller
 
         return Inertia::render('conversations/index', [
             'conversations' => $conversations,
-            'filters'       => $request->only(['lead_id', 'search']),
+            'filters' => $request->only(['lead_id', 'search']),
         ]);
     }
 
@@ -62,7 +61,7 @@ class ConversationController extends Controller
         ]);
 
         $data['sender_type'] = get_class(Auth::user());
-        $data['sender_id']   = Auth::id();
+        $data['sender_id'] = Auth::id();
 
         $conversation = Conversation::create($data);
 
@@ -82,7 +81,7 @@ class ConversationController extends Controller
         // FIX: was view('conversations.edit')
         return Inertia::render('conversations/edit', [
             'conversation' => $conversation,
-            'leads'        => Lead::select(['id', 'title'])->orderBy('title')->limit(200)->get(),
+            'leads' => Lead::select(['id', 'title'])->orderBy('title')->limit(200)->get(),
         ]);
     }
 

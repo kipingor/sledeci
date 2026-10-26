@@ -1,4 +1,7 @@
 import { createInertiaApp } from '@inertiajs/react';
+import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import type { ComponentType } from 'react';
+import { pages } from '@/lib/pages';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { initializeTheme } from '@/hooks/use-appearance';
@@ -9,10 +12,12 @@ import SettingsLayout from '@/layouts/settings/layout';
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 void createInertiaApp({
+    resolve: (name) => resolvePageComponent<ComponentType>(`./pages/${name}.tsx`, pages),
     title: (title) => (title ? `${title} - ${appName}` : appName),
     layout: (name) => {
         switch (true) {
-            case name === 'welcome':
+            // Public pages bring their own PublicLayout.
+            case name === 'welcome' || name.startsWith('site/') || name.startsWith('careers/'):
                 return null;
             case name.startsWith('auth/'):
                 return AuthLayout;

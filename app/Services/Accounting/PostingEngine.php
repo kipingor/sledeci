@@ -8,13 +8,11 @@ use App\Models\ExchangeRate;
 use App\Models\Expense;
 use App\Models\Invoice;
 use App\Models\JournalEntry;
+use App\Models\JournalEntryLine;
 use App\Models\Payment;
-use App\Models\TaxCode;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 /**
  * PostingEngine
@@ -73,7 +71,7 @@ class PostingEngine
         }
 
         $period = $this->requireOpenPeriod($invoice->issue_date);
-        $ar     = $this->requireAccount('1100', 'Accounts Receivable');
+        $ar = $this->requireAccount('1100', 'Accounts Receivable');
 
         // IAS 21: resolve exchange rate if foreign currency
         [$exchangeRate, $functionalTotal] = $this->resolveFX(
@@ -84,15 +82,15 @@ class PostingEngine
 
         return DB::transaction(function () use ($invoice, $period, $ar, $exchangeRate, $functionalTotal) {
             $je = JournalEntry::create([
-                'period_id'           => $period->id,
-                'entry_date'          => $invoice->issue_date,
-                'type'                => 'invoice',
-                'memo'                => "Invoice {$invoice->number} — {$invoice->client?->name}",
+                'period_id' => $period->id,
+                'entry_date' => $invoice->issue_date,
+                'type' => 'invoice',
+                'memo' => "Invoice {$invoice->number} — {$invoice->client?->name}",
                 'functional_currency' => $this->functionalCurrency,
-                'source_type'         => Invoice::class,
-                'source_id'           => $invoice->id,
-                'created_by'          => Auth::id(),
-                'status'              => 'draft',
+                'source_type' => Invoice::class,
+                'source_id' => $invoice->id,
+                'created_by' => Auth::id(),
+                'status' => 'draft',
             ]);
 
             // Get revenue account — use default service revenue if no mapping
@@ -105,48 +103,48 @@ class PostingEngine
                 // Debit AR in functional currency equivalent
                 $lines[] = [
                     'journal_entry_id' => $je->id,
-                    'account_id'       => $ar->id,
-                    'type'             => 'debit',
-                    'amount'           => $functionalTotal,
+                    'account_id' => $ar->id,
+                    'type' => 'debit',
+                    'amount' => $functionalTotal,
                     'foreign_currency' => $invoice->currency,
-                    'foreign_amount'   => (float) $invoice->total,
-                    'exchange_rate'    => $exchangeRate,
-                    'description'      => "AR — {$invoice->number}",
-                    'client_id'        => $invoice->client_id,
-                    'project_id'       => $invoice->project_id,
-                    'line_order'       => 1,
+                    'foreign_amount' => (float) $invoice->total,
+                    'exchange_rate' => $exchangeRate,
+                    'description' => "AR — {$invoice->number}",
+                    'client_id' => $invoice->client_id,
+                    'project_id' => $invoice->project_id,
+                    'line_order' => 1,
                 ];
 
                 $functionalSubtotal = round((float) $invoice->subtotal * $exchangeRate, 4);
-                $functionalTax      = round((float) $invoice->tax * $exchangeRate, 4);
+                $functionalTax = round((float) $invoice->tax * $exchangeRate, 4);
 
                 // Credit Revenue
                 $lines[] = [
                     'journal_entry_id' => $je->id,
-                    'account_id'       => $revenueAccount->id,
-                    'type'             => 'credit',
-                    'amount'           => $functionalSubtotal,
+                    'account_id' => $revenueAccount->id,
+                    'type' => 'credit',
+                    'amount' => $functionalSubtotal,
                     'foreign_currency' => $invoice->currency,
-                    'foreign_amount'   => (float) $invoice->subtotal,
-                    'exchange_rate'    => $exchangeRate,
-                    'description'      => "Revenue — {$invoice->number}",
-                    'client_id'        => $invoice->client_id,
-                    'project_id'       => $invoice->project_id,
-                    'line_order'       => 2,
+                    'foreign_amount' => (float) $invoice->subtotal,
+                    'exchange_rate' => $exchangeRate,
+                    'description' => "Revenue — {$invoice->number}",
+                    'client_id' => $invoice->client_id,
+                    'project_id' => $invoice->project_id,
+                    'line_order' => 2,
                 ];
 
                 if ($functionalTax > 0) {
                     $vatAccount = $this->requireAccount('3400', 'VAT Payable');
                     $lines[] = [
                         'journal_entry_id' => $je->id,
-                        'account_id'       => $vatAccount->id,
-                        'type'             => 'credit',
-                        'amount'           => $functionalTax,
+                        'account_id' => $vatAccount->id,
+                        'type' => 'credit',
+                        'amount' => $functionalTax,
                         'foreign_currency' => $invoice->currency,
-                        'foreign_amount'   => (float) $invoice->tax,
-                        'exchange_rate'    => $exchangeRate,
-                        'description'      => "VAT — {$invoice->number}",
-                        'line_order'       => 3,
+                        'foreign_amount' => (float) $invoice->tax,
+                        'exchange_rate' => $exchangeRate,
+                        'description' => "VAT — {$invoice->number}",
+                        'line_order' => 3,
                     ];
                 }
             } else {
@@ -154,35 +152,35 @@ class PostingEngine
                 // Debit AR
                 $lines[] = [
                     'journal_entry_id' => $je->id,
-                    'account_id'       => $ar->id,
-                    'type'             => 'debit',
-                    'amount'           => (float) $invoice->total,
-                    'description'      => "AR — {$invoice->number}",
-                    'client_id'        => $invoice->client_id,
-                    'project_id'       => $invoice->project_id,
-                    'line_order'       => 1,
+                    'account_id' => $ar->id,
+                    'type' => 'debit',
+                    'amount' => (float) $invoice->total,
+                    'description' => "AR — {$invoice->number}",
+                    'client_id' => $invoice->client_id,
+                    'project_id' => $invoice->project_id,
+                    'line_order' => 1,
                 ];
                 // Credit Revenue
                 $lines[] = [
                     'journal_entry_id' => $je->id,
-                    'account_id'       => $revenueAccount->id,
-                    'type'             => 'credit',
-                    'amount'           => (float) $invoice->subtotal,
-                    'description'      => "Revenue — {$invoice->number}",
-                    'client_id'        => $invoice->client_id,
-                    'project_id'       => $invoice->project_id,
-                    'line_order'       => 2,
+                    'account_id' => $revenueAccount->id,
+                    'type' => 'credit',
+                    'amount' => (float) $invoice->subtotal,
+                    'description' => "Revenue — {$invoice->number}",
+                    'client_id' => $invoice->client_id,
+                    'project_id' => $invoice->project_id,
+                    'line_order' => 2,
                 ];
                 // Credit VAT if applicable
                 if ((float) $invoice->tax > 0) {
                     $vatAccount = $this->requireAccount('3400', 'VAT Payable');
                     $lines[] = [
                         'journal_entry_id' => $je->id,
-                        'account_id'       => $vatAccount->id,
-                        'type'             => 'credit',
-                        'amount'           => (float) $invoice->tax,
-                        'description'      => "VAT — {$invoice->number}",
-                        'line_order'       => 3,
+                        'account_id' => $vatAccount->id,
+                        'type' => 'credit',
+                        'amount' => (float) $invoice->tax,
+                        'description' => "VAT — {$invoice->number}",
+                        'line_order' => 3,
                     ];
                 }
             }
@@ -194,11 +192,11 @@ class PostingEngine
 
             // Update invoice with journal entry reference
             $invoice->update([
-                'journal_entry_id'  => $je->id,
-                'posting_status'    => 'posted',
-                'exchange_rate'     => $exchangeRate,
+                'journal_entry_id' => $je->id,
+                'posting_status' => 'posted',
+                'exchange_rate' => $exchangeRate,
                 'functional_currency' => $this->functionalCurrency,
-                'functional_total'  => $functionalTotal,
+                'functional_total' => $functionalTotal,
             ]);
 
             return $je->fresh(['lines.account']);
@@ -222,30 +220,30 @@ class PostingEngine
         }
 
         $invoice = $payment->invoice;
-        $paidAt  = Carbon::parse($payment->paid_at ?? now());
-        $period  = $this->requireOpenPeriod($paidAt);
-        $ar      = $this->requireAccount('1100', 'Accounts Receivable');
+        $paidAt = Carbon::parse($payment->paid_at ?? now());
+        $period = $this->requireOpenPeriod($paidAt);
+        $ar = $this->requireAccount('1100', 'Accounts Receivable');
 
         // Determine bank/cash account
         $bankAccountId = $payment->bank_account_id
             ?? ChartOfAccount::where('is_bank_account', true)->value('id')
             ?? ChartOfAccount::where('is_cash_account', true)->value('id');
 
-        if (!$bankAccountId) {
+        if (! $bankAccountId) {
             throw new \RuntimeException('No bank or cash account configured. Please set up your Chart of Accounts.');
         }
 
         return DB::transaction(function () use ($payment, $invoice, $paidAt, $period, $ar, $bankAccountId) {
             $je = JournalEntry::create([
-                'period_id'           => $period->id,
-                'entry_date'          => $paidAt,
-                'type'                => 'payment',
-                'memo'                => "Payment — Invoice {$invoice?->number} — " . ucfirst($payment->method ?? ''),
+                'period_id' => $period->id,
+                'entry_date' => $paidAt,
+                'type' => 'payment',
+                'memo' => "Payment — Invoice {$invoice?->number} — ".ucfirst($payment->method ?? ''),
                 'functional_currency' => $this->functionalCurrency,
-                'source_type'         => Payment::class,
-                'source_id'           => $payment->id,
-                'created_by'          => Auth::id(),
-                'status'              => 'draft',
+                'source_type' => Payment::class,
+                'source_id' => $payment->id,
+                'created_by' => Auth::id(),
+                'status' => 'draft',
             ]);
 
             [$exchangeRate, $functionalAmount] = $this->resolveFX(
@@ -265,27 +263,27 @@ class PostingEngine
                 // Dr Bank
                 [
                     'journal_entry_id' => $je->id,
-                    'account_id'       => $bankAccountId,
-                    'type'             => 'debit',
-                    'amount'           => $functionalAmount,
+                    'account_id' => $bankAccountId,
+                    'type' => 'debit',
+                    'amount' => $functionalAmount,
                     'foreign_currency' => $payment->currency !== $this->functionalCurrency ? $payment->currency : null,
-                    'foreign_amount'   => $payment->currency !== $this->functionalCurrency ? (float) $payment->amount : null,
-                    'exchange_rate'    => $payment->currency !== $this->functionalCurrency ? $exchangeRate : null,
-                    'description'      => "Payment received",
-                    'client_id'        => $invoice?->client_id,
-                    'project_id'       => $invoice?->project_id,
-                    'line_order'       => 1,
+                    'foreign_amount' => $payment->currency !== $this->functionalCurrency ? (float) $payment->amount : null,
+                    'exchange_rate' => $payment->currency !== $this->functionalCurrency ? $exchangeRate : null,
+                    'description' => 'Payment received',
+                    'client_id' => $invoice?->client_id,
+                    'project_id' => $invoice?->project_id,
+                    'line_order' => 1,
                 ],
                 // Cr AR — released at the invoice's carrying value (its own rate), pro-rated for partial payments
                 [
                     'journal_entry_id' => $je->id,
-                    'account_id'       => $ar->id,
-                    'type'             => 'credit',
-                    'amount'           => $arReleased,
-                    'description'      => "Settle AR — Invoice {$invoice?->number}",
-                    'client_id'        => $invoice?->client_id,
-                    'project_id'       => $invoice?->project_id,
-                    'line_order'       => 2,
+                    'account_id' => $ar->id,
+                    'type' => 'credit',
+                    'amount' => $arReleased,
+                    'description' => "Settle AR — Invoice {$invoice?->number}",
+                    'client_id' => $invoice?->client_id,
+                    'project_id' => $invoice?->project_id,
+                    'line_order' => 2,
                 ],
             ];
 
@@ -296,21 +294,21 @@ class PostingEngine
                     $fxAccount = $this->requireAccount('6400', 'Foreign Exchange Gain');
                     $lines[] = [
                         'journal_entry_id' => $je->id,
-                        'account_id'       => $fxAccount->id,
-                        'type'             => 'credit',
-                        'amount'           => abs($fxDiff),
-                        'description'      => 'FX settlement gain (IAS 21)',
-                        'line_order'       => 3,
+                        'account_id' => $fxAccount->id,
+                        'type' => 'credit',
+                        'amount' => abs($fxDiff),
+                        'description' => 'FX settlement gain (IAS 21)',
+                        'line_order' => 3,
                     ];
                 } else {
                     $fxAccount = $this->requireAccount('9200', 'Foreign Exchange Loss');
                     $lines[] = [
                         'journal_entry_id' => $je->id,
-                        'account_id'       => $fxAccount->id,
-                        'type'             => 'debit',
-                        'amount'           => abs($fxDiff),
-                        'description'      => 'FX settlement loss (IAS 21)',
-                        'line_order'       => 3,
+                        'account_id' => $fxAccount->id,
+                        'type' => 'debit',
+                        'amount' => abs($fxDiff),
+                        'description' => 'FX settlement loss (IAS 21)',
+                        'line_order' => 3,
                     ];
                 }
             }
@@ -320,8 +318,8 @@ class PostingEngine
 
             $payment->update([
                 'journal_entry_id' => $je->id,
-                'posting_status'   => 'posted',
-                'exchange_rate'    => $exchangeRate,
+                'posting_status' => 'posted',
+                'exchange_rate' => $exchangeRate,
             ]);
 
             return $je->fresh(['lines.account']);
@@ -341,7 +339,7 @@ class PostingEngine
             throw new \RuntimeException("Expense {$expense->id} is already posted.");
         }
 
-        $date   = Carbon::parse($expense->incurred_at ?? now());
+        $date = Carbon::parse($expense->incurred_at ?? now());
         $period = $this->requireOpenPeriod($date);
 
         $expenseAccountId = $expense->expense_account_id
@@ -352,15 +350,15 @@ class PostingEngine
 
         return DB::transaction(function () use ($expense, $date, $period, $expenseAccountId, $creditAccountId) {
             $je = JournalEntry::create([
-                'period_id'           => $period->id,
-                'entry_date'          => $date,
-                'type'                => 'expense',
-                'memo'                => "Expense — " . ($expense->description ?? $expense->vendor ?? 'Unnamed'),
+                'period_id' => $period->id,
+                'entry_date' => $date,
+                'type' => 'expense',
+                'memo' => 'Expense — '.($expense->description ?? $expense->vendor ?? 'Unnamed'),
                 'functional_currency' => $this->functionalCurrency,
-                'source_type'         => Expense::class,
-                'source_id'           => $expense->id,
-                'created_by'          => Auth::id(),
-                'status'              => 'draft',
+                'source_type' => Expense::class,
+                'source_id' => $expense->id,
+                'created_by' => Auth::id(),
+                'status' => 'draft',
             ]);
 
             [$exchangeRate, $functionalAmount] = $this->resolveFX(
@@ -372,21 +370,21 @@ class PostingEngine
             $this->insertLines([
                 [
                     'journal_entry_id' => $je->id,
-                    'account_id'       => $expenseAccountId,
-                    'type'             => 'debit',
-                    'amount'           => $functionalAmount,
-                    'description'      => $expense->description,
-                    'project_id'       => $expense->project_id,
-                    'line_order'       => 1,
+                    'account_id' => $expenseAccountId,
+                    'type' => 'debit',
+                    'amount' => $functionalAmount,
+                    'description' => $expense->description,
+                    'project_id' => $expense->project_id,
+                    'line_order' => 1,
                 ],
                 [
                     'journal_entry_id' => $je->id,
-                    'account_id'       => $creditAccountId,
-                    'type'             => 'credit',
-                    'amount'           => $functionalAmount,
-                    'description'      => "AP — {$expense->vendor}",
-                    'project_id'       => $expense->project_id,
-                    'line_order'       => 2,
+                    'account_id' => $creditAccountId,
+                    'type' => 'credit',
+                    'amount' => $functionalAmount,
+                    'description' => "AP — {$expense->vendor}",
+                    'project_id' => $expense->project_id,
+                    'line_order' => 2,
                 ],
             ]);
 
@@ -394,7 +392,7 @@ class PostingEngine
 
             $expense->update([
                 'journal_entry_id' => $je->id,
-                'posting_status'   => 'posted',
+                'posting_status' => 'posted',
             ]);
 
             return $je->fresh(['lines.account']);
@@ -409,14 +407,14 @@ class PostingEngine
     public function post(JournalEntry $je): JournalEntry
     {
         $errors = $je->validate();
-        if (!empty($errors)) {
-            throw new \RuntimeException('Cannot post: ' . implode('; ', $errors));
+        if (! empty($errors)) {
+            throw new \RuntimeException('Cannot post: '.implode('; ', $errors));
         }
 
         $je->update([
-            'status'     => 'posted',
-            'posted_by'  => Auth::id(),
-            'posted_at'  => now(),
+            'status' => 'posted',
+            'posted_by' => Auth::id(),
+            'posted_at' => now(),
             'posting_date' => $je->entry_date,
         ]);
 
@@ -430,45 +428,45 @@ class PostingEngine
      */
     public function reverse(JournalEntry $original, string $memo, ?Carbon $reversalDate = null): JournalEntry
     {
-        if (!$original->isPosted()) {
+        if (! $original->isPosted()) {
             throw new \RuntimeException('Only posted entries can be reversed.');
         }
         if ($original->is_reversed) {
             throw new \RuntimeException('This entry has already been reversed.');
         }
 
-        $date   = $reversalDate ?? now();
+        $date = $reversalDate ?? now();
         $period = $this->requireOpenPeriod($date);
 
         return DB::transaction(function () use ($original, $memo, $date, $period) {
             $reversal = JournalEntry::create([
-                'period_id'           => $period->id,
-                'entry_date'          => $date,
-                'type'                => 'reversal',
-                'memo'                => "REVERSAL: {$original->reference} — {$memo}",
+                'period_id' => $period->id,
+                'entry_date' => $date,
+                'type' => 'reversal',
+                'memo' => "REVERSAL: {$original->reference} — {$memo}",
                 'functional_currency' => $original->functional_currency,
-                'source_type'         => $original->source_type,
-                'source_id'           => $original->source_id,
-                'reversed_by'         => $original->id,
-                'is_reversal'         => true,
-                'created_by'          => Auth::id(),
-                'status'              => 'draft',
+                'source_type' => $original->source_type,
+                'source_id' => $original->source_id,
+                'reversed_by' => $original->id,
+                'is_reversal' => true,
+                'created_by' => Auth::id(),
+                'status' => 'draft',
             ]);
 
             // Swap debits ↔ credits
             $original->lines->each(function ($line) use ($reversal) {
-                \App\Models\JournalEntryLine::create([
+                JournalEntryLine::create([
                     'journal_entry_id' => $reversal->id,
-                    'account_id'       => $line->account_id,
-                    'type'             => $line->type === 'debit' ? 'credit' : 'debit',
-                    'amount'           => $line->amount,
+                    'account_id' => $line->account_id,
+                    'type' => $line->type === 'debit' ? 'credit' : 'debit',
+                    'amount' => $line->amount,
                     'foreign_currency' => $line->foreign_currency,
-                    'foreign_amount'   => $line->foreign_amount,
-                    'exchange_rate'    => $line->exchange_rate,
-                    'description'      => "Reversal: {$line->description}",
-                    'project_id'       => $line->project_id,
-                    'client_id'        => $line->client_id,
-                    'line_order'       => $line->line_order,
+                    'foreign_amount' => $line->foreign_amount,
+                    'exchange_rate' => $line->exchange_rate,
+                    'description' => "Reversal: {$line->description}",
+                    'project_id' => $line->project_id,
+                    'client_id' => $line->client_id,
+                    'line_order' => $line->line_order,
                 ]);
             });
 
@@ -483,7 +481,6 @@ class PostingEngine
 
     // ── Private helpers ────────────────────────────────────────────────────────
 
-
     /**
      * Bulk-insert journal lines. Eloquent's insert() builds the column list from the
      * FIRST row only, so rows with different keys (e.g. a VAT line without client_id,
@@ -493,9 +490,9 @@ class PostingEngine
     private function insertLines(array $lines): void
     {
         $columns = collect($lines)->flatMap(fn ($line) => array_keys($line))->unique()->all();
-        $blank   = array_fill_keys($columns, null);
+        $blank = array_fill_keys($columns, null);
 
-        \App\Models\JournalEntryLine::insert(
+        JournalEntryLine::insert(
             array_map(fn ($line) => array_merge($blank, $line), $lines)
         );
     }
@@ -505,13 +502,13 @@ class PostingEngine
         $carbon = Carbon::parse($date);
         $period = AccountingPeriod::forDate($carbon);
 
-        if (!$period) {
+        if (! $period) {
             // Auto-create the period if it doesn't exist
             AccountingPeriod::createFiscalYear($carbon->year);
             $period = AccountingPeriod::forDate($carbon);
         }
 
-        if (!$period) {
+        if (! $period) {
             throw new \RuntimeException("No accounting period found for date {$carbon->toDateString()}.");
         }
 
@@ -526,10 +523,10 @@ class PostingEngine
     {
         $account = ChartOfAccount::where('code', $code)->where('is_active', true)->first();
 
-        if (!$account) {
+        if (! $account) {
             throw new \RuntimeException(
-                "Required account '{$code}' ({$label}) not found. " .
-                "Run: php artisan db:seed --class=ChartOfAccountsSeeder"
+                "Required account '{$code}' ({$label}) not found. ".
+                'Run: php artisan db:seed --class=ChartOfAccountsSeeder'
             );
         }
 
@@ -548,11 +545,11 @@ class PostingEngine
 
         $rate = ExchangeRate::getRate($currency, $this->functionalCurrency, $date);
 
-        if (!$rate) {
+        if (! $rate) {
             // Never fall back to 1:1 — that would silently book e.g. USD 10,000 as KES 10,000.
             throw new \RuntimeException(
                 "No exchange rate for {$currency} → {$this->functionalCurrency} on or before {$date->toDateString()}. "
-                . 'Add one under Accounting → Exchange Rates before posting this transaction.'
+                .'Add one under Accounting → Exchange Rates before posting this transaction.'
             );
         }
 

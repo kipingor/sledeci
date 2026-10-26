@@ -17,11 +17,11 @@
 | Role names MUST match database/seeders/RoleSeeder.php.
 */
 
-$crm      = ['sales', 'manager', 'viewer', 'auditor'];
+$crm = ['sales', 'manager', 'viewer', 'auditor'];
 $projects = ['project manager', 'manager', 'viewer', 'auditor'];
-$ledger   = ['accountant', 'finance', 'auditor'];                       // books of account
-$billing  = ['accountant', 'finance', 'manager', 'auditor'];            // invoices / payments / expenses
-$supply   = ['manager', 'accountant', 'finance', 'auditor', 'viewer'];
+$ledger = ['accountant', 'finance', 'auditor'];                       // books of account
+$billing = ['accountant', 'finance', 'manager', 'auditor'];            // invoices / payments / expenses
+$supply = ['manager', 'accountant', 'finance', 'auditor', 'viewer'];
 
 return [
 
@@ -34,71 +34,72 @@ return [
 
     'modules' => [
         // ── CRM & sales ──────────────────────────────────────────────
-        'leads'            => $crm,
-        'lead-documents'   => $crm,
-        'pipelines'        => $crm,
-        'opportunities'    => $crm,
-        'contacts'         => $crm,
-        'follow-ups'       => $crm,
-        'client-reports'   => $crm,
+        'leads' => $crm,
+        'lead-documents' => $crm,
+        'pipelines' => $crm,
+        'opportunities' => $crm,
+        'contacts' => $crm,
+        'follow-ups' => $crm,
+        'client-reports' => $crm,
         'client-report-metrics' => $crm,
-        'emails'           => [...$crm, 'project manager'],
-        'conversations'    => [...$crm, 'project manager'],
-        'proposals'        => $crm,
-        'questions'        => $crm,
-        'ai'               => $crm,
-        'documents'        => $crm,
-        'upload'           => $crm,
-        'import-export'    => ['sales', 'manager'],
+        'emails' => [...$crm, 'project manager'],
+        'conversations' => [...$crm, 'project manager'],
+        'proposals' => $crm,
+        'questions' => $crm,
+        'ai' => $crm,
+        'documents' => $crm,
+        'upload' => $crm,
+        'import-export' => ['sales', 'manager'],
         'automation-rules' => ['manager'],
-        'automation-logs'  => ['manager', 'auditor'],
-        'clients'          => [...$crm, 'project manager', 'accountant', 'finance'],
-        'rfps'             => [...$crm, 'project manager'],
-        'tenders'          => [...$crm, 'project manager'],
-        'approvals'        => ['sales', 'manager', 'project manager', 'accountant', 'finance'],
+        'workflows' => ['manager'],
+        'automation-logs' => ['manager', 'auditor'],
+        'clients' => [...$crm, 'project manager', 'accountant', 'finance'],
+        'rfps' => [...$crm, 'project manager'],
+        'tenders' => [...$crm, 'project manager'],
+        'approvals' => ['sales', 'manager', 'project manager', 'accountant', 'finance'],
 
         // ── Projects ─────────────────────────────────────────────────
-        'projects'          => $projects,
+        'projects' => $projects,
         'project-templates' => $projects,
-        'milestones'        => $projects,
-        'tasks'             => [...$projects, 'field agent'],
-        'time-logs'         => [...$projects, 'field agent', 'human resource'],
+        'milestones' => $projects,
+        'tasks' => [...$projects, 'field agent'],
+        'time-logs' => [...$projects, 'field agent', 'human resource'],
 
         // ── Accounting ───────────────────────────────────────────────
-        'accounting'        => $ledger,
+        'accounting' => $ledger,
         'chart-of-accounts' => $ledger,
-        'accounting-periods'=> $ledger,
-        'journal-entries'   => $ledger,
-        'accounting-reports'=> $ledger,
-        'exchange-rates'    => $ledger,
-        'forex-rates'       => $billing,
-        'invoices'          => $billing,
-        'payments'          => $billing,
-        'expenses'          => $billing,
-        'etims'             => ['accountant', 'finance'],
-        'financing'         => ['accountant', 'finance', 'manager', 'auditor'],
-        'trade-documents'   => [...$billing, 'sales'],
+        'accounting-periods' => $ledger,
+        'journal-entries' => $ledger,
+        'accounting-reports' => $ledger,
+        'exchange-rates' => $ledger,
+        'forex-rates' => $billing,
+        'invoices' => $billing,
+        'payments' => $billing,
+        'expenses' => $billing,
+        'etims' => ['accountant', 'finance'],
+        'financing' => ['accountant', 'finance', 'manager', 'auditor'],
+        'trade-documents' => [...$billing, 'sales'],
 
         // ── Supply chain & retail ────────────────────────────────────
-        'inventory'          => $supply,
-        'products'           => [...$supply, 'sales'],
-        'suppliers'          => $supply,
-        'vendors'            => $supply,
-        'purchase-orders'    => $supply,
-        'deliveries'         => [...$supply, 'field agent'],
+        'inventory' => $supply,
+        'products' => [...$supply, 'sales'],
+        'suppliers' => $supply,
+        'vendors' => $supply,
+        'purchase-orders' => $supply,
+        'deliveries' => [...$supply, 'field agent'],
         'delivery-documents' => [...$supply, 'field agent'],
-        'pos'                => ['sales', 'manager', 'accountant', 'finance'],
+        'pos' => ['sales', 'manager', 'accountant', 'finance'],
 
         // ── People ───────────────────────────────────────────────────
-        'hr'           => ['human resource', 'manager', 'auditor'],
-        'payroll'      => ['human resource', 'finance', 'accountant', 'auditor'],
-        'sacco'        => ['finance', 'accountant', 'manager', 'auditor'],
+        'hr' => ['human resource', 'manager', 'auditor'],
+        'payroll' => ['human resource', 'finance', 'accountant', 'auditor'],
+        'sacco' => ['finance', 'accountant', 'manager', 'auditor'],
         'field-agents' => ['field agent', 'manager', 'sales', 'project manager', 'auditor'],
-        'users'        => ['human resource'],
+        'users' => ['human resource'],
 
         // ── Insight ──────────────────────────────────────────────────
-        'analytics'  => ['manager', 'sales', 'project manager', 'finance', 'accountant', 'auditor', 'viewer'],
-        'reports'    => ['manager', 'sales', 'project manager', 'finance', 'accountant', 'auditor', 'viewer'],
+        'analytics' => ['manager', 'sales', 'project manager', 'finance', 'accountant', 'auditor', 'viewer'],
+        'reports' => ['manager', 'sales', 'project manager', 'finance', 'accountant', 'auditor', 'viewer'],
         'activities' => null,   // any role
         'audit-logs' => ['auditor'],
     ],

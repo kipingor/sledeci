@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\Models\ExchangeRate;
-use App\Models\Invoice;
-use App\Models\JournalEntry;
-use App\Models\Payment;
 use App\Models\User;
-use App\Services\Accounting\PostingEngine;
 use Database\Seeders\ChartOfAccountsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Sledeci\Accounting\Models\ExchangeRate;
+use Sledeci\Accounting\Models\Invoice;
+use Sledeci\Accounting\Models\JournalEntry;
+use Sledeci\Accounting\Models\Payment;
+use Sledeci\Accounting\Services\PostingEngine;
 use Tests\TestCase;
 
 /**

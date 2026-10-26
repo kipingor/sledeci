@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { router } from '@inertiajs/react';
 import { useToast } from '@/hooks/use-toast';
-import { route } from 'ziggy-js';
+import * as leadRoutes from '@/routes/web/leads';
 
 export interface BulkOperationResult {
     success: boolean;
@@ -29,7 +29,7 @@ export function useBulkLeadOperations(): UseBulkLeadOperationsReturn {
         try {
             return await new Promise<BulkOperationResult>((resolve) => {
                 router.delete(
-                    route('web.leads.bulk-delete'),
+                    leadRoutes.bulkDelete().url,
                     {
                         data: { lead_ids: leadIds },
                         preserveState: true,
@@ -85,7 +85,7 @@ export function useBulkLeadOperations(): UseBulkLeadOperationsReturn {
             // Create a form and submit it to trigger download
             const form = document.createElement('form');
             form.method = 'POST';
-            form.action = route('web.leads.bulk-export');
+            form.action = leadRoutes.bulkExport().url;
             form.style.display = 'none';
 
             // Add CSRF token
@@ -145,7 +145,7 @@ export function useBulkLeadOperations(): UseBulkLeadOperationsReturn {
         try {
             return await new Promise<BulkOperationResult>((resolve) => {
                 router.patch(
-                    route('web.leads.bulk-update-status'),
+                    leadRoutes.bulkUpdateStatus().url,
                     {
                         lead_ids: leadIds,
                         status: status,
@@ -203,7 +203,7 @@ export function useBulkLeadOperations(): UseBulkLeadOperationsReturn {
         try {
             return await new Promise<BulkOperationResult>((resolve) => {
                 router.patch(
-                    route('web.leads.bulk-assign'),
+                    leadRoutes.bulkAssign().url,
                     {
                         lead_ids: leadIds,
                         owner_id: ownerId,
@@ -261,7 +261,7 @@ export function useBulkLeadOperations(): UseBulkLeadOperationsReturn {
         try {
             return await new Promise<BulkOperationResult>((resolve) => {
                 router.patch(
-                    route('web.leads.bulk-update-stage'),
+                    leadRoutes.bulkUpdateStage().url,
                     {
                         lead_ids: leadIds,
                         pipeline_stage_id: stageId,

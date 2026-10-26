@@ -3,7 +3,6 @@
 namespace App\Listeners\Lead;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class SendLeadCreatedNotification implements ShouldQueue
 {

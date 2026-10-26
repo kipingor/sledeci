@@ -25,7 +25,7 @@ return new class extends Migration
             $table->json('metadata')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->index(['territory', 'active']);      
+            $table->index(['territory', 'active']);
         });
     }
 

@@ -1,0 +1,24 @@
+{
+    "name": "sledeci/core",
+    "description": "Foundation for the Sledeci module suite: module registry, shared contracts and role-based policy helpers.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "illuminate/support": "^13.0",
+        "spatie/laravel-permission": "^8.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sledeci\\Core\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Sledeci\\Core\\CoreServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable"
+}

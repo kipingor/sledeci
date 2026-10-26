@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\ClientFollowUp;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Sledeci\Clients\Models\ClientFollowUp;
 
 /**
  * @extends Factory<ClientFollowUp>

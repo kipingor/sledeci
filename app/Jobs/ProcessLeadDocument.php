@@ -2,10 +2,12 @@
 
 namespace App\Jobs;
 
-use App\Models\LeadDocument;
 use App\Enums\LeadDocumentStatus;
-use App\Services\DocumentParserService;
+use App\Events\LeadDocumentProcessed;
+use App\Models\AuditLog;
+use App\Models\LeadDocument;
 use App\Services\AI\AiClientInterface;
+use App\Services\DocumentParserService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -35,7 +37,7 @@ class ProcessLeadDocument implements ShouldQueue
         AiClientInterface $client
     ): void {
         $document = LeadDocument::find($this->documentId);
-        if (!$document) {
+        if (! $document) {
             return;
         }
 
@@ -49,15 +51,15 @@ class ProcessLeadDocument implements ShouldQueue
 
         // Determine absolute path
         $disk = Storage::disk('private');
-        $absolutePath = method_exists($disk, 'path') ? $disk->path($document->storage_path) : storage_path('app/' . $document->storage_path);
+        $absolutePath = method_exists($disk, 'path') ? $disk->path($document->storage_path) : storage_path('app/'.$document->storage_path);
 
         // Ensure we have extracted text
         $text = '';
-        if (!empty($document->extracted_text) && is_array($document->extracted_text) && !empty($document->extracted_text['text'])) {
+        if (! empty($document->extracted_text) && is_array($document->extracted_text) && ! empty($document->extracted_text['text'])) {
             $text = $document->extracted_text['text'];
         } else {
             $text = $parser->extractText($absolutePath, $document->mime_type);
-            if (!empty($text)) {
+            if (! empty($text)) {
                 $document->extracted_text = ['text' => $text];
                 $document->save();
             }
@@ -66,12 +68,13 @@ class ProcessLeadDocument implements ShouldQueue
         if (empty($text)) {
             $document->status = LeadDocumentStatus::FAILED;
             $document->save();
-            event(new \App\Events\LeadDocumentProcessed($document, LeadDocumentStatus::FAILED->value));
+            event(new LeadDocumentProcessed($document, LeadDocumentStatus::FAILED->value));
+
             return; // nothing to summarize
         }
 
         try {
-            $prompt = "Summarize the following document into a concise summary (3-6 bullet points) and extract any clear requirements or action items.\n\nDocument:\n" . mb_substr($text, 0, 30000);
+            $prompt = "Summarize the following document into a concise summary (3-6 bullet points) and extract any clear requirements or action items.\n\nDocument:\n".mb_substr($text, 0, 30000);
             $summary = $client->chat($prompt, ['max_tokens' => 500, 'temperature' => 0.2]);
 
             $document->ai_summary = [
@@ -81,7 +84,7 @@ class ProcessLeadDocument implements ShouldQueue
             $document->status = LeadDocumentStatus::SUCCEEDED;
             $document->save();
 
-            \App\Models\AuditLog::record(
+            AuditLog::record(
                 $document->lead,
                 'document_summarized',
                 [],
@@ -90,13 +93,13 @@ class ProcessLeadDocument implements ShouldQueue
             );
 
             // Broadcast the result so UI can update in real-time
-            event(new \App\Events\LeadDocumentProcessed($document, LeadDocumentStatus::SUCCEEDED->value));
+            event(new LeadDocumentProcessed($document, LeadDocumentStatus::SUCCEEDED->value));
         } catch (\Throwable $e) {
             report($e);
             try {
                 $document->status = LeadDocumentStatus::FAILED;
                 $document->save();
-                event(new \App\Events\LeadDocumentProcessed($document, LeadDocumentStatus::FAILED->value));
+                event(new LeadDocumentProcessed($document, LeadDocumentStatus::FAILED->value));
             } catch (\Throwable $inner) {
                 report($inner);
             }

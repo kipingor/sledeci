@@ -20,13 +20,13 @@ return new class extends Migration
             $table->text('objectives')->nullable();          // Measurable objectives
             $table->text('success_criteria')->nullable();     // How success is measured
             $table->text('scope_statement')->nullable();
-            ;// Ch5 — formal scope statement
+            // Ch5 — formal scope statement
             $table->text('out_of_scope')->nullable();    // Explicit exclusions
             $table->text('assumptions')->nullable();       // Project assumptions log
             $table->text('constraints')->nullable();          // Known constraints
             $table->text('high_level_risks')->nullable(); // Initial high-level risks
             $table->json('deliverables')->nullable();         // High-level deliverables list
-            
+
             $table->foreignId('client_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('owner_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('manager_id')->nullable()->constrained('users')->nullOnDelete();
@@ -53,17 +53,17 @@ return new class extends Migration
             $table->index('opportunity_id', 'idx_projects_opportunity_id');
             $table->index('lead_id', 'idx_projects_lead_id');
             $table->index('manager_id', 'idx_projects_manager_id');
-            
+
             // Status filtering
             $table->index('status', 'idx_projects_status');
-            
+
             // Date-based queries
             $table->index('start_date', 'idx_projects_start_date');
             $table->index('end_date', 'idx_projects_end_date');
-            
+
             // Active projects: WHERE status = 'active' AND start_date <= NOW()
             $table->index(['status', 'start_date'], 'idx_projects_status_start');
- 
+
             $table->index('deleted_at', 'idx_projects_deleted_at');
             $table->index('phase', 'idx_projects_phase');
             $table->index('sponsor_id', 'idx_projects_sponsor_id');
@@ -102,16 +102,16 @@ return new class extends Migration
         Schema::create('project_template_tasks', function (Blueprint $table) {
             // ── Primary key ───────────────────────────────────────────────────
             $table->id();
- 
+
             // ── Parent template ───────────────────────────────────────────────
             $table->foreignId('template_id')
-                  ->constrained('project_templates')
-                  ->cascadeOnDelete();   // tasks are meaningless without their template
- 
+                ->constrained('project_templates')
+                ->cascadeOnDelete();   // tasks are meaningless without their template
+
             // ── Task content ──────────────────────────────────────────────────
             $table->string('title');
             $table->text('description')->nullable();
- 
+
             // ── Scheduling ────────────────────────────────────────────────────
             // `order`            — display / creation order within the template
             // `start_day_offset` — how many calendar days after project start_date
@@ -120,27 +120,27 @@ return new class extends Migration
             $table->unsignedInteger('order')->default(0);
             $table->unsignedInteger('start_day_offset')->default(0);
             $table->unsignedInteger('duration_days')->default(1);
- 
+
             // ── Classification ────────────────────────────────────────────────
             // 'critical' is present in ProjectTemplateSeeder (Deployment task)
             // and accepted by the controller's validation rule.
             $table->enum('priority', ['low', 'medium', 'high', 'critical'])
-                  ->default('medium');
- 
+                ->default('medium');
+
             // Status stored as a plain string (not enum) for flexibility — the
             // template task represents a *blueprint*, so the value is typically
             // 'todo'; the project task created from it can have any live status.
             $table->string('status', 50)->default('todo')->nullable();
- 
+
             // ── Structured data ───────────────────────────────────────────────
             $table->json('checklist')->nullable();
- 
+
             // metadata  — arbitrary key/value bag for future extensibility
             $table->json('metadata')->nullable();
- 
+
             // ── Timestamps ────────────────────────────────────────────────────
             $table->timestamps();
- 
+
             // ── Indexes ───────────────────────────────────────────────────────
             // Primary access pattern: fetch all tasks for a template ordered by `order`
             $table->index(['template_id', 'order'], 'idx_ptt_template_order');
@@ -172,8 +172,8 @@ return new class extends Migration
             $table->unsignedTinyInteger('probability')->default(1); // 1=Very Low … 5=Very High
             $table->unsignedTinyInteger('impact')->default(1);      // 1=Very Low … 5=Very High
             $table->decimal('risk_score', 4, 2)
-                  ->storedAs('probability * impact')
-                  ->comment('P×I score, auto-calculated'); // 1–25
+                ->storedAs('probability * impact')
+                ->comment('P×I score, auto-calculated'); // 1–25
 
             // Risk Response (PMBOK §11.5)
             $table->enum('response_type', [
@@ -210,9 +210,9 @@ return new class extends Migration
             $table->foreignId('raised_by')->nullable()->constrained('users')->nullOnDelete();
             // Optional: link back to the risk that materialised
             $table->foreignId('risk_id')
-                  ->nullable()
-                  ->constrained('project_risks')
-                  ->nullOnDelete();
+                ->nullable()
+                ->constrained('project_risks')
+                ->nullOnDelete();
 
             $table->string('title');
             $table->text('description')->nullable();
@@ -311,12 +311,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('project_id')->constrained('projects')->cascadeOnDelete();
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
- 
+
             $table->string('title');
             $table->text('situation');         // What happened?
             $table->text('impact');            // What was the effect?
             $table->text('recommendation');    // What should future projects do?
- 
+
             $table->enum('category', [
                 'technical',
                 'schedule',
@@ -330,19 +330,19 @@ return new class extends Migration
                 'tools',
                 'other',
             ])->default('other');
- 
+
             $table->enum('type', ['positive', 'negative', 'observation'])->default('negative');
- 
+
             // Which phase the lesson was captured in
             $table->enum('phase_captured', [
                 'initiating', 'planning', 'executing',
                 'monitoring_controlling', 'closing',
             ])->nullable();
- 
+
             $table->json('tags')->nullable();     // free-form searchable tags
- 
+
             $table->timestamps();
- 
+
             $table->index(['project_id', 'category']);
             $table->index(['project_id', 'type']);
         });

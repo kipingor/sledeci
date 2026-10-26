@@ -26,6 +26,7 @@ class ApprovalController extends Controller
         // Filter to ones this user can approve
         $pending->getCollection()->transform(function ($req) {
             $req->can_approve = $this->makerChecker->canApprove(Auth::user(), $req);
+
             return $req;
         });
 

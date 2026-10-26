@@ -41,7 +41,7 @@ return new class extends Migration
             $table->timestamp('read_at')->nullable();
 
             $table->timestamps();
-            
+
             $table->index(['to_phone', 'status']);
         });
     }

@@ -12,7 +12,7 @@ enum LeadType: string
      */
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             self::DOCUMENT => 'Document-based Lead',
             self::CONVERSATION => 'Conversation-based Lead',
         };
@@ -23,7 +23,7 @@ enum LeadType: string
      */
     public function shortLabel(): string
     {
-        return match($this) {
+        return match ($this) {
             self::DOCUMENT => 'Document',
             self::CONVERSATION => 'Conversation',
         };
@@ -34,7 +34,7 @@ enum LeadType: string
      */
     public function icon(): string
     {
-        return match($this) {
+        return match ($this) {
             self::DOCUMENT => 'file-text',
             self::CONVERSATION => 'message-circle',
         };
@@ -45,7 +45,7 @@ enum LeadType: string
      */
     public function color(): string
     {
-        return match($this) {
+        return match ($this) {
             self::DOCUMENT => 'blue',
             self::CONVERSATION => 'green',
         };
@@ -72,7 +72,7 @@ enum LeadType: string
      */
     public function allowedFileTypes(): array
     {
-        return match($this) {
+        return match ($this) {
             self::DOCUMENT => ['pdf', 'doc', 'docx', 'txt', 'csv', 'xlsx'],
             self::CONVERSATION => [], // No file uploads for conversation
         };
@@ -83,7 +83,7 @@ enum LeadType: string
      */
     public function description(): string
     {
-        return match($this) {
+        return match ($this) {
             self::DOCUMENT => 'Lead generated from uploaded documents (RFPs, proposals, contracts, etc.)',
             self::CONVERSATION => 'Lead generated from direct conversations (emails, calls, meetings, etc.)',
         };

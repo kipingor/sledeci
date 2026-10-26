@@ -17,24 +17,36 @@ class PosSale extends Model
     ];
 
     protected $casts = [
-        'subtotal'        => 'decimal:2',
-        'tax'              => 'decimal:2',
-        'discount'         => 'decimal:2',
-        'total'            => 'decimal:2',
-        'amount_tendered'  => 'decimal:2',
-        'change_given'     => 'decimal:2',
+        'subtotal' => 'decimal:2',
+        'tax' => 'decimal:2',
+        'discount' => 'decimal:2',
+        'total' => 'decimal:2',
+        'amount_tendered' => 'decimal:2',
+        'change_given' => 'decimal:2',
     ];
 
     public static function generateReceiptNumber(): string
     {
-        $prefix = 'POS-' . now()->format('Ymd');
-        $last   = static::where('receipt_number', 'like', "{$prefix}%")
+        $prefix = 'POS-'.now()->format('Ymd');
+        $last = static::where('receipt_number', 'like', "{$prefix}%")
             ->orderByDesc('id')->first();
-        $seq    = $last ? ((int) substr($last->receipt_number, -4)) + 1 : 1;
-        return $prefix . '-' . str_pad((string) $seq, 4, '0', STR_PAD_LEFT);
+        $seq = $last ? ((int) substr($last->receipt_number, -4)) + 1 : 1;
+
+        return $prefix.'-'.str_pad((string) $seq, 4, '0', STR_PAD_LEFT);
     }
 
-    public function cashier(): BelongsTo { return $this->belongsTo(User::class, 'cashier_id'); }
-    public function client(): BelongsTo  { return $this->belongsTo(User::class, 'client_id'); }
-    public function items(): HasMany     { return $this->hasMany(PosSaleItem::class); }
+    public function cashier(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'cashier_id');
+    }
+
+    public function client(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'client_id');
+    }
+
+    public function items(): HasMany
+    {
+        return $this->hasMany(PosSaleItem::class);
+    }
 }

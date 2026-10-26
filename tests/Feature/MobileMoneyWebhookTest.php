@@ -2,11 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\Models\Invoice;
 use App\Models\MobileMoneyRequest;
-use App\Models\Payment;
+use App\Services\MobileMoney\MobileMoneyService;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
+use Sledeci\Accounting\Models\Invoice;
+use Sledeci\Accounting\Models\Payment;
 use Tests\TestCase;
 
 class MobileMoneyWebhookTest extends TestCase
@@ -14,6 +17,7 @@ class MobileMoneyWebhookTest extends TestCase
     use RefreshDatabase;
 
     private Invoice $invoice;
+
     private MobileMoneyRequest $pending;
 
     protected function setUp(): void
@@ -28,11 +32,11 @@ class MobileMoneyWebhookTest extends TestCase
         ]);
 
         $this->pending = MobileMoneyRequest::create([
-            'invoice_id'  => $this->invoice->id,
-            'channel'     => 'mpesa',
+            'invoice_id' => $this->invoice->id,
+            'channel' => 'mpesa',
             'external_id' => 'ws_CO_123',
-            'amount'      => 1000,
-            'status'      => 'pending',
+            'amount' => 1000,
+            'status' => 'pending',
         ]);
     }
 
@@ -41,8 +45,8 @@ class MobileMoneyWebhookTest extends TestCase
         return ['Body' => ['stkCallback' => [
             'MerchantRequestID' => 'm-1',
             'CheckoutRequestID' => $checkoutId,
-            'ResultCode'        => $code,
-            'CallbackMetadata'  => ['Item' => [
+            'ResultCode' => $code,
+            'CallbackMetadata' => ['Item' => [
                 ['Name' => 'Amount', 'Value' => 1000],
                 ['Name' => 'MpesaReceiptNumber', 'Value' => $receipt],
                 ['Name' => 'PhoneNumber', 'Value' => 254700000000],
@@ -124,20 +128,20 @@ class MobileMoneyWebhookTest extends TestCase
 
     public function test_database_rejects_a_second_payment_with_the_same_receipt_code(): void
     {
-        $service = app(\App\Services\MobileMoney\MobileMoneyService::class);
+        $service = app(MobileMoneyService::class);
         $data = ['channel' => 'mpesa', 'amount' => 500, 'mobile_money_code' => 'DUP123', 'reference' => 'DUP123'];
 
-        $first  = $service->recordMobilePayment($this->invoice, $data);
+        $first = $service->recordMobilePayment($this->invoice, $data);
         $second = $service->recordMobilePayment($this->invoice, $data);
 
         $this->assertSame($first->id, $second->id);
         $this->assertSame(1, Payment::where('mobile_money_code', 'DUP123')->count());
 
         // Bypass the service guard: the unique index itself must stop a raw duplicate.
-        $this->expectException(\Illuminate\Database\UniqueConstraintViolationException::class);
-        \Illuminate\Support\Facades\DB::table('payments')->insert(
+        $this->expectException(UniqueConstraintViolationException::class);
+        DB::table('payments')->insert(
             ['invoice_id' => $this->invoice->id, 'amount' => 500, 'currency' => 'KES', 'method' => 'mpesa', 'channel' => 'mpesa',
-             'mobile_money_code' => 'DUP123', 'paid_at' => now(), 'created_at' => now(), 'updated_at' => now()]
+                'mobile_money_code' => 'DUP123', 'paid_at' => now(), 'created_at' => now(), 'updated_at' => now()]
         );
     }
 }

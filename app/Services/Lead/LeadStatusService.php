@@ -2,10 +2,10 @@
 
 namespace App\Services\Lead;
 
-use App\Models\Lead;
 use App\Enums\LeadStatus;
 use App\Events\LeadStatusChanged;
 use App\Exceptions\InvalidStatusTransitionException;
+use App\Models\Lead;
 use Illuminate\Support\Facades\DB;
 
 class LeadStatusService
@@ -14,7 +14,7 @@ class LeadStatusService
     {
         $currentStatus = $lead->status;
 
-        if (!$currentStatus->canTransitionTo($newStatus)) {
+        if (! $currentStatus->canTransitionTo($newStatus)) {
             throw new InvalidStatusTransitionException(
                 "Cannot transition from {$currentStatus->value} to {$newStatus->value}"
             );
@@ -94,7 +94,7 @@ class LeadStatusService
                 $availableStatuses[] = [
                     'value' => $status->value,
                     'label' => $status->label(),
-                    'color' => $status->color()
+                    'color' => $status->color(),
                 ];
             }
         }
@@ -121,7 +121,7 @@ class LeadStatusService
             }
         }
 
-        usort($history, fn($a, $b) => strtotime($a['timestamp']) <=> strtotime($b['timestamp']));
+        usort($history, fn ($a, $b) => strtotime($a['timestamp']) <=> strtotime($b['timestamp']));
 
         return $history;
     }

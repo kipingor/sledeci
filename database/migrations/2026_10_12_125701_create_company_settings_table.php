@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('company_settings', function (Blueprint $table) {
             $table->id();
- 
+
             // ── Company Identity ───────────────────────────────────────────────
             $table->string('company_name')->nullable();
             $table->string('company_email')->nullable();
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('company_city')->nullable();
             $table->string('company_country')->default('KE');
             $table->string('company_logo_path')->nullable();
- 
+
             // ── Tax / KRA Compliance ───────────────────────────────────────────
             $table->string('kra_pin')->nullable()->comment('KRA PIN (e.g. P051234567Q)');
             $table->string('kra_branch_name')->nullable();
@@ -30,7 +30,7 @@ return new class extends Migration
             $table->string('vat_number')->nullable();
             $table->decimal('default_vat_rate', 5, 2)->default(16.00)->comment('Standard VAT rate in %');
             $table->boolean('vat_registered')->default(false);
- 
+
             // ── eTIMS Integration ──────────────────────────────────────────────
             $table->boolean('etims_enabled')->default(false);
             $table->enum('etims_environment', ['sandbox', 'production'])->default('sandbox');
@@ -43,28 +43,28 @@ return new class extends Migration
             $table->unsignedInteger('etims_last_invoice_sequence')->default(0);
             $table->timestamp('etims_last_sync_at')->nullable();
             $table->json('etims_metadata')->nullable()->comment('Additional eTIMS configuration');
- 
+
             // ── Financial Defaults ─────────────────────────────────────────────
             $table->string('default_currency', 3)->default('KES');
             $table->string('fiscal_year_start')->default('01-01')->comment('MM-DD format');
             $table->string('date_format')->default('d/m/Y');
- 
+
             // ── Maker-Checker Workflow ─────────────────────────────────────────
             $table->boolean('maker_checker_enabled')->default(false)
-                  ->comment('Master toggle for maker-checker across all modules');
+                ->comment('Master toggle for maker-checker across all modules');
             $table->boolean('maker_checker_tenders')->default(false)
-                  ->comment('Require approval before Tender submission');
+                ->comment('Require approval before Tender submission');
             $table->boolean('maker_checker_rfp')->default(false)
-                  ->comment('Require approval before RFP/RFQ publishing');
+                ->comment('Require approval before RFP/RFQ publishing');
             $table->boolean('maker_checker_invoices')->default(false)
-                  ->comment('Require approval before Invoice is sent');
+                ->comment('Require approval before Invoice is sent');
             $table->boolean('maker_checker_purchase_orders')->default(false)
-                  ->comment('Require approval before PO is sent to supplier');
+                ->comment('Require approval before PO is sent to supplier');
             $table->unsignedInteger('maker_checker_min_approvals')->default(1)
-                  ->comment('Number of approvals required');
+                ->comment('Number of approvals required');
             $table->json('maker_checker_approver_roles')->nullable()
-                  ->comment('Spatie role names allowed to approve');
- 
+                ->comment('Spatie role names allowed to approve');
+
             // ── Notifications ──────────────────────────────────────────────────
             $table->boolean('notify_on_approval_request')->default(true);
             $table->boolean('notify_on_approval_decision')->default(true);
@@ -73,15 +73,15 @@ return new class extends Migration
         });
 
         // Seed a single default row
-        \DB::table('company_settings')->insert([
-            'company_name'       => config('app.name', 'My Company'),
-            'default_currency'   => 'KES',
-            'default_vat_rate'   => 16.00,
+        DB::table('company_settings')->insert([
+            'company_name' => config('app.name', 'My Company'),
+            'default_currency' => 'KES',
+            'default_vat_rate' => 16.00,
             'maker_checker_enabled' => false,
-            'etims_enabled'      => false,
-            'etims_environment'  => 'sandbox',
-            'created_at'         => now(),
-            'updated_at'         => now(),
+            'etims_enabled' => false,
+            'etims_environment' => 'sandbox',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 

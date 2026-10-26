@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\Opportunity;
 use App\Models\Lead;
+use App\Models\Opportunity;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Opportunity>
+ * @extends Factory<Opportunity>
  */
 class OpportunityFactory extends Factory
 {
@@ -37,7 +37,7 @@ class OpportunityFactory extends Factory
                     $this->faker->company,
                     $this->faker->company,
                 ],
-                'notes' => $this->faker->sentence
+                'notes' => $this->faker->sentence,
             ]) : null,
         ];
     }

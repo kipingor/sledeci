@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('lead_id')->nullable()->constrained('leads')->nullOnDelete();
 
             // GPS check-in
-            $table->decimal('latitude',  10, 8)->nullable();
+            $table->decimal('latitude', 10, 8)->nullable();
             $table->decimal('longitude', 11, 8)->nullable();
             $table->string('location_name')->nullable()
                 ->comment('Reverse-geocoded address or landmark');

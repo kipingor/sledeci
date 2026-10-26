@@ -29,11 +29,11 @@ class ContactAgentService
             $contact->ai_context_summary = $context;
 
             // Populate key_topics from AI-extracted context
-            if (!empty($context['key_topics'])) {
+            if (! empty($context['key_topics'])) {
                 $contact->key_topics = $context['key_topics'];
             }
 
-            $contact->ai_email_draft      = $this->draftInitialEmail($contact, $context);
+            $contact->ai_email_draft = $this->draftInitialEmail($contact, $context);
             $contact->ai_follow_up_schedule = $this->buildFollowUpSchedule($contact, $context);
             $contact->save();
 
@@ -42,7 +42,7 @@ class ContactAgentService
         } catch (\Exception $e) {
             Log::error('ContactAgentService::onboard failed', [
                 'contact_id' => $contact->id,
-                'error'      => $e->getMessage(),
+                'error' => $e->getMessage(),
             ]);
         }
 
@@ -56,10 +56,10 @@ class ContactAgentService
     {
         $context = $contact->ai_context_summary ?? $this->extractContext($contact);
 
-        $summary      = $context['summary'] ?? $contact->talking_points ?? '';
+        $summary = $context['summary'] ?? $contact->talking_points ?? '';
         $opportunities = implode(', ', $context['opportunities'] ?? []);
-        $nextStep     = $context['next_step_suggestion'] ?? 'schedule a short call';
-        $sender       = Auth::user()?->name ?? 'our team';
+        $nextStep = $context['next_step_suggestion'] ?? 'schedule a short call';
+        $sender = Auth::user()?->name ?? 'our team';
 
         $prompt = <<<PROMPT
 Write a warm, personalised follow-up email from {$sender} to {$contact->name}.
@@ -82,6 +82,7 @@ PROMPT;
 
         $draft = $this->ai->chat($prompt, ['max_tokens' => 350, 'temperature' => 0.7]);
         $contact->update(['ai_email_draft' => $draft]);
+
         return $draft;
     }
 
@@ -95,7 +96,7 @@ PROMPT;
         $contact = $followUp->contact;
         $contact->increment('follow_up_count');
         $contact->update([
-            'status'          => 'following_up',
+            'status' => 'following_up',
             'last_contact_at' => now(),
         ]);
 
@@ -112,7 +113,7 @@ PROMPT;
     public function markInitialEmailSent(Contact $contact): void
     {
         $contact->update([
-            'status'          => 'email_sent',
+            'status' => 'email_sent',
             'last_contact_at' => now(),
             'follow_up_count' => $contact->follow_up_count + 1,
         ]);
@@ -132,21 +133,21 @@ PROMPT;
         $summary = $contact->ai_context_summary['summary'] ?? $contact->talking_points ?? '';
 
         $lead = Lead::create([
-            'title'      => 'Follow-up: ' . $contact->name . ($contact->company ? " ({$contact->company})" : ''),
+            'title' => 'Follow-up: '.$contact->name.($contact->company ? " ({$contact->company})" : ''),
             'description' => trim(implode("\n\n", array_filter([$summary, $contact->notes]))),
-            'status'     => 'new',
-            'type'       => 'manual',
+            'status' => 'new',
+            'type' => 'manual',
             'created_by' => Auth::id(),
-            'owner_id'   => $contact->owner_id,
-            'metadata'   => [
-                'source'          => 'networking_contact',
-                'contact_id'      => $contact->id,
-                'contact_name'    => $contact->name,
+            'owner_id' => $contact->owner_id,
+            'metadata' => [
+                'source' => 'networking_contact',
+                'contact_id' => $contact->id,
+                'contact_name' => $contact->name,
                 'contact_company' => $contact->company,
-                'contact_email'   => $contact->email,
-                'event_name'      => $contact->event_name,
-                'met_at'          => $contact->met_at?->toDateString(),
-                'key_topics'      => $contact->key_topics,
+                'contact_email' => $contact->email,
+                'event_name' => $contact->event_name,
+                'met_at' => $contact->met_at?->toDateString(),
+                'key_topics' => $contact->key_topics,
             ],
             ...$extra,
         ]);
@@ -160,7 +161,7 @@ PROMPT;
 
     private function extractContext(Contact $contact): array
     {
-        $notes = trim(($contact->talking_points ?? '') . "\n" . ($contact->notes ?? ''));
+        $notes = trim(($contact->talking_points ?? '')."\n".($contact->notes ?? ''));
         if (empty($notes)) {
             return ['summary' => '', 'key_topics' => [], 'pain_points' => [], 'opportunities' => [], 'next_step_suggestion' => 'schedule a brief introductory call'];
         }
@@ -183,8 +184,9 @@ Respond with ONLY valid JSON, no markdown fences.
 PROMPT;
 
         try {
-            $raw  = $this->ai->chat($prompt, ['max_tokens' => 500, 'temperature' => 0.3]);
+            $raw = $this->ai->chat($prompt, ['max_tokens' => 500, 'temperature' => 0.3]);
             $data = json_decode(trim($raw), true);
+
             return is_array($data) ? $data : ['summary' => $notes, 'key_topics' => [], 'pain_points' => [], 'opportunities' => [], 'next_step_suggestion' => ''];
         } catch (\Exception $e) {
             return ['summary' => $notes, 'key_topics' => [], 'pain_points' => [], 'opportunities' => [], 'next_step_suggestion' => ''];
@@ -193,10 +195,10 @@ PROMPT;
 
     private function draftInitialEmail(Contact $contact, array $context): string
     {
-        $summary      = $context['summary'] ?? $contact->talking_points ?? '';
+        $summary = $context['summary'] ?? $contact->talking_points ?? '';
         $opportunities = implode(', ', $context['opportunities'] ?? []);
-        $nextStep     = $context['next_step_suggestion'] ?? 'schedule a short call';
-        $sender       = Auth::user()?->name ?? 'our team';
+        $nextStep = $context['next_step_suggestion'] ?? 'schedule a short call';
+        $sender = Auth::user()?->name ?? 'our team';
 
         $prompt = <<<PROMPT
 Write a warm, personalised outreach email from {$sender} to {$contact->name} ({$contact->role} at {$contact->company}).
@@ -221,7 +223,7 @@ PROMPT;
     private function buildFollowUpSchedule(Contact $contact, array $context): array
     {
         $summary = $context['summary'] ?? '';
-        $topics  = implode(', ', $context['key_topics'] ?? []);
+        $topics = implode(', ', $context['key_topics'] ?? []);
 
         $prompt = <<<PROMPT
 Create a 3-email follow-up sequence to send after the initial outreach to {$contact->name} ({$contact->role} at {$contact->company}).
@@ -238,9 +240,10 @@ Return ONLY a JSON array of exactly 3 objects with keys: day_offset, subject, bo
 PROMPT;
 
         try {
-            $raw   = $this->ai->chat($prompt, ['max_tokens' => 900, 'temperature' => 0.65]);
-            $raw   = preg_replace('/```json\s*|\s*```/', '', trim($raw));
+            $raw = $this->ai->chat($prompt, ['max_tokens' => 900, 'temperature' => 0.65]);
+            $raw = preg_replace('/```json\s*|\s*```/', '', trim($raw));
             $items = json_decode($raw, true);
+
             return is_array($items) && count($items) >= 1 ? $items : $this->defaultSchedule();
         } catch (\Exception $e) {
             return $this->defaultSchedule();
@@ -252,15 +255,15 @@ PROMPT;
         $contact->followUps()->where('status', 'scheduled')->delete();
 
         $schedule = $contact->ai_follow_up_schedule ?? [];
-        $base     = now()->addDay();   // initial email is day 0; follow-ups start tomorrow+
+        $base = now()->addDay();   // initial email is day 0; follow-ups start tomorrow+
 
         foreach ($schedule as $i => $item) {
             ContactFollowUp::create([
-                'contact_id'   => $contact->id,
-                'sequence'     => $i + 1,
-                'subject'      => $item['subject'] ?? "Follow-up #" . ($i + 1),
-                'body'         => $item['body'] ?? '',
-                'status'       => 'scheduled',
+                'contact_id' => $contact->id,
+                'sequence' => $i + 1,
+                'subject' => $item['subject'] ?? 'Follow-up #'.($i + 1),
+                'body' => $item['body'] ?? '',
+                'status' => 'scheduled',
                 'scheduled_at' => $base->copy()->addDays((int) ($item['day_offset'] ?? ($i + 1) * 7)),
             ]);
         }

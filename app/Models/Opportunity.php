@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Builder;
+use App\Enums\OpportunityStage;
 use App\Policies\OpportunityPolicy;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[UsePolicy(OpportunityPolicy::class)]
 class Opportunity extends Model
@@ -44,11 +45,11 @@ class Opportunity extends Model
     ];
 
     protected $casts = [
-        'ai_suggestions'      => 'array',
-        'estimated_value'     => 'decimal:2',
-        'probability'         => 'integer',
+        'ai_suggestions' => 'array',
+        'estimated_value' => 'decimal:2',
+        'probability' => 'integer',
         'expected_close_date' => 'datetime:Y-m-d',
-        'stage'               => \App\Enums\OpportunityStage::class,
+        'stage' => OpportunityStage::class,
     ];
 
     /**
@@ -78,6 +79,7 @@ class Opportunity extends Model
         if ($this->stage?->isClosed()) {
             return $this->updated_at?->toISOString();
         }
+
         return null;
     }
 
@@ -100,8 +102,8 @@ class Opportunity extends Model
     {
         return $query->where(function ($q) use ($term) {
             $q->where('title', 'like', "%{$term}%")
-              ->orWhere('contact_name', 'like', "%{$term}%")
-              ->orWhere('description', 'like', "%{$term}%");
+                ->orWhere('contact_name', 'like', "%{$term}%")
+                ->orWhere('description', 'like', "%{$term}%");
         });
     }
 
@@ -109,7 +111,7 @@ class Opportunity extends Model
      * BUG FIX: OpportunityController::kanban() called ->byStage() scope
      * which didn't exist.
      */
-    public function scopeByStage(Builder $query, \App\Enums\OpportunityStage $stage): Builder
+    public function scopeByStage(Builder $query, OpportunityStage $stage): Builder
     {
         return $query->where('stage', $stage->value);
     }

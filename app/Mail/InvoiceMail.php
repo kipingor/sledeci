@@ -18,9 +18,8 @@ class InvoiceMail extends Mailable implements ShouldQueue
 
     public function __construct(
         public readonly Invoice $invoice,
-        public readonly string  $message = '',
-    ) {
-    }
+        public readonly string $message = '',
+    ) {}
 
     public function envelope(): Envelope
     {
@@ -38,9 +37,9 @@ class InvoiceMail extends Mailable implements ShouldQueue
         return new Content(
             view: 'emails.invoice',
             with: [
-                'invoice'  => $this->invoice,
-                'company'  => config('company'),
-                'message'  => $this->message,
+                'invoice' => $this->invoice,
+                'company' => config('company'),
+                'message' => $this->message,
             ],
         );
     }

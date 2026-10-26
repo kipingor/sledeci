@@ -19,7 +19,7 @@ class SupplierFactory extends Factory
 
             'contact_info' => [
                 'email' => fake()->companyEmail(),
-                'phone' => '+2547' . $this->faker->numberBetween(10000000, 99999999),
+                'phone' => '+2547'.$this->faker->numberBetween(10000000, 99999999),
                 'address' => fake()->address(),
             ],
 

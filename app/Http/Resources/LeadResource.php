@@ -25,7 +25,7 @@ class LeadResource extends JsonResource
             'ai_reviewed' => $this->ai_reviewed,
             'is_starred' => $this->is_starred,
             'estimated_value' => $this->estimated_value,
-            
+
             // Timestamps
             'contacted_at' => $this->contacted_at?->toISOString(),
             'qualified_at' => $this->qualified_at?->toISOString(),
@@ -38,15 +38,15 @@ class LeadResource extends JsonResource
             'created_at' => $this->created_at->toISOString(),
             'updated_at' => $this->updated_at->toISOString(),
             'deleted_at' => $this->deleted_at?->toISOString(),
-            
+
             // Relationships (loaded when available)
-            'owner' => $this->whenLoaded('owner', fn() => [
+            'owner' => $this->whenLoaded('owner', fn () => [
                 'id' => $this->owner->id,
                 'name' => $this->owner->name,
                 'email' => $this->owner->email,
                 'avatar' => $this->owner->avatar,
             ]),
-            'pipeline_stage' => $this->whenLoaded('pipelineStage', fn() => [
+            'pipeline_stage' => $this->whenLoaded('pipelineStage', fn () => [
                 'id' => $this->pipelineStage->id,
                 'key' => $this->pipelineStage->key,
                 'name' => $this->pipelineStage->name,

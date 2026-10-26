@@ -43,6 +43,7 @@ class PaymentController extends Controller
         // Flatten client relation for the frontend
         $payments->getCollection()->transform(function (Payment $p) {
             $p->client = $p->invoice?->client;
+
             return $p;
         });
 
@@ -56,19 +57,19 @@ class PaymentController extends Controller
             ->where('reconciliation_status', 'unmatched');
 
         $totals = [
-            'month'            => (float) Payment::whereMonth('paid_at', now()->month)
-                                        ->whereYear('paid_at', now()->year)
-                                        ->sum('amount'),
-            'year'             => (float) Payment::whereYear('paid_at', now()->year)->sum('amount'),
-            'unmatched_count'  => $unmatched->count(),
+            'month' => (float) Payment::whereMonth('paid_at', now()->month)
+                ->whereYear('paid_at', now()->year)
+                ->sum('amount'),
+            'year' => (float) Payment::whereYear('paid_at', now()->year)->sum('amount'),
+            'unmatched_count' => $unmatched->count(),
             'unmatched_amount' => (float) $unmatched->sum('amount'),
-            'by_channel'       => $byChannel->map(fn ($v) => (float) $v)->toArray(),
+            'by_channel' => $byChannel->map(fn ($v) => (float) $v)->toArray(),
         ];
 
         return Inertia::render('payments/index', [
             'payments' => $payments,
-            'totals'   => $totals,
-            'filters'  => $request->only(['search', 'channel', 'reconciliation_status']),
+            'totals' => $totals,
+            'filters' => $request->only(['search', 'channel', 'reconciliation_status']),
         ]);
     }
 
@@ -90,9 +91,9 @@ class PaymentController extends Controller
         }
 
         return Inertia::render('payments/show', [
-            'payment'             => $payment,
+            'payment' => $payment,
             'functional_currency' => config('company.functional_currency', 'KES'),
-            'unmatched_invoices'  => $unmatchedInvoices,
+            'unmatched_invoices' => $unmatchedInvoices,
         ]);
     }
 
@@ -128,8 +129,8 @@ class PaymentController extends Controller
 
         DB::transaction(function () use ($payment, $invoice) {
             $payment->update([
-                'invoice_id'            => $invoice->id,
-                'project_id'            => $invoice->project_id,
+                'invoice_id' => $invoice->id,
+                'project_id' => $invoice->project_id,
                 'reconciliation_status' => 'matched',
             ]);
 

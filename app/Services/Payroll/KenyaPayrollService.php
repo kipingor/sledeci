@@ -20,10 +20,13 @@ namespace App\Services\Payroll;
 class KenyaPayrollService
 {
     private const NSSF_PENSIONABLE_CEILING = 108_000.0; // upper earnings limit
+
     private const NSSF_RATE = 0.06;                      // employee rate, employer matches
+
     private const NSSF_MAX_EMPLOYEE = 6_480.0;           // 6% of 108,000
 
     private const SHIF_RATE = 0.0275; // 2.75% of gross
+
     private const SHIF_MIN = 300.0;   // monthly minimum contribution
 
     private const HOUSING_LEVY_RATE = 0.015; // 1.5% of gross, employee side

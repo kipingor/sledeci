@@ -2,12 +2,12 @@
 
 namespace App\Events;
 
+use App\Models\AuditLog;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\AuditLog;
 
 /**
  * FIX: Previously imported ActivityLog (deleted).
@@ -34,12 +34,12 @@ class ActivityCreated implements ShouldBroadcast
     public function broadcastWith(): array
     {
         return [
-            'id'             => $this->activity->id,
-            'event'          => $this->activity->event,
+            'id' => $this->activity->id,
+            'event' => $this->activity->event,
             'auditable_type' => class_basename($this->activity->auditable_type),
-            'auditable_id'   => $this->activity->auditable_id,
-            'user_id'        => $this->activity->user_id,
-            'created_at'     => $this->activity->created_at,
+            'auditable_id' => $this->activity->auditable_id,
+            'user_id' => $this->activity->user_id,
+            'created_at' => $this->activity->created_at,
         ];
     }
 }

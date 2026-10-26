@@ -6,7 +6,7 @@ use App\Models\PipelineStage;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PipelineStage>
+ * @extends Factory<PipelineStage>
  */
 class PipelineStageFactory extends Factory
 {

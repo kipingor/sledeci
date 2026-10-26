@@ -5,7 +5,6 @@ namespace App\Events;
 use App\Models\Lead;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -19,7 +18,7 @@ class LeadDeleted implements ShouldBroadcast
      * The lead that was created.
      */
     public Lead $lead;
-    
+
     /**
      * The ID of the deleted lead.
      */
@@ -48,13 +47,13 @@ class LeadDeleted implements ShouldBroadcast
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
+     * @return array<int, Channel>
      */
     public function broadcastOn(): array
     {
         return [
             new PrivateChannel('leads'),
-            new PrivateChannel('user.' . $this->ownerId),
+            new PrivateChannel('user.'.$this->ownerId),
         ];
     }
 

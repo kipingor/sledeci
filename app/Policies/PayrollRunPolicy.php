@@ -4,16 +4,31 @@ namespace App\Policies;
 
 use App\Models\PayrollRun;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use Sledeci\Core\Policies\ChecksModuleRoles;
 
+/**
+ * Access follows the "payroll" module in config/access.php.
+ */
 class PayrollRunPolicy
 {
+    use ChecksModuleRoles;
+
+    protected function modules(): array
+    {
+        return ['payroll'];
+    }
+
+    protected function adminDenied(): array
+    {
+        return ['update', 'delete', 'compute', 'approve', 'markPaid', 'forceDelete'];
+    }
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $this->canRead($user);
     }
 
     /**
@@ -21,7 +36,7 @@ class PayrollRunPolicy
      */
     public function view(User $user, PayrollRun $payrollRun): bool
     {
-        return false;
+        return $this->canRead($user);
     }
 
     /**
@@ -29,7 +44,7 @@ class PayrollRunPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
     /**
@@ -37,7 +52,7 @@ class PayrollRunPolicy
      */
     public function update(User $user, PayrollRun $payrollRun): bool
     {
-        return false;
+        return $this->canWrite($user) && $payrollRun->status === 'draft';
     }
 
     /**
@@ -45,7 +60,7 @@ class PayrollRunPolicy
      */
     public function delete(User $user, PayrollRun $payrollRun): bool
     {
-        return false;
+        return $this->canWrite($user) && $payrollRun->status === 'draft';
     }
 
     /**
@@ -53,14 +68,38 @@ class PayrollRunPolicy
      */
     public function restore(User $user, PayrollRun $payrollRun): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Permanent deletion is never allowed through the application.
      */
     public function forceDelete(User $user, PayrollRun $payrollRun): bool
     {
         return false;
+    }
+
+    /**
+     * Compute or recompute payslips before approval.
+     */
+    public function compute(User $user, PayrollRun $payrollRun): bool
+    {
+        return $this->canWrite($user) && in_array($payrollRun->status, ['draft', 'processing'], true);
+    }
+
+    /**
+     * Approve a computed run.
+     */
+    public function approve(User $user, PayrollRun $payrollRun): bool
+    {
+        return $this->canWrite($user) && $payrollRun->status === 'processing';
+    }
+
+    /**
+     * Mark an approved run as paid.
+     */
+    public function markPaid(User $user, PayrollRun $payrollRun): bool
+    {
+        return $this->canWrite($user) && $payrollRun->status === 'approved';
     }
 }

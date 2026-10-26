@@ -42,23 +42,23 @@ class CompanySetting extends Model
     ];
 
     protected $casts = [
-        'vat_registered'               => 'boolean',
-        'default_vat_rate'             => 'decimal:2',
-        'etims_enabled'                => 'boolean',
-        'etims_auto_submit'            => 'boolean',
-        'etims_last_invoice_sequence'  => 'integer',
-        'etims_last_sync_at'           => 'datetime',
-        'etims_metadata'               => 'array',
-        'maker_checker_enabled'        => 'boolean',
-        'maker_checker_tenders'        => 'boolean',
-        'maker_checker_rfp'            => 'boolean',
-        'maker_checker_invoices'       => 'boolean',
-        'maker_checker_purchase_orders'=> 'boolean',
-        'maker_checker_min_approvals'  => 'integer',
+        'vat_registered' => 'boolean',
+        'default_vat_rate' => 'decimal:2',
+        'etims_enabled' => 'boolean',
+        'etims_auto_submit' => 'boolean',
+        'etims_last_invoice_sequence' => 'integer',
+        'etims_last_sync_at' => 'datetime',
+        'etims_metadata' => 'array',
+        'maker_checker_enabled' => 'boolean',
+        'maker_checker_tenders' => 'boolean',
+        'maker_checker_rfp' => 'boolean',
+        'maker_checker_invoices' => 'boolean',
+        'maker_checker_purchase_orders' => 'boolean',
+        'maker_checker_min_approvals' => 'integer',
         'maker_checker_approver_roles' => 'array',
-        'notify_on_approval_request'   => 'boolean',
-        'notify_on_approval_decision'  => 'boolean',
-        'notify_on_etims_failure'      => 'boolean',
+        'notify_on_approval_request' => 'boolean',
+        'notify_on_approval_decision' => 'boolean',
+        'notify_on_etims_failure' => 'boolean',
     ];
 
     private const CACHE_KEY = 'company_settings';
@@ -83,8 +83,8 @@ class CompanySetting extends Model
 
     protected static function booted(): void
     {
-        static::saved(fn() => static::clearCache());
-        static::updated(fn() => static::clearCache());
+        static::saved(fn () => static::clearCache());
+        static::updated(fn () => static::clearCache());
     }
 
     // ── Helpers ────────────────────────────────────────────────────────────────
@@ -96,17 +96,18 @@ class CompanySetting extends Model
         }
 
         return (bool) match ($module) {
-            'tenders'         => $this->maker_checker_tenders,
-            'rfp'             => $this->maker_checker_rfp,
-            'invoices'        => $this->maker_checker_invoices,
+            'tenders' => $this->maker_checker_tenders,
+            'rfp' => $this->maker_checker_rfp,
+            'invoices' => $this->maker_checker_invoices,
             'purchase_orders' => $this->maker_checker_purchase_orders,
-            default           => false,
+            default => false,
         };
     }
 
     public function nextEtimsSequence(): int
     {
         $this->increment('etims_last_invoice_sequence');
+
         return $this->etims_last_invoice_sequence;
     }
 }

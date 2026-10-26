@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use App\Traits\ExpenseOcrAddendum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\ExpenseOcrAddendum;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * BUG FIX — Expense model was missing a $casts definition entirely.
@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Expense extends Model
 {
-    use HasFactory, SoftDeletes, ExpenseOcrAddendum;
+    use ExpenseOcrAddendum, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'project_id',
@@ -44,8 +44,8 @@ class Expense extends Model
     // FIX: was missing entirely — 'lines' => 'array' is required so Eloquent
     // auto-encodes on save and auto-decodes on fetch, matching the json column type.
     protected $casts = [
-        'lines'       => 'array',
-        'amount'      => 'decimal:2',
+        'lines' => 'array',
+        'amount' => 'decimal:2',
         'incurred_at' => 'date',
         'receipt_pending_upload' => 'boolean',
     ];

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -108,7 +109,7 @@ class ModuleAccessTest extends TestCase
         $hr = $this->userWith('human resource');
 
         $this->actingAs($hr)->post('/users', [
-            'name'  => 'Sneaky',
+            'name' => 'Sneaky',
             'email' => 'sneaky@example.com',
             'roles' => ['admin'],
         ])->assertForbidden();
@@ -121,7 +122,7 @@ class ModuleAccessTest extends TestCase
         $hr = $this->userWith('human resource');
 
         $this->actingAs($hr)->post('/users', [
-            'name'  => 'New Hire',
+            'name' => 'New Hire',
             'email' => 'hire@example.com',
             'roles' => ['project manager'], // previously the UI sent 'pm', which threw RoleDoesNotExist
         ])->assertRedirect();
@@ -154,7 +155,7 @@ class ModuleAccessTest extends TestCase
 
     public function test_every_role_referenced_in_the_access_map_is_seeded(): void
     {
-        $this->seed(\Database\Seeders\RoleSeeder::class);
+        $this->seed(RoleSeeder::class);
         $known = Role::pluck('name')->all();
 
         $referenced = collect(config('access.modules'))->flatten()->merge(config('access.read_only_roles'))->unique()->filter();

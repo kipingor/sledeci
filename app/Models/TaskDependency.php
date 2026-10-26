@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use Database\Factories\TaskDependencyFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class TaskDependency extends Model
 {
-    /** @use HasFactory<\Database\Factories\TaskDependencyFactory> */
+    /** @use HasFactory<TaskDependencyFactory> */
     use HasFactory;
 }

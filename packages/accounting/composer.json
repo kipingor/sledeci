@@ -1,0 +1,30 @@
+{
+    "name": "sledeci/accounting",
+    "description": "Accounting for the Sledeci suite: chart of accounts, journals, invoices, payments, expenses, financial statements, multi-currency and invoice financing.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "sledeci/core": "^0.1 || @dev",
+        "inertiajs/inertia-laravel": "^3.0",
+        "barryvdh/laravel-dompdf": "^3.0"
+    },
+    "suggest": {
+        "sledeci/clients": "Shows invoices and balances on client profiles.",
+        "sledeci/kenya-tax": "Submits invoices to KRA eTIMS.",
+        "sledeci/kenya-payments": "Collects invoice payments through M-Pesa, Airtel Money and MTN MoMo."
+    },
+    "autoload": {
+        "psr-4": {
+            "Sledeci\\Accounting\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Sledeci\\Accounting\\AccountingServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable"
+}

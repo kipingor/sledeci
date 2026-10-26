@@ -1,12 +1,10 @@
 <?php
 
 use App\Http\Controllers\Web\DashboardController;
+use App\Http\Controllers\Web\DeliveryController;
 use App\Http\Controllers\Web\MailgunWebhookController;
 use App\Http\Controllers\Web\MobileMoneyWebhookController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use Laravel\Fortify\Features;
 
 // ── Mailgun inbound webhook ────────────────────────────────────────────────────
 Route::post('/webhooks/mailgun/inbound', [MailgunWebhookController::class, 'inbound'])
@@ -28,20 +26,8 @@ Route::prefix('webhooks')->name('webhooks.')->middleware('webhook.token')->group
     Route::post('mtn/callback', [MobileMoneyWebhookController::class, 'mtnCallback'])->name('mtn.callback');
 });
 
-// ── Public root ──────────────────────────────────────────────────────────
-Route::get('/', function () {
-    if (Auth::check()) {
-        return redirect()->route('web.dashboard');
-    }
-
-    return Inertia::render('welcome', [
-        'canRegister' => Features::enabled(Features::registration()),
-    ]);
-})->name('home');
-
-Route::get('/welcome', function () {
-    return redirect()->route('home');
-});
+// ── Public website: home, about, solutions, terms, contact, careers ─────────
+require __DIR__.'/site.php';
 
 Route::middleware(['auth', 'verified', 'module.access'])
     ->name('web.')
@@ -55,7 +41,9 @@ Route::middleware(['auth', 'verified', 'module.access'])
     });
 
 // ── Public delivery confirmation (no auth) ────────────────────────────────────
-// Note: These are also registered inside the auth group above as a fallback.
-// Keeping them here ensures they work even if middleware is misconfigured.
+// Customers confirm a delivery from an emailed link, so these sit outside the
+// auth group. Names keep the "web." prefix used by emails and the frontend.
+Route::get('/delivery-confirm/{token}', [DeliveryController::class, 'confirmPage'])->name('web.deliveries.confirm-page');
+Route::post('/delivery-confirm/{token}', [DeliveryController::class, 'confirmByToken'])->name('web.deliveries.confirm-by-token');
 
 require __DIR__.'/settings.php';

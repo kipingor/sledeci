@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Web\HRController;
-use App\Http\Controllers\Web\InvoiceController;
 use App\Http\Controllers\Web\MilestoneController;
 use App\Http\Controllers\Web\PayrollController;
 use App\Http\Controllers\Web\ProjectController;
@@ -36,21 +35,6 @@ Route::put('/hr/staff/{id}', [HRController::class, 'update'])->name('hr.staff.up
 Route::get('/hr/leave', [HRController::class, 'leave'])->name('hr.leave.index');
 Route::post('/hr/leave/{leave}/approve', [HRController::class, 'approveLeave'])->name('hr.leave.approve');
 Route::post('/hr/leave/{leave}/reject', [HRController::class, 'rejectLeave'])->name('hr.leave.reject');
-
-Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
-Route::get('/invoices/create', [InvoiceController::class, 'create'])->name('invoices.create');
-Route::post('/invoices', [InvoiceController::class, 'store'])->name('invoices.store');
-Route::get('/invoices/forex-rates', [InvoiceController::class, 'forexRates'])->name('invoices.forex-rates');
-Route::get('/invoices/{invoice}/edit', [InvoiceController::class, 'edit'])->name('invoices.edit');
-Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
-Route::put('/invoices/{invoice}', [InvoiceController::class, 'update'])->name('invoices.update');
-Route::delete('/invoices/{invoice}', [InvoiceController::class, 'destroy'])->name('invoices.destroy');
-Route::post('/invoices/{invoice}/payment', [InvoiceController::class, 'recordPayment'])->name('invoices.payment');
-Route::post('/invoices/{invoice}/send', [InvoiceController::class, 'send'])->name('invoices.send');
-Route::post('/invoices/{invoice}/send-whatsapp', [InvoiceController::class, 'sendWhatsApp'])->name('invoices.send-whatsapp');
-Route::post('/invoices/{invoice}/reminder', [InvoiceController::class, 'sendReminder'])->name('invoices.reminder');
-Route::post('/invoices/{invoice}/cancel', [InvoiceController::class, 'cancel'])->name('invoices.cancel');
-Route::get('/invoices/{invoice}/pdf', [InvoiceController::class, 'downloadPdf'])->name('invoices.pdf');
 
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
 Route::get('/users/create', [UserController::class, 'create'])->name('users.create');

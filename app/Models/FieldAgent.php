@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FieldAgent extends Model
 {
@@ -18,12 +18,19 @@ class FieldAgent extends Model
 
     protected $casts = [
         'commission_rate' => 'decimal:2',
-        'active'          => 'boolean',
-        'metadata'        => 'array',
+        'active' => 'boolean',
+        'metadata' => 'array',
     ];
 
-    public function user(): BelongsTo   { return $this->belongsTo(User::class); }
-    public function visits(): HasMany   { return $this->hasMany(AgentVisit::class); }
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function visits(): HasMany
+    {
+        return $this->hasMany(AgentVisit::class);
+    }
 
     public function todayVisits(): int
     {

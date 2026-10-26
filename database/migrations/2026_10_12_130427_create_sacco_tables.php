@@ -40,13 +40,13 @@ return new class extends Migration
             $table->timestamps();
             $table->unique(['sacco_member_id', 'type']);
         });
- 
+
         // ── 3. SACCO transactions ──────────────────────────────────────────
         Schema::create('sacco_transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('sacco_account_id')->constrained('sacco_accounts')->cascadeOnDelete();
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
- 
+
             $table->enum('type', [
                 'deposit', 'withdrawal', 'loan_disbursement', 'loan_repayment',
                 'interest_credit', 'dividend_credit', 'share_purchase',
@@ -58,30 +58,30 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->timestamp('transacted_at')->useCurrent();
             $table->timestamps();
- 
+
             $table->index(['sacco_account_id', 'transacted_at']);
         });
- 
+
         // ── 4. SACCO loans ─────────────────────────────────────────────────
         Schema::create('sacco_loans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('sacco_member_id')->constrained('sacco_members')->cascadeOnDelete();
             $table->string('loan_number')->unique();
- 
+
             $table->decimal('principal', 15, 2);
             $table->decimal('interest_rate', 5, 2)->comment('Annual % rate');
             $table->unsignedSmallInteger('term_months');
             $table->decimal('monthly_repayment', 15, 2)->comment('Computed instalment');
             $table->decimal('total_repayable', 15, 2);
             $table->decimal('outstanding_balance', 15, 2);
- 
+
             $table->enum('status', ['pending', 'approved', 'disbursed', 'repaying', 'settled', 'defaulted'])
                 ->default('pending');
             $table->date('applied_date');
             $table->date('approved_date')->nullable();
             $table->date('disbursed_date')->nullable();
             $table->date('expected_end_date')->nullable();
- 
+
             $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
             $table->text('purpose')->nullable();
             $table->json('repayment_schedule')->nullable();
@@ -95,9 +95,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        schema::dropIfExists('sacco_loans');
-        schema::dropIfExists('sacco_transactions');
-        schema::dropIfExists('sacco_accounts');
+        Schema::dropIfExists('sacco_loans');
+        Schema::dropIfExists('sacco_transactions');
+        Schema::dropIfExists('sacco_accounts');
         Schema::dropIfExists('sacco_members');
     }
 };

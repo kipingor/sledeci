@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\StaffProfile;
 use App\Models\HrLeaveRequest;
+use App\Models\StaffProfile;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Support\Facades\Auth;
 
 class HRController extends Controller
 {
@@ -17,9 +17,9 @@ class HRController extends Controller
     {
         return Inertia::render('hr/index', [
             'stats' => [
-                'total_staff'   => StaffProfile::count(),
-                'available'     => StaffProfile::where('is_available', true)->count(),
-                'contractors'   => StaffProfile::where('is_contractor', true)->count(),
+                'total_staff' => StaffProfile::count(),
+                'available' => StaffProfile::where('is_available', true)->count(),
+                'contractors' => StaffProfile::where('is_contractor', true)->count(),
                 // BUG FIX: LeaveRequest now maps to leave_requests — this works correctly
                 'pending_leave' => HrLeaveRequest::where('status', 'pending')->count(),
             ],
@@ -31,18 +31,17 @@ class HRController extends Controller
         $staff = StaffProfile::with('user:id,name,email,avatar')
             ->when($request->filled('search'), fn ($q) => $q->where(function ($q) use ($request) {
                 $q->where('first_name', 'like', "%{$request->search}%")
-                  ->orWhere('last_name', 'like', "%{$request->search}%")
-                  ->orWhere('email', 'like', "%{$request->search}%");
+                    ->orWhere('last_name', 'like', "%{$request->search}%")
+                    ->orWhere('email', 'like', "%{$request->search}%");
             }))
-            ->when($request->filled('type'), fn ($q) =>
-                $q->where('is_contractor', $request->type === 'contractor')
+            ->when($request->filled('type'), fn ($q) => $q->where('is_contractor', $request->type === 'contractor')
             )
             ->orderBy('last_name')
             ->paginate(20)
             ->withQueryString();
 
         return Inertia::render('hr/staff', [
-            'staff'   => $staff,
+            'staff' => $staff,
             'filters' => $request->only(['search', 'type']),
         ]);
     }
@@ -71,17 +70,17 @@ class HRController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'first_name'     => ['required', 'string', 'max:100'],
-            'last_name'      => ['required', 'string', 'max:100'],
-            'email'          => ['nullable', 'email'],
-            'phone'          => ['nullable', 'string', 'max:30'],
-            'role'           => ['nullable', 'string', 'max:100'],
-            'hourly_rate'    => ['nullable', 'numeric', 'min:0'],
+            'first_name' => ['required', 'string', 'max:100'],
+            'last_name' => ['required', 'string', 'max:100'],
+            'email' => ['nullable', 'email'],
+            'phone' => ['nullable', 'string', 'max:30'],
+            'role' => ['nullable', 'string', 'max:100'],
+            'hourly_rate' => ['nullable', 'numeric', 'min:0'],
             'monthly_salary' => ['nullable', 'numeric', 'min:0'],
-            'is_contractor'  => ['boolean'],
-            'is_available'   => ['boolean'],
-            'skills'         => ['nullable', 'array'],
-            'user_id'        => ['nullable', 'exists:users,id'],
+            'is_contractor' => ['boolean'],
+            'is_available' => ['boolean'],
+            'skills' => ['nullable', 'array'],
+            'user_id' => ['nullable', 'exists:users,id'],
         ]);
 
         $userId = $data['user_id'] ?? null;
@@ -99,23 +98,23 @@ class HRController extends Controller
     {
         return Inertia::render('hr/edit', [
             'profile' => StaffProfile::with('user:id,name,email')->findOrFail($id),
-            'users'   => User::select(['id', 'name', 'email'])->orderBy('name')->get(),
+            'users' => User::select(['id', 'name', 'email'])->orderBy('name')->get(),
         ]);
     }
 
     public function update(Request $request, int $id)
     {
         StaffProfile::findOrFail($id)->update($request->validate([
-            'first_name'     => ['required', 'string', 'max:100'],
-            'last_name'      => ['required', 'string', 'max:100'],
-            'email'          => ['nullable', 'email'],
-            'phone'          => ['nullable', 'string', 'max:30'],
-            'role'           => ['nullable', 'string', 'max:100'],
-            'hourly_rate'    => ['nullable', 'numeric', 'min:0'],
+            'first_name' => ['required', 'string', 'max:100'],
+            'last_name' => ['required', 'string', 'max:100'],
+            'email' => ['nullable', 'email'],
+            'phone' => ['nullable', 'string', 'max:30'],
+            'role' => ['nullable', 'string', 'max:100'],
+            'hourly_rate' => ['nullable', 'numeric', 'min:0'],
             'monthly_salary' => ['nullable', 'numeric', 'min:0'],
-            'is_contractor'  => ['boolean'],
-            'is_available'   => ['boolean'],
-            'skills'         => ['nullable', 'array'],
+            'is_contractor' => ['boolean'],
+            'is_available' => ['boolean'],
+            'skills' => ['nullable', 'array'],
         ]));
 
         return redirect()->route('web.hr.index')->with('success', 'Staff profile updated.');
@@ -132,10 +131,10 @@ class HRController extends Controller
             ->withQueryString();
 
         return Inertia::render('hr/leave', [
-            'leaves'  => $leaves,
+            'leaves' => $leaves,
             'filters' => $request->only(['status']),
-            'stats'   => [
-                'pending'  => HrLeaveRequest::pending()->count(),
+            'stats' => [
+                'pending' => HrLeaveRequest::pending()->count(),
                 // BUG FIX: was 'to_date' field on wrong model — now uses correct column name
                 'approved' => HrLeaveRequest::active()->count(),
             ],
@@ -145,7 +144,7 @@ class HRController extends Controller
     public function approveLeave(Request $request, HrLeaveRequest $leave)
     {
         $leave->update([
-            'status'      => 'approved',
+            'status' => 'approved',
             'approved_by' => Auth::id(),
             'admin_notes' => $request->admin_notes,
         ]);
@@ -156,7 +155,7 @@ class HRController extends Controller
     public function rejectLeave(Request $request, HrLeaveRequest $leave)
     {
         $leave->update([
-            'status'      => 'rejected',
+            'status' => 'rejected',
             'approved_by' => Auth::id(),
             'admin_notes' => $request->validate(['admin_notes' => 'required|string'])['admin_notes'],
         ]);

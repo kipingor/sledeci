@@ -4,11 +4,10 @@ namespace Tests\Feature;
 
 use App\Models\Lead;
 use App\Models\User;
-use Laravel\Sanctum\Sanctum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use Illuminate\Support\Facades\Route;
+use Laravel\Sanctum\Sanctum;
+use Tests\TestCase;
 
 class LeadRoutesTest extends TestCase
 {
@@ -18,7 +17,7 @@ class LeadRoutesTest extends TestCase
     {
         $user = User::factory()->create();
         $user->assignRole('admin');
-        
+
         Sanctum::actingAs(
             $user,
             ['*'],
@@ -27,13 +26,13 @@ class LeadRoutesTest extends TestCase
         $response = $this->getJson('/api/v1/leads/statistics');
 
         $response->assertJsonStructure([
-                'success',
-                'data' => [
-                    'total',
-                    'by_status',
-                    'by_stage',
-                ]
-            ]);
+            'success',
+            'data' => [
+                'total',
+                'by_status',
+                'by_stage',
+            ],
+        ]);
     }
 
     public function test_single_lead_route_still_works()
@@ -45,13 +44,13 @@ class LeadRoutesTest extends TestCase
         $lead = Lead::factory()->create();
 
         $response = $this->getJson("/api/v1/leads/{$lead->id}");
-        
+
         $response->assertJson([
-                'success' => true,
-                'data' => [
-                    'id' => $lead->id,
-                ]
-            ]);
+            'success' => true,
+            'data' => [
+                'id' => $lead->id,
+            ],
+        ]);
     }
 
     public function test_bulk_routes_are_registered()

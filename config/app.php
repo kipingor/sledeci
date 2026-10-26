@@ -100,8 +100,8 @@ return [
     | Initial administrator (read by DatabaseSeeder)
     |--------------------------------------------------------------------------
     */
-    'admin_user_name'     => env('ADMIN_USER_NAME', 'Administrator'),
-    'admin_user_email'    => env('ADMIN_USER_EMAIL'),
+    'admin_user_name' => env('ADMIN_USER_NAME', 'Administrator'),
+    'admin_user_email' => env('ADMIN_USER_EMAIL'),
     'admin_user_password' => env('ADMIN_USER_PASSWORD'),
 
     'cipher' => 'AES-256-CBC',

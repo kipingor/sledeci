@@ -32,10 +32,11 @@ class UserFactory extends Factory
             'Kiambu',
             'Nakuru',
             'Kisumu',
-            'Uasin Gishu'
+            'Uasin Gishu',
         ];
+
         return [
-            'name' => $this->faker->randomElement($firstNames) . ' ' .
+            'name' => $this->faker->randomElement($firstNames).' '.
                       $this->faker->randomElement($lastNames),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),

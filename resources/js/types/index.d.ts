@@ -27,6 +27,12 @@ export interface SharedData {
     quote: { message: string; author: string };
     auth: Auth;
     sidebarOpen: boolean;
+    flash?: {
+        success?: string | null;
+        error?: string | null;
+        importResult?: { success: boolean; imported: number; failed: number; errors?: string[] } | null;
+        bulkResult?: unknown;
+    };
     [key: string]: unknown;
 }
 

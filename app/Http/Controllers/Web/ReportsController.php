@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Enums\LeadStatus;
+use App\Enums\OpportunityStage;
 use App\Http\Controllers\Controller;
 use App\Models\Lead;
 use App\Models\Opportunity;
 use App\Models\Project;
-use App\Models\Task;
-use App\Enums\LeadStatus;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,18 +18,18 @@ class ReportsController extends Controller
     public function index(Request $request)
     {
         $period = $request->input('period', '30');   // days
-        $from   = Carbon::now()->subDays((int) $period)->startOfDay();
-        $to     = Carbon::now()->endOfDay();
+        $from = Carbon::now()->subDays((int) $period)->startOfDay();
+        $to = Carbon::now()->endOfDay();
 
         return Inertia::render('reports/index', [
-            'period'        => $period,
-            'leadSummary'   => $this->leadSummary($from, $to),
+            'period' => $period,
+            'leadSummary' => $this->leadSummary($from, $to),
             'leadsByStatus' => $this->leadsByStatus(),
             'leadsBySource' => $this->leadsBySource($from, $to),
             'leadsOverTime' => $this->leadsOverTime($from, $to),
             'opportunitySummary' => $this->opportunitySummary($from, $to),
             'opportunitiesByStage' => $this->opportunitiesByStage(),
-            'projectSummary'  => $this->projectSummary(),
+            'projectSummary' => $this->projectSummary(),
             'projectsByStatus' => $this->projectsByStatus(),
             'conversionFunnel' => $this->conversionFunnel(),
         ]);
@@ -39,20 +39,20 @@ class ReportsController extends Controller
 
     private function leadSummary(Carbon $from, Carbon $to): array
     {
-        $total   = Lead::count();
-        $new     = Lead::whereBetween('created_at', [$from, $to])->count();
-        $won     = Lead::where('status', LeadStatus::WON)->count();
-        $lost    = Lead::where('status', LeadStatus::LOST)->count();
-        $closed  = $won + $lost;
+        $total = Lead::count();
+        $new = Lead::whereBetween('created_at', [$from, $to])->count();
+        $won = Lead::where('status', LeadStatus::WON)->count();
+        $lost = Lead::where('status', LeadStatus::LOST)->count();
+        $closed = $won + $lost;
 
         return [
-            'total'           => $total,
-            'new_in_period'   => $new,
-            'won'             => $won,
-            'lost'            => $lost,
+            'total' => $total,
+            'new_in_period' => $new,
+            'won' => $won,
+            'lost' => $lost,
             'conversion_rate' => $closed > 0 ? round(($won / $closed) * 100, 1) : 0,
-            'avg_value'       => Lead::where('status', LeadStatus::WON)->avg('estimated_value') ?? 0,
-            'pipeline_value'  => Lead::whereNotIn('status', [LeadStatus::WON, LeadStatus::LOST])->sum('estimated_value') ?? 0,
+            'avg_value' => Lead::where('status', LeadStatus::WON)->avg('estimated_value') ?? 0,
+            'pipeline_value' => Lead::whereNotIn('status', [LeadStatus::WON, LeadStatus::LOST])->sum('estimated_value') ?? 0,
         ];
     }
 
@@ -61,11 +61,11 @@ class ReportsController extends Controller
         return Lead::select('status', DB::raw('count(*) as count'))
             ->groupBy('status')
             ->get()
-            ->map(fn($r) => [
+            ->map(fn ($r) => [
                 'status' => $r->status instanceof LeadStatus ? $r->status->value : $r->status,
-                'label'  => $r->status instanceof LeadStatus ? $r->status->label() : ucfirst($r->status),
-                'count'  => $r->count,
-                'color'  => $r->status instanceof LeadStatus ? $r->status->color() : '#6b7280',
+                'label' => $r->status instanceof LeadStatus ? $r->status->label() : ucfirst($r->status),
+                'count' => $r->count,
+                'color' => $r->status instanceof LeadStatus ? $r->status->color() : '#6b7280',
             ])
             ->toArray();
     }
@@ -74,9 +74,9 @@ class ReportsController extends Controller
     {
         // `source` is stored inside the `metadata` JSON column, not as a flat column.
         return Lead::select(
-                DB::raw("JSON_UNQUOTE(JSON_EXTRACT(metadata, '\$.source')) as source"),
-                DB::raw('count(*) as count')
-            )
+            DB::raw("JSON_UNQUOTE(JSON_EXTRACT(metadata, '\$.source')) as source"),
+            DB::raw('count(*) as count')
+        )
             ->whereBetween('created_at', [$from, $to])
             ->whereNotNull('metadata')
             ->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(metadata, '\$.source')) IS NOT NULL")
@@ -85,7 +85,7 @@ class ReportsController extends Controller
             ->orderByDesc('count')
             ->limit(8)
             ->get()
-            ->map(fn($r) => ['source' => $r->source ?? 'Unknown', 'count' => $r->count])
+            ->map(fn ($r) => ['source' => $r->source ?? 'Unknown', 'count' => $r->count])
             ->toArray();
     }
 
@@ -95,14 +95,14 @@ class ReportsController extends Controller
         $format = $days <= 31 ? '%Y-%m-%d' : '%Y-%u';  // daily or weekly
 
         return Lead::select(
-                DB::raw("DATE_FORMAT(created_at, '{$format}') as period"),
-                DB::raw('count(*) as count')
-            )
+            DB::raw("DATE_FORMAT(created_at, '{$format}') as period"),
+            DB::raw('count(*) as count')
+        )
             ->whereBetween('created_at', [$from, $to])
             ->groupBy('period')
             ->orderBy('period')
             ->get()
-            ->map(fn($r) => ['period' => $r->period, 'count' => $r->count])
+            ->map(fn ($r) => ['period' => $r->period, 'count' => $r->count])
             ->toArray();
     }
 
@@ -110,20 +110,20 @@ class ReportsController extends Controller
 
     private function opportunitySummary(Carbon $from, Carbon $to): array
     {
-        $total  = Opportunity::count();
-        $new    = Opportunity::whereBetween('created_at', [$from, $to])->count();
-        $won    = Opportunity::where('stage', 'closed_won')->count();
-        $lost   = Opportunity::where('stage', 'closed_lost')->count();
+        $total = Opportunity::count();
+        $new = Opportunity::whereBetween('created_at', [$from, $to])->count();
+        $won = Opportunity::where('stage', 'closed_won')->count();
+        $lost = Opportunity::where('stage', 'closed_lost')->count();
         $closed = $won + $lost;
 
         return [
-            'total'           => $total,
-            'new_in_period'   => $new,
-            'won'             => $won,
-            'lost'            => $lost,
+            'total' => $total,
+            'new_in_period' => $new,
+            'won' => $won,
+            'lost' => $lost,
             'conversion_rate' => $closed > 0 ? round(($won / $closed) * 100, 1) : 0,
-            'total_value'     => Opportunity::sum('estimated_value') ?? 0,
-            'won_value'       => Opportunity::where('stage', 'closed_won')->sum('estimated_value') ?? 0,
+            'total_value' => Opportunity::sum('estimated_value') ?? 0,
+            'won_value' => Opportunity::where('stage', 'closed_won')->sum('estimated_value') ?? 0,
         ];
     }
 
@@ -132,9 +132,9 @@ class ReportsController extends Controller
         return Opportunity::select('stage', DB::raw('count(*) as count'), DB::raw('sum(estimated_value) as value'))
             ->groupBy('stage')
             ->get()
-            ->map(fn($r) => [
-                'stage' => $r->stage instanceof \App\Enums\OpportunityStage ? $r->stage->value : $r->stage,
-                'label' => $r->stage instanceof \App\Enums\OpportunityStage ? $r->stage->label() : ucfirst(str_replace('_', ' ', $r->stage)),
+            ->map(fn ($r) => [
+                'stage' => $r->stage instanceof OpportunityStage ? $r->stage->value : $r->stage,
+                'label' => $r->stage instanceof OpportunityStage ? $r->stage->label() : ucfirst(str_replace('_', ' ', $r->stage)),
                 'count' => $r->count,
                 'value' => round($r->value ?? 0, 2),
             ])
@@ -146,11 +146,11 @@ class ReportsController extends Controller
     private function projectSummary(): array
     {
         return [
-            'total'     => Project::count(),
-            'active'    => Project::where('status', 'active')->count(),
+            'total' => Project::count(),
+            'active' => Project::where('status', 'active')->count(),
             'completed' => Project::where('status', 'completed')->count(),
-            'on_hold'   => Project::where('status', 'on_hold')->count(),
-            'overdue'   => Project::where('status', 'active')
+            'on_hold' => Project::where('status', 'on_hold')->count(),
+            'overdue' => Project::where('status', 'active')
                 ->whereNotNull('end_date')
                 ->where('end_date', '<', now())
                 ->count(),
@@ -163,7 +163,7 @@ class ReportsController extends Controller
         return Project::select('status', DB::raw('count(*) as count'))
             ->groupBy('status')
             ->get()
-            ->map(fn($r) => ['status' => $r->status, 'count' => $r->count])
+            ->map(fn ($r) => ['status' => $r->status, 'count' => $r->count])
             ->toArray();
     }
 
@@ -171,10 +171,10 @@ class ReportsController extends Controller
 
     private function conversionFunnel(): array
     {
-        $total        = Lead::count();
-        $qualified    = Lead::where('status', LeadStatus::QUALIFIED)->count();
+        $total = Lead::count();
+        $qualified = Lead::where('status', LeadStatus::QUALIFIED)->count();
         $opportunities = Opportunity::count();
-        $won          = Lead::where('status', LeadStatus::WON)->count();
+        $won = Lead::where('status', LeadStatus::WON)->count();
 
         return [
             ['label' => 'Total Leads',    'count' => $total],

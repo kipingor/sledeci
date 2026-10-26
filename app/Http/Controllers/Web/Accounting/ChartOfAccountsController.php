@@ -18,38 +18,38 @@ class ChartOfAccountsController extends Controller
             ->orderBy('code')
             ->get()
             ->map(fn ($a) => [
-                'id'             => $a->id,
-                'code'           => $a->code,
-                'name'           => $a->name,
-                'type'           => $a->type,
-                'sub_type'       => $a->sub_type,
+                'id' => $a->id,
+                'code' => $a->code,
+                'name' => $a->name,
+                'type' => $a->type,
+                'sub_type' => $a->sub_type,
                 'normal_balance' => $a->normal_balance,
-                'parent_code'    => $a->parent?->code,
-                'is_bank'        => $a->is_bank_account,
-                'is_ar'          => $a->is_ar_account,
-                'is_system'      => $a->is_system,
-                'is_active'      => $a->is_active,
+                'parent_code' => $a->parent?->code,
+                'is_bank' => $a->is_bank_account,
+                'is_ar' => $a->is_ar_account,
+                'is_system' => $a->is_system,
+                'is_active' => $a->is_active,
             ]);
 
         return Inertia::render('accounting/chart-of-accounts', [
             'accounts' => $accounts,
-            'types'    => ['asset','liability','equity','revenue','expense','cogs','other_income','other_expense'],
+            'types' => ['asset', 'liability', 'equity', 'revenue', 'expense', 'cogs', 'other_income', 'other_expense'],
         ]);
     }
 
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'code'           => 'required|string|max:20|unique:chart_of_accounts',
-            'name'           => 'required|string|max:100',
-            'type'           => 'required|in:asset,liability,equity,revenue,expense,cogs,other_income,other_expense',
-            'sub_type'       => 'required|string',
+            'code' => 'required|string|max:20|unique:chart_of_accounts',
+            'name' => 'required|string|max:100',
+            'type' => 'required|in:asset,liability,equity,revenue,expense,cogs,other_income,other_expense',
+            'sub_type' => 'required|string',
             'normal_balance' => 'required|in:debit,credit',
-            'parent_id'      => 'nullable|exists:chart_of_accounts,id',
-            'description'    => 'nullable|string',
-            'is_bank_account'=> 'boolean',
-            'is_cash_account'=> 'boolean',
-            'currency_code'  => 'nullable|string|size:3',
+            'parent_id' => 'nullable|exists:chart_of_accounts,id',
+            'description' => 'nullable|string',
+            'is_bank_account' => 'boolean',
+            'is_cash_account' => 'boolean',
+            'currency_code' => 'nullable|string|size:3',
         ]);
 
         ChartOfAccount::create($data);
@@ -64,10 +64,10 @@ class ChartOfAccountsController extends Controller
         }
 
         $data = $request->validate([
-            'name'        => 'required|string|max:100',
+            'name' => 'required|string|max:100',
             'description' => 'nullable|string',
-            'is_active'   => 'boolean',
-            'parent_id'   => 'nullable|exists:chart_of_accounts,id',
+            'is_active' => 'boolean',
+            'parent_id' => 'nullable|exists:chart_of_accounts,id',
         ]);
 
         $account->update($data);

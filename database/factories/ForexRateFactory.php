@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\ForexRate;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Sledeci\Accounting\Models\ForexRate;
 
 /**
  * @extends Factory<ForexRate>

@@ -4,16 +4,26 @@ namespace App\Policies;
 
 use App\Models\ProjectTemplateTask;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use Sledeci\Core\Policies\ChecksModuleRoles;
 
+/**
+ * Access follows the "project-templates" module in config/access.php.
+ */
 class ProjectTemplateTaskPolicy
 {
+    use ChecksModuleRoles;
+
+    protected function modules(): array
+    {
+        return ['project-templates'];
+    }
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $this->canRead($user);
     }
 
     /**
@@ -21,7 +31,7 @@ class ProjectTemplateTaskPolicy
      */
     public function view(User $user, ProjectTemplateTask $projectTemplateTask): bool
     {
-        return false;
+        return $this->canRead($user);
     }
 
     /**
@@ -29,7 +39,7 @@ class ProjectTemplateTaskPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
     /**
@@ -37,7 +47,7 @@ class ProjectTemplateTaskPolicy
      */
     public function update(User $user, ProjectTemplateTask $projectTemplateTask): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
     /**
@@ -45,7 +55,7 @@ class ProjectTemplateTaskPolicy
      */
     public function delete(User $user, ProjectTemplateTask $projectTemplateTask): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
     /**
@@ -53,11 +63,11 @@ class ProjectTemplateTaskPolicy
      */
     public function restore(User $user, ProjectTemplateTask $projectTemplateTask): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Permanent deletion is never allowed through the application.
      */
     public function forceDelete(User $user, ProjectTemplateTask $projectTemplateTask): bool
     {

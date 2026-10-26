@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ClientReport extends Model
 {
@@ -19,21 +19,23 @@ class ClientReport extends Model
     ];
 
     protected $casts = [
-        'metrics'      => 'array',
+        'metrics' => 'array',
         'period_start' => 'date',
-        'period_end'   => 'date',
-        'sent_at'      => 'datetime',
-        'viewed_at'    => 'datetime',
+        'period_end' => 'date',
+        'sent_at' => 'datetime',
+        'viewed_at' => 'datetime',
     ];
 
     public function client(): BelongsTo
     {
         return $this->belongsTo(User::class, 'client_id');
     }
+
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
     }
+
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');

@@ -1,21 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import {
-    Activity,
-    BookOpen,
-    CalendarDays,
-    ChevronDown,
-    FileText,
-    Flag,
-    Folder,
-    FolderGit2,
-    Landmark,
-    LayoutGrid,
-    Receipt,
-    ScrollText,
-    Shield,
-    Users,
-    type LucideIcon,
-} from 'lucide-react';
+import { Activity, BookOpen, CalendarDays, ChevronDown, FileText, Flag, Folder, FolderGit2, Inbox, Landmark, LayoutGrid, Megaphone, Receipt, ScrollText, Shield, type LucideIcon, Users } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { NavFooter } from '@/components/nav-footer';
@@ -103,6 +87,8 @@ const navGroups: SidebarNavGroup[] = [
                 icon: CalendarDays,
             },
             { title: 'Payroll', href: web.payroll.index().url, icon: Landmark },
+            { title: 'Job Postings', href: web.hr.jobs.index().url, icon: Megaphone },
+            { title: 'Applications', href: web.hr.applications.index().url, icon: Inbox },
         ],
     },
     {

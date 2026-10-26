@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\TaxCode;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Sledeci\Accounting\Models\TaxCode;
 
 /**
  * @extends Factory<TaxCode>

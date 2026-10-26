@@ -70,22 +70,22 @@ return [
     |--------------------------------------------------------------------------
     */
     'mpesa' => [
-        'consumer_key'    => env('MPESA_CONSUMER_KEY'),
+        'consumer_key' => env('MPESA_CONSUMER_KEY'),
         'consumer_secret' => env('MPESA_CONSUMER_SECRET'),
-        'shortcode'       => env('MPESA_SHORTCODE'),
-        'passkey'         => env('MPESA_PASSKEY'),
+        'shortcode' => env('MPESA_SHORTCODE'),
+        'passkey' => env('MPESA_PASSKEY'),
     ],
 
     'airtel' => [
-        'client_id'     => env('AIRTEL_CLIENT_ID'),
+        'client_id' => env('AIRTEL_CLIENT_ID'),
         'client_secret' => env('AIRTEL_CLIENT_SECRET'),
     ],
 
     'mtn_momo' => [
-        'api_user'         => env('MTN_MOMO_API_USER'),
-        'api_key'          => env('MTN_MOMO_API_KEY'),
+        'api_user' => env('MTN_MOMO_API_USER'),
+        'api_key' => env('MTN_MOMO_API_KEY'),
         'subscription_key' => env('MTN_MOMO_SUBSCRIPTION_KEY'),
-        'environment'      => env('MTN_MOMO_ENVIRONMENT', 'sandbox'),
+        'environment' => env('MTN_MOMO_ENVIRONMENT', 'sandbox'),
     ],
 
     /*
@@ -94,18 +94,30 @@ return [
     |--------------------------------------------------------------------------
     */
     'whatsapp' => [
-        'token'           => env('WHATSAPP_TOKEN'),
+        'token' => env('WHATSAPP_TOKEN'),
         'phone_number_id' => env('WHATSAPP_PHONE_NUMBER_ID'),
     ],
 
     'africas_talking' => [
-        'username'  => env('AFRICAS_TALKING_USERNAME'),
-        'api_key'   => env('AFRICAS_TALKING_API_KEY'),
+        'username' => env('AFRICAS_TALKING_USERNAME'),
+        'api_key' => env('AFRICAS_TALKING_API_KEY'),
         'sender_id' => env('AFRICAS_TALKING_SENDER_ID'),
     ],
 
     'exchangerate_api' => [
         'key' => env('EXCHANGERATE_API_KEY'),
+    ],
+
+    /*
+    | LinkedIn: optional API posting of job ads (HR > Jobs > LinkedIn).
+    | Without these values the page still offers a ready-made post and a share
+    | link. author_urn is urn:li:organization:{id} for a company page, or
+    | urn:li:person:{id} for a personal profile; the token needs the w_member_social
+    | (or organization posting) permission from your LinkedIn developer app.
+    */
+    'linkedin' => [
+        'access_token' => env('LINKEDIN_ACCESS_TOKEN'),
+        'author_urn' => env('LINKEDIN_AUTHOR_URN'),
     ],
 
 ];

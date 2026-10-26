@@ -25,7 +25,6 @@ class AiController extends Controller
         return response()->json(['ok' => true, 'data' => $result]);
     }
 
-
     /** Draft an email using the AI service */
     public function draftEmail(AiRequest $request, EmailDraftingService $emailService): JsonResponse
     {
@@ -53,10 +52,10 @@ class AiController extends Controller
         }
 
         $prompt = "Generate content based on the following.\n";
-        if (!empty($payload['context'])) {
+        if (! empty($payload['context'])) {
             $prompt .= "Context:\n{$payload['context']}\n\n";
         }
-        if (!empty($payload['instructions'])) {
+        if (! empty($payload['instructions'])) {
             $prompt .= "Instructions:\n{$payload['instructions']}";
         }
 
@@ -81,7 +80,7 @@ class AiController extends Controller
             ], 422);
         }
 
-        $lead = !empty($payload['lead_id']) ? Lead::find($payload['lead_id']) : null;
+        $lead = ! empty($payload['lead_id']) ? Lead::find($payload['lead_id']) : null;
 
         $history = '';
         if ($lead) {
@@ -90,7 +89,7 @@ class AiController extends Controller
                 ->limit(10)
                 ->get()
                 ->reverse()
-                ->map(fn (LeadQuestion $q) => "Q: {$q->question}\nA: " . ($q->answer ?? '[unanswered]'))
+                ->map(fn (LeadQuestion $q) => "Q: {$q->question}\nA: ".($q->answer ?? '[unanswered]'))
                 ->implode("\n\n");
         }
 
@@ -98,7 +97,7 @@ class AiController extends Controller
         if ($history !== '') {
             $prompt .= "Prior questions and answers:\n{$history}\n\n";
         }
-        if (!empty($payload['context'])) {
+        if (! empty($payload['context'])) {
             $prompt .= "Additional context:\n{$payload['context']}\n\n";
         }
         $prompt .= "Latest message from the client:\n{$payload['instructions']}\n\n";
@@ -134,7 +133,7 @@ class AiController extends Controller
         }
 
         $document = LeadDocument::find($payload['document_id']);
-        if (!$document) {
+        if (! $document) {
             return response()->json(['ok' => false, 'message' => 'Document not found.'], 404);
         }
 

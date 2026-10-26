@@ -2,12 +2,12 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\AuditLog;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
-use App\Models\AuditLog;
 
 /**
  * FIXES:
@@ -36,7 +36,7 @@ class LogUserActivity
 
     private function maybeLog(Request $request, Response $response): void
     {
-        if (!in_array($request->method(), ['POST', 'PUT', 'PATCH', 'DELETE'], true)) {
+        if (! in_array($request->method(), ['POST', 'PUT', 'PATCH', 'DELETE'], true)) {
             return;
         }
 
@@ -55,30 +55,30 @@ class LogUserActivity
         try {
             $segments = explode('/', trim($request->path(), '/'));
             $resource = $segments[0] ?? 'unknown';
-            $method   = $request->method();
+            $method = $request->method();
 
             $event = match ($method) {
-                'POST'         => "{$resource}.created",
+                'POST' => "{$resource}.created",
                 'PUT', 'PATCH' => "{$resource}.updated",
-                'DELETE'       => "{$resource}.deleted",
-                default        => 'action',
+                'DELETE' => "{$resource}.deleted",
+                default => 'action',
             };
 
             AuditLog::create([
-                'user_id'        => Auth::id(),
-                'event'          => $event,
+                'user_id' => Auth::id(),
+                'event' => $event,
                 'auditable_type' => null,
-                'auditable_id'   => null,
-                'old_values'     => null,
-                'new_values'     => null,
-                'ip_address'     => $request->ip(),
-                'user_agent'     => $request->userAgent(),
+                'auditable_id' => null,
+                'old_values' => null,
+                'new_values' => null,
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent(),
             ]);
         } catch (\Throwable $e) {
             Log::warning('LogUserActivity: failed to write audit log', [
-                'error'   => $e->getMessage(),
+                'error' => $e->getMessage(),
                 'user_id' => Auth::id(),
-                'path'    => $request->path(),
+                'path' => $request->path(),
             ]);
         }
     }

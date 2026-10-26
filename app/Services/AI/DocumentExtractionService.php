@@ -3,8 +3,10 @@
 namespace App\Services\AI;
 
 use App\Models\LeadDocument;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpWord\IOFactory;
+use Smalot\PdfParser\Parser;
 
 class DocumentExtractionService
 {
@@ -54,22 +56,18 @@ class DocumentExtractionService
     {
         $filePath = Storage::disk('private')->path($document->storage_path);
 
-        if (!file_exists($filePath)) {
+        if (! file_exists($filePath)) {
             throw new \Exception('Document file not found');
         }
 
         $extension = strtolower(pathinfo($document->original_name ?? $document->filename ?? '', PATHINFO_EXTENSION));
 
-        return match(true) {
-            str_contains((string) $document->mime_type, 'pdf') || $extension === 'pdf'
-                => $this->extractFromPdf($filePath),
-            str_contains((string) $document->mime_type, 'word') || in_array($extension, ['doc', 'docx'], true)
-                => $this->extractFromWord($filePath),
-            str_contains((string) $document->mime_type, 'csv') || $extension === 'csv'
-                => $this->extractFromCsv($filePath),
-            str_contains((string) $document->mime_type, 'text') || $extension === 'txt'
-                => file_get_contents($filePath),
-            default => throw new \Exception('Unsupported file type: ' . ($document->mime_type ?? $extension)),
+        return match (true) {
+            str_contains((string) $document->mime_type, 'pdf') || $extension === 'pdf' => $this->extractFromPdf($filePath),
+            str_contains((string) $document->mime_type, 'word') || in_array($extension, ['doc', 'docx'], true) => $this->extractFromWord($filePath),
+            str_contains((string) $document->mime_type, 'csv') || $extension === 'csv' => $this->extractFromCsv($filePath),
+            str_contains((string) $document->mime_type, 'text') || $extension === 'txt' => file_get_contents($filePath),
+            default => throw new \Exception('Unsupported file type: '.($document->mime_type ?? $extension)),
         };
     }
 
@@ -78,13 +76,14 @@ class DocumentExtractionService
      */
     protected function extractFromPdf(string $filePath): string
     {
-        if (! class_exists(\Smalot\PdfParser\Parser::class)) {
+        if (! class_exists(Parser::class)) {
             throw new \Exception('PDF extraction requires the smalot/pdfparser package.');
         }
 
         try {
-            $parser = new \Smalot\PdfParser\Parser();
+            $parser = new Parser;
             $pdf = $parser->parseFile($filePath);
+
             return $pdf->getText();
         } catch (\Exception $e) {
             Log::error('PDF extraction failed', ['error' => $e->getMessage()]);
@@ -97,13 +96,13 @@ class DocumentExtractionService
      */
     protected function extractFromWord(string $filePath): string
     {
-        if (! class_exists(\PhpOffice\PhpWord\IOFactory::class)) {
+        if (! class_exists(IOFactory::class)) {
             throw new \Exception('Word extraction requires the phpoffice/phpword package.');
         }
 
         try {
-            $reader  = strtolower(pathinfo($filePath, PATHINFO_EXTENSION)) === 'doc' ? 'MsDoc' : 'Word2007';
-            $phpWord = \PhpOffice\PhpWord\IOFactory::load($filePath, $reader);
+            $reader = strtolower(pathinfo($filePath, PATHINFO_EXTENSION)) === 'doc' ? 'MsDoc' : 'Word2007';
+            $phpWord = IOFactory::load($filePath, $reader);
 
             $lines = [];
             foreach ($phpWord->getSections() as $section) {
@@ -156,12 +155,13 @@ class DocumentExtractionService
     {
         $content = [];
         $file = fopen($filePath, 'r');
-        
+
         while (($row = fgetcsv($file)) !== false) {
             $content[] = implode(' | ', $row);
         }
-        
+
         fclose($file);
+
         return implode("\n", $content);
     }
 
@@ -210,7 +210,7 @@ PROMPT;
         try {
             // Remove markdown code blocks if present
             $response = preg_replace('/```json\s*|\s*```/', '', $response);
-            
+
             $data = json_decode($response, true);
 
             if (json_last_error() !== JSON_ERROR_NONE) {

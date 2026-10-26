@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Email extends Model
@@ -46,16 +47,16 @@ class Email extends Model
     ];
 
     protected $casts = [
-        'metadata'    => 'array',
-        'sent_at'     => 'datetime',
+        'metadata' => 'array',
+        'sent_at' => 'datetime',
         'received_at' => 'datetime',
-        'opened_at'   => 'datetime',
+        'opened_at' => 'datetime',
     ];
 
     /**
      * Get the lead associated with this email.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function lead()
     {
@@ -65,7 +66,7 @@ class Email extends Model
     /**
      * Get the opportunity associated with this email.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function opportunity()
     {
@@ -75,7 +76,7 @@ class Email extends Model
     /**
      * Get the user who sent this email.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function sender()
     {

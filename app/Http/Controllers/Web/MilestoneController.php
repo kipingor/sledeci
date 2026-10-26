@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Support\SqlOrder;
 use App\Http\Controllers\Controller;
 use App\Models\Milestone;
 use App\Models\Project;
-use Illuminate\Http\Request;
+use App\Support\SqlOrder;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -20,12 +20,12 @@ class MilestoneController extends Controller
     {
         $query = Milestone::with('project:id,name,status,owner_id')
             ->when($request->filled('project_id'), fn ($q) => $q->where('project_id', $request->project_id))
-            ->when($request->filled('status'),     fn ($q) => $q->where('status', $request->status))
-            ->when($request->filled('search'),     fn ($q) => $q->where('title', 'like', "%{$request->search}%"));
+            ->when($request->filled('status'), fn ($q) => $q->where('status', $request->status))
+            ->when($request->filled('search'), fn ($q) => $q->where('title', 'like', "%{$request->search}%"));
 
         // Order: incomplete first, then by due date ascending
         $query->orderByRaw(SqlOrder::byList('status', ['pending', 'in_progress', 'missed', 'completed']))
-              ->orderBy('due_date');
+            ->orderBy('due_date');
 
         $milestones = $query->paginate(30)->withQueryString();
 
@@ -37,9 +37,9 @@ class MilestoneController extends Controller
 
         return Inertia::render('milestones/index', [
             'milestones' => $milestones,
-            'projects'   => $projects,
-            'filters'    => $request->only(['project_id', 'status', 'search']),
-            'counts'     => $counts,
+            'projects' => $projects,
+            'filters' => $request->only(['project_id', 'status', 'search']),
+            'counts' => $counts,
         ]);
     }
 
@@ -63,10 +63,10 @@ class MilestoneController extends Controller
         $this->authorize('update', $project);
 
         $data = $request->validate([
-            'title'          => ['required', 'string', 'max:255'],
-            'description'    => ['nullable', 'string'],
-            'due_date'       => ['nullable', 'date'],
-            'status'         => ['nullable', 'in:pending,in_progress,completed,missed'],
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'due_date' => ['nullable', 'date'],
+            'status' => ['nullable', 'in:pending,in_progress,completed,missed'],
         ]);
 
         $milestone = $project->milestones()->create($data);
@@ -98,10 +98,10 @@ class MilestoneController extends Controller
         $this->authorize('update', $milestone->project);
 
         $data = $request->validate([
-            'title'          => ['required', 'string', 'max:255'],
-            'description'    => ['nullable', 'string'],
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
             'due_date' => ['nullable', 'date'],
-            'status'         => ['nullable', 'in:pending,in_progress,completed,missed'],
+            'status' => ['nullable', 'in:pending,in_progress,completed,missed'],
         ]);
 
         $milestone->update($data);
@@ -128,10 +128,10 @@ class MilestoneController extends Controller
         $this->authorize('update', $milestone->project);
 
         $milestone->update([
-            'status'         => 'completed',
+            'status' => 'completed',
             'completed_at' => now(),
         ]);
 
-        return back()->with('success', 'Milestone "' . $milestone->title . '" marked complete.');
+        return back()->with('success', 'Milestone "'.$milestone->title.'" marked complete.');
     }
 }

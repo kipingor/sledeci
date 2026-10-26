@@ -14,6 +14,8 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
+        $this->guardAgainstNonTestDatabase();
+
         // Tests must not depend on a compiled frontend (public/build/manifest.json).
         $this->withoutVite();
 
@@ -23,6 +25,26 @@ abstract class TestCase extends BaseTestCase
             $this->seed(RoleSeeder::class);
             app(PermissionRegistrar::class)->forgetCachedPermissions();
         }
+    }
+
+    /**
+     * RefreshDatabase drops every table. Refuse to run if the configured database
+     * does not look like a throw-away test database (e.g. a developer's .env was
+     * loaded instead of phpunit.xml).
+     */
+    private function guardAgainstNonTestDatabase(): void
+    {
+        $connection = config('database.default');
+        $database = (string) config("database.connections.{$connection}.database");
+
+        if ($database === ':memory:' || str_contains(strtolower($database), 'test')) {
+            return;
+        }
+
+        throw new \RuntimeException(
+            "Refusing to run tests against database '{$database}' ({$connection}). "
+            .'Set DB_DATABASE to a name containing "test" (phpunit.xml uses sledeci_test).'
+        );
     }
 
     protected function skipUnlessFortifyHas(string $feature, ?string $message = null): void

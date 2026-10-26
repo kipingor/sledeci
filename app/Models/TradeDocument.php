@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Sledeci\Accounting\Models\Invoice;
 
 class TradeDocument extends Model
 {
@@ -34,20 +35,31 @@ class TradeDocument extends Model
     ];
 
     protected $casts = [
-        'items'               => 'array',
-        'total_value'         => 'decimal:2',
-        'total_gross_weight'  => 'decimal:3',
-        'total_net_weight'    => 'decimal:3',
-        'departure_date'      => 'date',
-        'certified_date'      => 'date',
-        'valid_until'         => 'date',
+        'items' => 'array',
+        'total_value' => 'decimal:2',
+        'total_gross_weight' => 'decimal:3',
+        'total_net_weight' => 'decimal:3',
+        'departure_date' => 'date',
+        'certified_date' => 'date',
+        'valid_until' => 'date',
     ];
 
     // ── Relations ──────────────────────────────────────────────────────────
 
-    public function invoice(): BelongsTo       { return $this->belongsTo(Invoice::class); }
-    public function purchaseOrder(): BelongsTo { return $this->belongsTo(PurchaseOrder::class); }
-    public function creator(): BelongsTo       { return $this->belongsTo(User::class, 'created_by'); }
+    public function invoice(): BelongsTo
+    {
+        return $this->belongsTo(Invoice::class);
+    }
+
+    public function purchaseOrder(): BelongsTo
+    {
+        return $this->belongsTo(PurchaseOrder::class);
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 
     // ── Helpers ────────────────────────────────────────────────────────────
 
@@ -55,15 +67,16 @@ class TradeDocument extends Model
     {
         $prefix = match ($type) {
             'certificate_of_origin' => 'COO',
-            'customs_declaration'   => 'CD',
-            'proforma_invoice'      => 'PFI',
-            'packing_list'          => 'PL',
-            default                 => 'TD',
+            'customs_declaration' => 'CD',
+            'proforma_invoice' => 'PFI',
+            'packing_list' => 'PL',
+            default => 'TD',
         };
         $date = now()->format('Ymd');
         $last = static::where('document_number', 'like', "{$prefix}-{$date}%")->orderByDesc('id')->first();
-        $seq  = $last ? ((int) substr($last->document_number, -4)) + 1 : 1;
-        return "{$prefix}-{$date}-" . str_pad((string) $seq, 4, '0', STR_PAD_LEFT);
+        $seq = $last ? ((int) substr($last->document_number, -4)) + 1 : 1;
+
+        return "{$prefix}-{$date}-".str_pad((string) $seq, 4, '0', STR_PAD_LEFT);
     }
 
     public function isEacTrade(): bool
@@ -80,8 +93,13 @@ class TradeDocument extends Model
 
     public function suggestedRegion(): ?string
     {
-        if ($this->isEacTrade())    return 'EAC';
-        if ($this->isComesaTrade()) return 'COMESA';
+        if ($this->isEacTrade()) {
+            return 'EAC';
+        }
+        if ($this->isComesaTrade()) {
+            return 'COMESA';
+        }
+
         return null;
     }
 

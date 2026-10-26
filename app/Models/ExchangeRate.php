@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Carbon\Carbon;
 
 /**
  * BUG FIX: The original ExchangeRate.php had TWO class definitions in the same file:
@@ -30,7 +30,7 @@ class ExchangeRate extends Model
     ];
 
     protected $casts = [
-        'rate'      => 'decimal:10',
+        'rate' => 'decimal:10',
         'rate_date' => 'date',
     ];
 

@@ -5,7 +5,6 @@ namespace App\Listeners\Lead;
 use App\Events\LeadCreated;
 use App\Events\LeadStatusChanged;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Cache;
 
 class UpdateLeadMetrics implements ShouldQueue

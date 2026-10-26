@@ -26,13 +26,13 @@ class StaffProfile extends Model
     ];
 
     protected $casts = [
-        'skills'         => 'array',
-        'hourly_rate'    => 'decimal:2',
+        'skills' => 'array',
+        'hourly_rate' => 'decimal:2',
         'monthly_salary' => 'decimal:2',
-        'is_client'      => 'boolean',
-        'is_contractor'  => 'boolean',
-        'is_available'   => 'boolean',
-        'client_since'   => 'date',
+        'is_client' => 'boolean',
+        'is_contractor' => 'boolean',
+        'is_available' => 'boolean',
+        'client_since' => 'date',
     ];
 
     protected $appends = ['full_name'];

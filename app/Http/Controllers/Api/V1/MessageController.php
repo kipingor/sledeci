@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Models\Message;
-use App\Http\Resources\MessageResource;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MessageResource;
+use App\Models\Message;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller

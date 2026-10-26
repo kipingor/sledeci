@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Sledeci\Accounting\Models\Invoice;
 
 class MobileMoneyRequest extends Model
 {
@@ -15,8 +16,8 @@ class MobileMoneyRequest extends Model
     protected function casts(): array
     {
         return [
-            'amount'       => 'decimal:2',
-            'payload'      => 'array',
+            'amount' => 'decimal:2',
+            'payload' => 'array',
             'completed_at' => 'datetime',
         ];
     }

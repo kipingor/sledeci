@@ -4,16 +4,26 @@ namespace App\Policies;
 
 use App\Models\HrLeaveRequest;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use Sledeci\Core\Policies\ChecksModuleRoles;
 
+/**
+ * Access follows the "hr" module in config/access.php.
+ */
 class HrLeaveRequestPolicy
 {
+    use ChecksModuleRoles;
+
+    protected function modules(): array
+    {
+        return ['hr'];
+    }
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $this->canRead($user);
     }
 
     /**
@@ -21,7 +31,7 @@ class HrLeaveRequestPolicy
      */
     public function view(User $user, HrLeaveRequest $hrLeaveRequest): bool
     {
-        return false;
+        return $this->canRead($user) || $this->isOwner($user, $hrLeaveRequest);
     }
 
     /**
@@ -29,7 +39,7 @@ class HrLeaveRequestPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->getRoleNames()->isNotEmpty();
     }
 
     /**
@@ -37,7 +47,7 @@ class HrLeaveRequestPolicy
      */
     public function update(User $user, HrLeaveRequest $hrLeaveRequest): bool
     {
-        return false;
+        return $this->canWrite($user) || ($this->isOwner($user, $hrLeaveRequest) && $hrLeaveRequest->status === 'pending');
     }
 
     /**
@@ -45,7 +55,7 @@ class HrLeaveRequestPolicy
      */
     public function delete(User $user, HrLeaveRequest $hrLeaveRequest): bool
     {
-        return false;
+        return $this->canWrite($user) || ($this->isOwner($user, $hrLeaveRequest) && $hrLeaveRequest->status === 'pending');
     }
 
     /**
@@ -53,14 +63,36 @@ class HrLeaveRequestPolicy
      */
     public function restore(User $user, HrLeaveRequest $hrLeaveRequest): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Permanent deletion is never allowed through the application.
      */
     public function forceDelete(User $user, HrLeaveRequest $hrLeaveRequest): bool
     {
         return false;
+    }
+
+    /**
+     * Approve a pending leave request.
+     */
+    public function approve(User $user, HrLeaveRequest $hrLeaveRequest): bool
+    {
+        return $this->canWrite($user) && $hrLeaveRequest->status === 'pending';
+    }
+
+    /**
+     * Reject a pending leave request.
+     */
+    public function reject(User $user, HrLeaveRequest $hrLeaveRequest): bool
+    {
+        return $this->canWrite($user) && $hrLeaveRequest->status === 'pending';
+    }
+
+    private function isOwner(User $user, HrLeaveRequest $hrLeaveRequest): bool
+    {
+        return $hrLeaveRequest->staffProfile?->user_id !== null
+            && $hrLeaveRequest->staffProfile->user_id === $user->id;
     }
 }

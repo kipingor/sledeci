@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Lead;
 use App\Services\AILeadService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 /**
  * AI Controller for Lead Intelligence
- * 
+ *
  * Endpoints for AI-powered features:
  * - Lead insights
  * - Batch scoring
@@ -27,9 +28,8 @@ class AILeadController extends Controller
 
     /**
      * Get comprehensive AI insights for a lead
-     * 
-     * @param Lead $lead
-     * @return \Illuminate\Http\JsonResponse
+     *
+     * @return JsonResponse
      */
     public function getLeadInsights(Lead $lead)
     {
@@ -54,9 +54,8 @@ class AILeadController extends Controller
 
     /**
      * Batch score multiple leads
-     * 
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     *
+     * @return JsonResponse
      */
     public function batchScore(Request $request)
     {
@@ -71,7 +70,7 @@ class AILeadController extends Controller
             // Filter to only leads the user can access
             $accessibleLeads = Lead::whereIn('id', $leadIds)
                 ->where(function ($query) use ($request) {
-                    if (!$request->user()->isAdmin()) {
+                    if (! $request->user()->isAdmin()) {
                         $query->where('owner_id', $request->user()->id);
                     }
                 })
@@ -99,9 +98,8 @@ class AILeadController extends Controller
 
     /**
      * Get AI recommendations for next actions
-     * 
-     * @param Lead $lead
-     * @return \Illuminate\Http\JsonResponse
+     *
+     * @return JsonResponse
      */
     public function getRecommendations(Lead $lead)
     {
@@ -127,10 +125,8 @@ class AILeadController extends Controller
 
     /**
      * Find similar leads
-     * 
-     * @param Lead $lead
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     *
+     * @return JsonResponse
      */
     public function findSimilar(Lead $lead, Request $request)
     {
@@ -161,16 +157,15 @@ class AILeadController extends Controller
 
     /**
      * Get pipeline health score
-     * 
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     *
+     * @return JsonResponse
      */
     public function getPipelineHealth(Request $request)
     {
         try {
             $query = Lead::query();
 
-            if (!$request->user()->isAdmin()) {
+            if (! $request->user()->isAdmin()) {
                 $query->where('owner_id', $request->user()->id);
             }
 
@@ -190,16 +185,19 @@ class AILeadController extends Controller
             // Categorize leads by score
             $highQuality = $leads->filter(function ($lead) {
                 $score = $this->aiService->calculateLeadScore($lead);
+
                 return $score['score'] >= 80;
             })->count();
 
             $mediumQuality = $leads->filter(function ($lead) {
                 $score = $this->aiService->calculateLeadScore($lead);
+
                 return $score['score'] >= 60 && $score['score'] < 80;
             })->count();
 
             $lowQuality = $leads->filter(function ($lead) {
                 $score = $this->aiService->calculateLeadScore($lead);
+
                 return $score['score'] < 60;
             })->count();
 
@@ -230,17 +228,23 @@ class AILeadController extends Controller
      */
     private function getHealthStatus(float $avgScore): string
     {
-        if ($avgScore >= 80) return 'excellent';
-        if ($avgScore >= 70) return 'good';
-        if ($avgScore >= 60) return 'fair';
+        if ($avgScore >= 80) {
+            return 'excellent';
+        }
+        if ($avgScore >= 70) {
+            return 'good';
+        }
+        if ($avgScore >= 60) {
+            return 'fair';
+        }
+
         return 'needs_improvement';
     }
 
     /**
      * Refresh AI insights for a lead
-     * 
-     * @param Lead $lead
-     * @return \Illuminate\Http\JsonResponse
+     *
+     * @return JsonResponse
      */
     public function refreshInsights(Lead $lead)
     {

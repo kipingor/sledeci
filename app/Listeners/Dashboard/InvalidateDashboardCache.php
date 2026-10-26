@@ -3,10 +3,10 @@
 namespace App\Listeners\Dashboard;
 
 use App\Events\LeadCreated;
-use App\Events\LeadUpdated;
 use App\Events\LeadDeleted;
 use App\Events\LeadDocumentUploaded;
 use App\Events\LeadStatusChanged;
+use App\Events\LeadUpdated;
 use App\Services\Dashboard\DashboardMetricsService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * Invalidate Dashboard Cache Listener
- * 
+ *
  * Clears dashboard cache when leads change to ensure fresh data.
  * Implements ShouldQueue for async processing.
  */
@@ -48,7 +48,7 @@ class InvalidateDashboardCache implements ShouldQueue
             // Clear all dashboard caches
             $this->metricsService->clearCache();
 
-            $eventType = match(true) {
+            $eventType = match (true) {
                 $event instanceof LeadCreated => 'created',
                 $event instanceof LeadUpdated => 'updated',
                 $event instanceof LeadDeleted => 'deleted',
@@ -66,7 +66,7 @@ class InvalidateDashboardCache implements ShouldQueue
                 'lead_id' => $event instanceof LeadDocumentUploaded ? $event->leadId : $event->lead->id,
                 'error' => $e->getMessage(),
             ]);
-            
+
             // Don't throw - cache invalidation shouldn't break the flow
         }
     }

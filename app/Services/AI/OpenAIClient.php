@@ -2,9 +2,9 @@
 
 namespace App\Services\AI;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Cache;
 
 class OpenAIClient implements AiClientInterface
 {
@@ -34,7 +34,7 @@ class OpenAIClient implements AiClientInterface
     public function __construct()
     {
         $this->apiKey = config('services.openai.api_key');
-        
+
         // Don't throw exception in constructor - allow lazy initialization
         // Exception will be thrown when actually trying to use the client
     }
@@ -42,8 +42,8 @@ class OpenAIClient implements AiClientInterface
     /**
      * Send a chat completion request
      *
-     * @param string|array $messages Either a string prompt or array of messages
-     * @param array $options Additional options (model, temperature, max_tokens, etc.)
+     * @param  string|array  $messages  Either a string prompt or array of messages
+     * @param  array  $options  Additional options (model, temperature, max_tokens, etc.)
      * @return string The response content
      */
     public function chat($messages, array $options = []): string
@@ -51,7 +51,7 @@ class OpenAIClient implements AiClientInterface
         // Convert string to messages array
         if (is_string($messages)) {
             $messages = [
-                ['role' => 'user', 'content' => $messages]
+                ['role' => 'user', 'content' => $messages],
             ];
         }
 
@@ -82,7 +82,7 @@ class OpenAIClient implements AiClientInterface
         try {
             $response = $this->makeRequest('POST', '/chat/completions', $payload);
 
-            if (!isset($response['choices'][0]['message']['content'])) {
+            if (! isset($response['choices'][0]['message']['content'])) {
                 throw new \Exception('Invalid response from OpenAI API');
             }
 
@@ -94,23 +94,22 @@ class OpenAIClient implements AiClientInterface
                 'messages' => $messages,
             ]);
 
-            throw new \Exception('Failed to get response from OpenAI: ' . $e->getMessage());
+            throw new \Exception('Failed to get response from OpenAI: '.$e->getMessage());
         }
     }
 
     /**
      * Send a streaming chat completion request
      *
-     * @param string|array $messages Either a string prompt or array of messages
-     * @param callable $callback Callback function to handle each chunk
-     * @param array $options Additional options
-     * @return void
+     * @param  string|array  $messages  Either a string prompt or array of messages
+     * @param  callable  $callback  Callback function to handle each chunk
+     * @param  array  $options  Additional options
      */
     public function chatStream($messages, callable $callback, array $options = []): void
     {
         if (is_string($messages)) {
             $messages = [
-                ['role' => 'user', 'content' => $messages]
+                ['role' => 'user', 'content' => $messages],
             ];
         }
 
@@ -125,26 +124,26 @@ class OpenAIClient implements AiClientInterface
         try {
             $response = Http::timeout($this->timeout)
                 ->withHeaders([
-                    'Authorization' => 'Bearer ' . $this->apiKey,
+                    'Authorization' => 'Bearer '.$this->apiKey,
                     'Content-Type' => 'application/json',
                 ])
                 ->withOptions(['stream' => true])
-                ->post($this->baseUrl . '/chat/completions', $payload);
+                ->post($this->baseUrl.'/chat/completions', $payload);
 
             $body = $response->getBody();
 
-            while (!$body->eof()) {
+            while (! $body->eof()) {
                 $line = $body->read(1024);
-                
+
                 if (strpos($line, 'data: ') === 0) {
                     $data = substr($line, 6);
-                    
+
                     if (trim($data) === '[DONE]') {
                         break;
                     }
 
                     $json = json_decode($data, true);
-                    
+
                     if (isset($json['choices'][0]['delta']['content'])) {
                         $callback($json['choices'][0]['delta']['content']);
                     }
@@ -163,8 +162,8 @@ class OpenAIClient implements AiClientInterface
     /**
      * Create an embedding for text
      *
-     * @param string|array $input Text or array of texts to embed
-     * @param string $model Embedding model to use
+     * @param  string|array  $input  Text or array of texts to embed
+     * @param  string  $model  Embedding model to use
      * @return array Array of embeddings
      */
     public function embeddings($input, string $model = 'text-embedding-ada-002'): array
@@ -184,15 +183,15 @@ class OpenAIClient implements AiClientInterface
                 'error' => $e->getMessage(),
             ]);
 
-            throw new \Exception('Failed to create embeddings: ' . $e->getMessage());
+            throw new \Exception('Failed to create embeddings: '.$e->getMessage());
         }
     }
 
     /**
      * Generate an image from a text prompt
      *
-     * @param string $prompt The text prompt
-     * @param array $options Additional options (size, n, response_format)
+     * @param  string  $prompt  The text prompt
+     * @param  array  $options  Additional options (size, n, response_format)
      * @return array Array of image URLs or base64 data
      */
     public function imageGeneration(string $prompt, array $options = []): array
@@ -215,14 +214,14 @@ class OpenAIClient implements AiClientInterface
                 'prompt' => $prompt,
             ]);
 
-            throw new \Exception('Failed to generate image: ' . $e->getMessage());
+            throw new \Exception('Failed to generate image: '.$e->getMessage());
         }
     }
 
     /**
      * Moderate content for safety
      *
-     * @param string $content Content to moderate
+     * @param  string  $content  Content to moderate
      * @return array Moderation results
      */
     public function moderation(string $content): array
@@ -241,16 +240,16 @@ class OpenAIClient implements AiClientInterface
                 'error' => $e->getMessage(),
             ]);
 
-            throw new \Exception('Failed to moderate content: ' . $e->getMessage());
+            throw new \Exception('Failed to moderate content: '.$e->getMessage());
         }
     }
 
     /**
      * Make a request to OpenAI API
      *
-     * @param string $method HTTP method
-     * @param string $endpoint API endpoint
-     * @param array $data Request payload
+     * @param  string  $method  HTTP method
+     * @param  string  $endpoint  API endpoint
+     * @param  array  $data  Request payload
      * @return array Response data
      */
     protected function makeRequest(string $method, string $endpoint, array $data = []): array
@@ -260,20 +259,20 @@ class OpenAIClient implements AiClientInterface
             throw new \Exception('AI API key is not configured. Please set AI_API_KEY in your .env file.');
         }
 
-        $url = $this->baseUrl . $endpoint;
+        $url = $this->baseUrl.$endpoint;
 
         $response = Http::timeout($this->timeout)
             ->withHeaders([
-                'Authorization' => 'Bearer ' . $this->apiKey,
+                'Authorization' => 'Bearer '.$this->apiKey,
                 'Content-Type' => 'application/json',
             ])
             ->send($method, $url, [
                 'json' => $data,
             ]);
 
-        if (!$response->successful()) {
+        if (! $response->successful()) {
             $error = $response->json('error.message') ?? 'Unknown error';
-            throw new \Exception('OpenAI API error: ' . $error);
+            throw new \Exception('OpenAI API error: '.$error);
         }
 
         return $response->json();
@@ -282,10 +281,10 @@ class OpenAIClient implements AiClientInterface
     /**
      * Create a cached chat completion (useful for repeated queries)
      *
-     * @param string $cacheKey Cache key
-     * @param string|array $messages Messages
-     * @param array $options Options
-     * @param int $ttl Cache TTL in seconds (default 1 hour)
+     * @param  string  $cacheKey  Cache key
+     * @param  string|array  $messages  Messages
+     * @param  array  $options  Options
+     * @param  int  $ttl  Cache TTL in seconds (default 1 hour)
      * @return string Response content
      */
     public function cachedChat(string $cacheKey, $messages, array $options = [], int $ttl = 3600): string
@@ -298,16 +297,16 @@ class OpenAIClient implements AiClientInterface
     /**
      * Generate a completion with function calling
      *
-     * @param string|array $messages Messages
-     * @param array $functions Available functions
-     * @param array $options Options
+     * @param  string|array  $messages  Messages
+     * @param  array  $functions  Available functions
+     * @param  array  $options  Options
      * @return array Response with possible function call
      */
     public function chatWithFunctions($messages, array $functions, array $options = []): array
     {
         if (is_string($messages)) {
             $messages = [
-                ['role' => 'user', 'content' => $messages]
+                ['role' => 'user', 'content' => $messages],
             ];
         }
 
@@ -333,14 +332,14 @@ class OpenAIClient implements AiClientInterface
                 'error' => $e->getMessage(),
             ]);
 
-            throw new \Exception('Failed to process function calling: ' . $e->getMessage());
+            throw new \Exception('Failed to process function calling: '.$e->getMessage());
         }
     }
 
     /**
      * Count tokens in text (approximate)
      *
-     * @param string $text Text to count
+     * @param  string  $text  Text to count
      * @return int Approximate token count
      */
     public function countTokens(string $text): int
@@ -376,31 +375,31 @@ class OpenAIClient implements AiClientInterface
     /**
      * Set default model
      *
-     * @param string $model Model name
-     * @return self
+     * @param  string  $model  Model name
      */
     public function setDefaultModel(string $model): self
     {
         $this->defaultModel = $model;
+
         return $this;
     }
 
     /**
      * Set request timeout
      *
-     * @param int $timeout Timeout in seconds
-     * @return self
+     * @param  int  $timeout  Timeout in seconds
      */
     public function setTimeout(int $timeout): self
     {
         $this->timeout = $timeout;
+
         return $this;
     }
 
     /**
      * Build a system message
      *
-     * @param string $content System message content
+     * @param  string  $content  System message content
      * @return array Message array
      */
     public static function systemMessage(string $content): array
@@ -414,7 +413,7 @@ class OpenAIClient implements AiClientInterface
     /**
      * Build a user message
      *
-     * @param string $content User message content
+     * @param  string  $content  User message content
      * @return array Message array
      */
     public static function userMessage(string $content): array
@@ -428,7 +427,7 @@ class OpenAIClient implements AiClientInterface
     /**
      * Build an assistant message
      *
-     * @param string $content Assistant message content
+     * @param  string  $content  Assistant message content
      * @return array Message array
      */
     public static function assistantMessage(string $content): array

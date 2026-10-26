@@ -24,10 +24,10 @@ class DashboardMetricsServiceTest extends TestCase
     {
         parent::setUp();
         $this->markTestSkipped('STALE: written for an earlier DashboardMetricsService API (calculateWinRate, calculateAverageResponseTime, $days arg, old array shapes). Rewrite against the current service.');
-        
+
         $leadService = $this->app->make(LeadService::class);
         $pipelineService = $this->app->make(PipelineService::class);
-        
+
         $this->service = new DashboardMetricsService($leadService, $pipelineService);
     }
 
@@ -66,10 +66,10 @@ class DashboardMetricsServiceTest extends TestCase
     {
         // Create 10 won leads
         Lead::factory()->count(10)->create(['status' => 'won']);
-        
+
         // Create 5 lost leads
         Lead::factory()->count(5)->create(['status' => 'lost']);
-        
+
         // Create 15 other leads (shouldn't affect win rate)
         Lead::factory()->count(15)->create(['status' => 'new']);
 
@@ -140,13 +140,13 @@ class DashboardMetricsServiceTest extends TestCase
         $performers = $this->service->getTopPerformers(limit: 10, period: 'month');
 
         $this->assertCount(2, $performers);
-        
+
         // User 1 should be first (highest won_count)
         $this->assertEquals('Top Seller', $performers->first()['name']);
         $this->assertEquals(10, $performers->first()['won_count']);
         $this->assertEquals(15, $performers->first()['total_count']);
         $this->assertEquals(66.67, $performers->first()['win_rate']);
-        
+
         // User 2 should be second
         $this->assertEquals('Average Seller', $performers->last()['name']);
         $this->assertEquals(3, $performers->last()['won_count']);
@@ -164,7 +164,7 @@ class DashboardMetricsServiceTest extends TestCase
 
         $this->assertIsArray($data);
         $this->assertGreaterThan(0, count($data));
-        
+
         // Each item should have date and count
         foreach ($data as $item) {
             $this->assertArrayHasKey('date', $item);
@@ -198,7 +198,7 @@ class DashboardMetricsServiceTest extends TestCase
         $data = $this->service->getRevenueOverTime(days: 7);
 
         $this->assertIsArray($data);
-        
+
         // Find revenue for each date
         $totalRevenue = array_sum(array_column($data, 'revenue'));
         $this->assertEquals(35000, $totalRevenue); // 10k + 25k, not 50k (lost)
@@ -272,7 +272,7 @@ class DashboardMetricsServiceTest extends TestCase
         $this->assertArrayHasKey('period', $chartData);
         $this->assertArrayHasKey('start_date', $chartData);
         $this->assertArrayHasKey('end_date', $chartData);
-        
+
         $this->assertEquals('30 days', $chartData['period']);
         $this->assertIsArray($chartData['data']);
     }
@@ -284,7 +284,7 @@ class DashboardMetricsServiceTest extends TestCase
 
         foreach ($periods as $period) {
             $metrics = $this->service->getActivityMetrics($period);
-            
+
             $this->assertEquals($period, $metrics['period']);
             $this->assertArrayHasKey('leads_created', $metrics);
             $this->assertArrayHasKey('date_from', $metrics);
@@ -295,7 +295,7 @@ class DashboardMetricsServiceTest extends TestCase
     public function test_it_excludes_performers_with_no_wins()
     {
         $user = User::factory()->create();
-        
+
         // Create leads but none won
         Lead::factory()->count(10)->create([
             'owner_id' => $user->id,

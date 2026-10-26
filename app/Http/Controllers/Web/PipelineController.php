@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
-use App\Models\PipelineStage;
 use App\Models\Lead;
-use App\Services\Pipeline\PipelineService;
+use App\Models\PipelineStage;
 use App\Services\Dashboard\DashboardMetricsService;
+use App\Services\Pipeline\PipelineService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class PipelineController extends Controller
 {
@@ -95,12 +95,12 @@ class PipelineController extends Controller
         ]);
 
         // Generate key from name if not provided
-        if (!isset($validated['key'])) {
+        if (! isset($validated['key'])) {
             $validated['key'] = Str::slug($validated['name']);
         }
 
         // Set order to last if not provided
-        if (!isset($validated['order'])) {
+        if (! isset($validated['order'])) {
             $validated['order'] = PipelineStage::max('order') + 1;
         }
 
@@ -150,7 +150,7 @@ class PipelineController extends Controller
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'key' => ['required', 'string', 'max:255', 'unique:pipeline_stages,key,' . $id],
+            'key' => ['required', 'string', 'max:255', 'unique:pipeline_stages,key,'.$id],
             'color' => ['nullable', 'string', 'max:7'],
             'order' => ['nullable', 'integer'],
         ]);

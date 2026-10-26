@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\ActivityType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Activity\StoreActivityRequest;
 use App\Http\Requests\Activity\UpdateActivityRequest;
@@ -195,7 +196,7 @@ class ActivityController extends Controller
         ];
 
         // Count by type
-        foreach (\App\Enums\ActivityType::cases() as $type) {
+        foreach (ActivityType::cases() as $type) {
             $stats['by_type'][$type->value] = [
                 'label' => $type->label(),
                 'count' => $lead->activities()->ofType($type)->count(),

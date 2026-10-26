@@ -2,14 +2,14 @@
 
 namespace App\Services\Proposal;
 
-use App\Models\Proposal;
-use App\Models\Lead;
-use App\Services\AI\AiClientInterface;
 use App\Events\ProposalGenerated;
 use App\Events\ProposalSent;
+use App\Models\Lead;
+use App\Models\Proposal;
+use App\Services\AI\AiClientInterface;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class ProposalGenerationService
 {
@@ -19,10 +19,6 @@ class ProposalGenerationService
 
     /**
      * Generate a proposal using AI
-     *
-     * @param Lead $lead
-     * @param array $options
-     * @return Proposal
      */
     public function generate(Lead $lead, array $options = []): Proposal
     {
@@ -127,7 +123,7 @@ class ProposalGenerationService
                 'lead_id' => $context['lead_id'] ?? null,
             ]);
 
-            throw new \Exception('Failed to generate proposal: ' . $e->getMessage());
+            throw new \Exception('Failed to generate proposal: '.$e->getMessage());
         }
     }
 
@@ -145,42 +141,42 @@ class ProposalGenerationService
         $promptParts = [];
 
         // System instruction
-        $promptParts[] = "You are an expert business proposal writer. Generate a professional, compelling proposal based on the provided information.";
+        $promptParts[] = 'You are an expert business proposal writer. Generate a professional, compelling proposal based on the provided information.';
 
         // Template instruction
         $templateInstructions = match ($template) {
-            'technical' => "Create a technical proposal with detailed specifications, implementation plans, and technical methodology.",
-            'executive' => "Create an executive proposal focused on strategic value, ROI, and high-level benefits. Keep it concise and business-focused.",
-            default => "Create a standard business proposal with problem statement, proposed solution, benefits, timeline, and next steps.",
+            'technical' => 'Create a technical proposal with detailed specifications, implementation plans, and technical methodology.',
+            'executive' => 'Create an executive proposal focused on strategic value, ROI, and high-level benefits. Keep it concise and business-focused.',
+            default => 'Create a standard business proposal with problem statement, proposed solution, benefits, timeline, and next steps.',
         };
         $promptParts[] = $templateInstructions;
 
         // Tone instruction
         $toneInstructions = match ($tone) {
-            'formal' => "Use formal, corporate language. Be professional and authoritative.",
-            'friendly' => "Use friendly, approachable language while maintaining professionalism.",
-            default => "Use professional, clear language that builds confidence and trust.",
+            'formal' => 'Use formal, corporate language. Be professional and authoritative.',
+            'friendly' => 'Use friendly, approachable language while maintaining professionalism.',
+            default => 'Use professional, clear language that builds confidence and trust.',
         };
         $promptParts[] = $toneInstructions;
 
         // Length instruction
         $lengthInstructions = match ($length) {
-            'brief' => "Keep the proposal brief and to the point (1-2 pages).",
-            'detailed' => "Create a comprehensive, detailed proposal (4-6 pages) with thorough explanations.",
-            default => "Create a standard-length proposal (2-3 pages) with appropriate detail.",
+            'brief' => 'Keep the proposal brief and to the point (1-2 pages).',
+            'detailed' => 'Create a comprehensive, detailed proposal (4-6 pages) with thorough explanations.',
+            default => 'Create a standard-length proposal (2-3 pages) with appropriate detail.',
         };
         $promptParts[] = $lengthInstructions;
 
         // Context
         $promptParts[] = "\n### Lead Information:";
-        $promptParts[] = "Title: " . ($context['lead_title'] ?? 'Untitled');
+        $promptParts[] = 'Title: '.($context['lead_title'] ?? 'Untitled');
 
-        if (!empty($context['lead_description'])) {
-            $promptParts[] = "Description: " . $context['lead_description'];
+        if (! empty($context['lead_description'])) {
+            $promptParts[] = 'Description: '.$context['lead_description'];
         }
 
         // Documents
-        if (!empty($context['documents'])) {
+        if (! empty($context['documents'])) {
             $promptParts[] = "\n### Relevant Documents:";
             foreach ($context['documents'] as $doc) {
                 $promptParts[] = "- {$doc['filename']}: {$doc['summary']}";
@@ -188,7 +184,7 @@ class ProposalGenerationService
         }
 
         // Q&A
-        if (!empty($context['questions_and_answers'])) {
+        if (! empty($context['questions_and_answers'])) {
             $promptParts[] = "\n### Questions & Answers:";
             foreach ($context['questions_and_answers'] as $qa) {
                 $promptParts[] = "Q: {$qa['question']}";
@@ -197,22 +193,22 @@ class ProposalGenerationService
         }
 
         // Metadata
-        if (!empty($context['metadata'])) {
+        if (! empty($context['metadata'])) {
             $promptParts[] = "\n### Additional Context:";
             if (isset($context['metadata']['budget'])) {
-                $promptParts[] = "Budget: " . $context['metadata']['budget'];
+                $promptParts[] = 'Budget: '.$context['metadata']['budget'];
             }
             if (isset($context['metadata']['timeline'])) {
-                $promptParts[] = "Timeline: " . $context['metadata']['timeline'];
+                $promptParts[] = 'Timeline: '.$context['metadata']['timeline'];
             }
             if (isset($context['metadata']['requirements'])) {
                 $requirements = $context['metadata']['requirements'];
 
                 // Handle both string and array
                 if (is_array($requirements)) {
-                    $promptParts[] = "Requirements: " . implode(', ', $requirements);
+                    $promptParts[] = 'Requirements: '.implode(', ', $requirements);
                 } else {
-                    $promptParts[] = "Requirements: " . $requirements;
+                    $promptParts[] = 'Requirements: '.$requirements;
                 }
             }
         }
@@ -220,12 +216,12 @@ class ProposalGenerationService
         // Pricing instruction
         if ($includePricing) {
             $promptParts[] = "\nInclude a pricing section with estimated costs and payment terms.";
-            $promptParts[] = "1. Executive Summary";
-            $promptParts[] = "2. Project Scope";
-            $promptParts[] = "3. Deliverables";
-            $promptParts[] = "4. Timeline";
-            $promptParts[] = "5. Pricing";
-            $promptParts[] = "6. Terms and Conditions";
+            $promptParts[] = '1. Executive Summary';
+            $promptParts[] = '2. Project Scope';
+            $promptParts[] = '3. Deliverables';
+            $promptParts[] = '4. Timeline';
+            $promptParts[] = '5. Pricing';
+            $promptParts[] = '6. Terms and Conditions';
         }
 
         // Custom instructions

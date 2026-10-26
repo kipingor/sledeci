@@ -113,7 +113,7 @@ return new class extends Migration
             $table->id();
             $table->string('code', 20)->unique();      // e.g. 'VAT16', 'WHT5', 'EXEMPT'
             $table->string('name');
-            $table->enum('type', ['vat', 'withholding', 'income_tax', 'exempt', 'zero_rated', 'payroll', 'excise', 'transfer', 'sales_tax', ]);
+            $table->enum('type', ['vat', 'withholding', 'income_tax', 'exempt', 'zero_rated', 'payroll', 'excise', 'transfer', 'sales_tax']);
             $table->decimal('rate', 7, 4);             // e.g. 16.00 for 16% VAT
             $table->foreignId('input_account_id')      // VAT Input / Deductible
                 ->nullable()->constrained('chart_of_accounts')->nullOnDelete();
@@ -282,7 +282,7 @@ return new class extends Migration
             $table->string('currency', 10)->default('USD');
             $table->timestamp('sent_at')->nullable();
             $table->enum('status', ['draft', 'issued', 'paid', 'overdue', 'cancelled'])->default('draft');
-            
+
             // Maker-checker
             $table->enum('approval_status', ['not_required', 'pending', 'approved', 'rejected'])->default('not_required');
             $table->json('lines')->nullable(); // store line items to avoid heavy joins

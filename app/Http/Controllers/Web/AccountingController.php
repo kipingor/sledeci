@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\ClientFollowUp;
+use App\Models\Expense;
 use App\Models\Invoice;
 use App\Models\Payment;
-use App\Models\Expense;
-use App\Models\ClientFollowUp;
-use App\Models\ClientReport;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class AccountingController extends Controller
@@ -22,10 +20,10 @@ class AccountingController extends Controller
             ->update(['status' => 'overdue']);
 
         $summary = [
-            'total_billed'    => Invoice::whereNotIn('status', ['draft', 'cancelled'])->sum('total'),
+            'total_billed' => Invoice::whereNotIn('status', ['draft', 'cancelled'])->sum('total'),
             'total_collected' => Payment::sum('amount'),
-            'total_overdue'   => Invoice::where('status', 'overdue')->sum('total'),
-            'total_expenses'  => Expense::sum('amount'),
+            'total_overdue' => Invoice::where('status', 'overdue')->sum('total'),
+            'total_expenses' => Expense::sum('amount'),
         ];
 
         // Monthly revenue for last 6 months

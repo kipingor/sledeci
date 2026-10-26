@@ -4,39 +4,35 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
     /** All available system roles */
-
     public function index(Request $request): Response
     {
         $query = User::with('roles')
-            ->when($request->filled('search'), fn ($q) =>
-                $q->where(fn ($q2) =>
-                    $q2->where('name', 'like', "%{$request->search}%")
-                       ->orWhere('email', 'like', "%{$request->search}%")
-                )
+            ->when($request->filled('search'), fn ($q) => $q->where(fn ($q2) => $q2->where('name', 'like', "%{$request->search}%")
+                ->orWhere('email', 'like', "%{$request->search}%")
             )
-            ->when($request->filled('role'), fn ($q) =>
-                $q->whereHas('roles', fn ($q2) => $q2->where('name', $request->role))
+            )
+            ->when($request->filled('role'), fn ($q) => $q->whereHas('roles', fn ($q2) => $q2->where('name', $request->role))
             );
 
         $users = $query->orderBy('name')->paginate(25)->withQueryString();
 
         return Inertia::render('users/index', [
-            'users'       => $users,
-            'filters'     => $request->only(['search', 'role']),
-            'roles'       => $this->roleNames(),
-            'roleStats'   => collect($this->roleNames())->mapWithKeys(fn ($r) => [
+            'users' => $users,
+            'filters' => $request->only(['search', 'role']),
+            'roles' => $this->roleNames(),
+            'roleStats' => collect($this->roleNames())->mapWithKeys(fn ($r) => [
                 $r => User::role($r)->count(),
             ]),
         ]);
@@ -48,7 +44,6 @@ class UserController extends Controller
             'roles' => $this->roleNames(),
         ]);
     }
-
 
     /** Role names that actually exist (seeded by RoleSeeder). */
     private function roleNames(): array
@@ -62,7 +57,7 @@ class UserController extends Controller
      */
     private function guardAdminRole(Request $request, array $newRoles, ?User $target = null): void
     {
-        $actor      = $request->user();
+        $actor = $request->user();
         $touchAdmin = in_array('admin', $newRoles, true) || ($target && $target->hasRole('admin'));
 
         if ($touchAdmin && ! $actor->hasRole('admin')) {
@@ -78,22 +73,22 @@ class UserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'roles'    => ['required', 'array', 'min:1'],
-            'roles.*'  => ['string', 'in:' . implode(',', $this->roleNames())],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'roles' => ['required', 'array', 'min:1'],
+            'roles.*' => ['string', 'in:'.implode(',', $this->roleNames())],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ]);
 
         $this->guardAdminRole($request, $data['roles']);
 
         // Generate a random password if none provided
-        $password   = $data['password'] ?? Str::random(16);
+        $password = $data['password'] ?? Str::random(16);
         $mustChange = empty($data['password']);
 
         $user = User::create([
-            'name'     => $data['name'],
-            'email'    => $data['email'],
+            'name' => $data['name'],
+            'email' => $data['email'],
             'password' => Hash::make($password),
         ]);
 
@@ -118,7 +113,7 @@ class UserController extends Controller
         $user->load('roles');
 
         return Inertia::render('users/edit', [
-            'user'  => array_merge($user->toArray(), [
+            'user' => array_merge($user->toArray(), [
                 'role_names' => $user->getRoleNames()->values()->all(),
             ]),
             'roles' => $this->roleNames(),
@@ -128,16 +123,16 @@ class UserController extends Controller
     public function update(Request $request, User $user): RedirectResponse
     {
         $data = $request->validate([
-            'name'  => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', "unique:users,email,{$user->id}"],
             'roles' => ['required', 'array', 'min:1'],
-            'roles.*' => ['string', 'in:' . implode(',', $this->roleNames())],
+            'roles.*' => ['string', 'in:'.implode(',', $this->roleNames())],
         ]);
 
         $this->guardAdminRole($request, $data['roles'], $user);
 
         $user->update([
-            'name'  => $data['name'],
+            'name' => $data['name'],
             'email' => $data['email'],
         ]);
 
@@ -175,8 +170,8 @@ class UserController extends Controller
     public function syncRoles(Request $request, User $user): RedirectResponse
     {
         $data = $request->validate([
-            'roles'   => ['required', 'array', 'min:1'],
-            'roles.*' => ['string', 'in:' . implode(',', $this->roleNames())],
+            'roles' => ['required', 'array', 'min:1'],
+            'roles.*' => ['string', 'in:'.implode(',', $this->roleNames())],
         ]);
 
         $this->guardAdminRole($request, $data['roles'], $user);

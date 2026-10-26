@@ -1,15 +1,11 @@
 <?php
 
+use App\Http\Controllers\Settings\CompanySettingsController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\SecurityController;
-use App\Http\Controllers\Settings\TwoFactorAuthenticationController;
 use App\Http\Controllers\Settings\SettingsController;
-use App\Http\Controllers\Settings\CompanySettingsController;
-use App\Http\Controllers\Web\ApprovalController;
-use App\Http\Controllers\Web\EtimsController;
-use App\Http\Controllers\Web\RfpController;
-use App\Http\Controllers\Web\TenderController;
+use App\Http\Controllers\Settings\TwoFactorAuthenticationController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;

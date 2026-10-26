@@ -3,7 +3,6 @@
 namespace App\Listeners\Pipeline;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class RecalculateStageMetrics implements ShouldQueue
 {

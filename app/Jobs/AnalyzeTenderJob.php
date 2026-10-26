@@ -47,7 +47,7 @@ class AnalyzeTenderJob implements ShouldQueue
     {
         Log::error('AnalyzeTenderJob: failed permanently', [
             'tender_id' => $this->tender->id,
-            'error'     => $exception->getMessage(),
+            'error' => $exception->getMessage(),
         ]);
 
         $this->tender->update(['analysis_status' => 'failed']);

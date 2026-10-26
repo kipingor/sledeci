@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('document_name')->nullable();
 
             // Lifecycle: reviewing → drafting → submitted → won | lost | withdrawn
-            $table->enum('status', ['reviewing','drafting','submitted','won','lost','withdrawn'])->default('reviewing');
+            $table->enum('status', ['reviewing', 'drafting', 'submitted', 'won', 'lost', 'withdrawn'])->default('reviewing');
             $table->enum('approval_status', ['not_required', 'pending', 'approved', 'rejected'])->default('not_required');
             $table->foreignId('submitted_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
@@ -42,7 +42,7 @@ return new class extends Migration
             $table->json('ai_analysis')->nullable();        // summary, strengths, risks, win themes
             $table->json('checklist')->nullable();          // [{id, category, label, done, notes}, ...]
             $table->json('information_gaps')->nullable();   // [{id, question, why_needed, answer, resolved}, ...]
-            $table->json('generated_documents')->nullable();// [{type, title, content, created_at}, ...]
+            $table->json('generated_documents')->nullable(); // [{type, title, content, created_at}, ...]
             $table->json('agent_conversation')->nullable(); // [{role, content, created_at}, ...]
 
             $table->text('notes')->nullable();
@@ -63,15 +63,15 @@ return new class extends Migration
             $table->foreignId('project_id')->nullable()->constrained('projects')->nullOnDelete();
 
             $table->enum('type', ['rfp', 'rfq'])->default('rfp')
-                  ->comment('Request for Proposal or Request for Quotation');
+                ->comment('Request for Proposal or Request for Quotation');
             $table->string('title');
             $table->string('reference_number')->nullable();
             $table->text('description')->nullable();
             $table->text('scope_of_work')->nullable();
             $table->json('requirements')->nullable()
-                  ->comment('[{id, category, description, mandatory}, ...]');
+                ->comment('[{id, category, description, mandatory}, ...]');
             $table->json('evaluation_criteria')->nullable()
-                  ->comment('[{id, criterion, weight_pct, description}, ...]');
+                ->comment('[{id, criterion, weight_pct, description}, ...]');
 
             $table->date('issue_date')->nullable();
             $table->date('submission_deadline')->nullable();
@@ -80,12 +80,12 @@ return new class extends Migration
             $table->string('currency', 3)->default('KES');
 
             $table->enum('status', [
-                'draft', 'review', 'published', 'closed', 'awarded', 'cancelled'
+                'draft', 'review', 'published', 'closed', 'awarded', 'cancelled',
             ])->default('draft');
 
             // Maker-checker
             $table->enum('approval_status', ['not_required', 'pending', 'approved', 'rejected'])
-                  ->default('not_required');
+                ->default('not_required');
             $table->foreignId('submitted_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamp('approval_requested_at')->nullable();

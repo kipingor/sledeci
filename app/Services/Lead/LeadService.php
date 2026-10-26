@@ -2,11 +2,11 @@
 
 namespace App\Services\Lead;
 
-use App\Models\Lead;
 use App\Enums\LeadStatus;
 use App\Events\LeadCreated;
-use App\Events\LeadUpdated;
 use App\Events\LeadDeleted;
+use App\Events\LeadUpdated;
+use App\Models\Lead;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -23,27 +23,27 @@ class LeadService
         $query = Lead::with(['owner', 'pipelineStage']);
 
         // Apply filters
-        if (!empty($filters['owner_id'])) {
+        if (! empty($filters['owner_id'])) {
             $query->where('owner_id', $filters['owner_id']);
         }
 
-        if (!empty($filters['pipeline_stage_id'])) {
+        if (! empty($filters['pipeline_stage_id'])) {
             $query->where('pipeline_stage_id', $filters['pipeline_stage_id']);
         }
 
-        if (!empty($filters['status'])) {
+        if (! empty($filters['status'])) {
             $query->where('status', $filters['status']);
         }
 
-        if (!empty($filters['type'])) {
+        if (! empty($filters['type'])) {
             $query->where('type', $filters['type']);
         }
 
-        if (!empty($filters['search'])) {
+        if (! empty($filters['search'])) {
             $searchTerm = $filters['search'];
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('title', 'like', "%{$searchTerm}%")
-                  ->orWhere('description', 'like', "%{$searchTerm}%");
+                    ->orWhere('description', 'like', "%{$searchTerm}%");
             });
         }
 
@@ -122,6 +122,7 @@ class LeadService
 
         // Reload with relationships
         $leadIds = $leads->pluck('id');
+
         return Lead::with(['owner', 'pipelineStage'])
             ->whereIn('id', $leadIds)
             ->get();
@@ -145,6 +146,7 @@ class LeadService
 
         // Reload with relationships
         $leadIds = $leads->pluck('id');
+
         return Lead::with(['owner', 'pipelineStage'])
             ->whereIn('id', $leadIds)
             ->get();
@@ -170,7 +172,7 @@ class LeadService
         return $count;
     }
 
-/**
+    /**
      * Get comprehensive lead statistics
      * ✅ NEW: Added for dashboard metrics
      */
@@ -178,7 +180,7 @@ class LeadService
     {
         $statusCounts = $this->getStatusCounts();
         $total = array_sum($statusCounts);
-        
+
         $wonCount = $statusCounts['won'] ?? 0;
         $lostCount = $statusCounts['lost'] ?? 0;
         $closedTotal = $wonCount + $lostCount;
@@ -186,11 +188,11 @@ class LeadService
         return [
             'total' => $total,
             'status' => $statusCounts,
-            'conversion_rate' => $closedTotal > 0 
-                ? round(($wonCount / $closedTotal) * 100, 2) 
+            'conversion_rate' => $closedTotal > 0
+                ? round(($wonCount / $closedTotal) * 100, 2)
                 : 0,
-            'active_count' => ($statusCounts['new'] ?? 0) + 
-                             ($statusCounts['contacted'] ?? 0) + 
+            'active_count' => ($statusCounts['new'] ?? 0) +
+                             ($statusCounts['contacted'] ?? 0) +
                              ($statusCounts['qualified'] ?? 0),
             'won_count' => $wonCount,
             'lost_count' => $lostCount,
@@ -264,7 +266,7 @@ class LeadService
         return Lead::indexQuery()
             ->where(function ($q) use ($query) {
                 $q->where('title', 'like', "%{$query}%")
-                  ->orWhere('description', 'like', "%{$query}%");
+                    ->orWhere('description', 'like', "%{$query}%");
             })
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
@@ -320,7 +322,7 @@ class LeadService
     public function transition(string $newStatus, Lead $lead): Lead
     {
         $validStatuses = ['new', 'contacted', 'qualified', 'won', 'lost'];
-        if (!in_array($newStatus, $validStatuses)) {
+        if (! in_array($newStatus, $validStatuses)) {
             throw new \InvalidArgumentException("Invalid status: {$newStatus}");
         }
 

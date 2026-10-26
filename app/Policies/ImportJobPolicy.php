@@ -4,16 +4,26 @@ namespace App\Policies;
 
 use App\Models\ImportJob;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use Sledeci\Core\Policies\ChecksModuleRoles;
 
+/**
+ * Access follows the "import-export" module in config/access.php.
+ */
 class ImportJobPolicy
 {
+    use ChecksModuleRoles;
+
+    protected function modules(): array
+    {
+        return ['import-export'];
+    }
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $this->canRead($user);
     }
 
     /**
@@ -21,7 +31,7 @@ class ImportJobPolicy
      */
     public function view(User $user, ImportJob $importJob): bool
     {
-        return false;
+        return $importJob->user_id === $user->id || $this->canRead($user);
     }
 
     /**
@@ -29,7 +39,7 @@ class ImportJobPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
     /**
@@ -37,7 +47,7 @@ class ImportJobPolicy
      */
     public function update(User $user, ImportJob $importJob): bool
     {
-        return false;
+        return $importJob->user_id === $user->id;
     }
 
     /**
@@ -45,7 +55,7 @@ class ImportJobPolicy
      */
     public function delete(User $user, ImportJob $importJob): bool
     {
-        return false;
+        return $importJob->user_id === $user->id || $this->canWrite($user);
     }
 
     /**
@@ -53,11 +63,11 @@ class ImportJobPolicy
      */
     public function restore(User $user, ImportJob $importJob): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Permanent deletion is never allowed through the application.
      */
     public function forceDelete(User $user, ImportJob $importJob): bool
     {

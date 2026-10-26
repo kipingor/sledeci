@@ -2,10 +2,7 @@
 
 namespace App\Services\Accounting;
 
-use App\Models\AccountingPeriod;
 use App\Models\ChartOfAccount;
-use App\Models\JournalEntry;
-use App\Models\JournalEntryLine;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -61,30 +58,30 @@ class FinancialStatementService
                     : $row->total_credits - $row->total_debits;
 
                 return [
-                    'id'             => $row->id,
-                    'code'           => $row->code,
-                    'name'           => $row->name,
-                    'type'           => $row->type,
+                    'id' => $row->id,
+                    'code' => $row->code,
+                    'name' => $row->name,
+                    'type' => $row->type,
                     'normal_balance' => $row->normal_balance,
-                    'debit'          => round((float) $row->total_debits, 2),
-                    'credit'         => round((float) $row->total_credits, 2),
-                    'balance'        => round($balance, 2),
+                    'debit' => round((float) $row->total_debits, 2),
+                    'credit' => round((float) $row->total_credits, 2),
+                    'balance' => round($balance, 2),
                 ];
             });
 
-        if (!$includeZero) {
+        if (! $includeZero) {
             $balances = $balances->filter(fn ($a) => abs($a['balance']) >= 0.005);
         }
 
-        $totalDebits  = round($balances->sum('debit'), 2);
+        $totalDebits = round($balances->sum('debit'), 2);
         $totalCredits = round($balances->sum('credit'), 2);
 
         return [
-            'accounts'      => $balances->values(),
-            'total_debits'  => $totalDebits,
+            'accounts' => $balances->values(),
+            'total_debits' => $totalDebits,
             'total_credits' => $totalCredits,
-            'is_balanced'   => abs($totalDebits - $totalCredits) < 0.01,
-            'as_of'         => $asOf->toDateString(),
+            'is_balanced' => abs($totalDebits - $totalCredits) < 0.01,
+            'as_of' => $asOf->toDateString(),
         ];
     }
 
@@ -109,38 +106,38 @@ class FinancialStatementService
     {
         $balances = $this->getPLBalances($from, $to);
 
-        $revenue          = $this->sumByType($balances, ['revenue']);
-        $cogs             = $this->sumByType($balances, ['cogs']);
-        $grossProfit      = $revenue - $cogs;
+        $revenue = $this->sumByType($balances, ['revenue']);
+        $cogs = $this->sumByType($balances, ['cogs']);
+        $grossProfit = $revenue - $cogs;
 
         $operatingExpenses = $this->sumByType($balances, ['expense']);
-        $ebit              = $grossProfit - $operatingExpenses;
+        $ebit = $grossProfit - $operatingExpenses;
 
-        $otherIncome       = $this->sumByType($balances, ['other_income']);
-        $otherExpense      = $this->sumByType($balances, ['other_expense']) - $this->getTaxExpense($balances);
-        $pbt               = $ebit + $otherIncome - $otherExpense;
+        $otherIncome = $this->sumByType($balances, ['other_income']);
+        $otherExpense = $this->sumByType($balances, ['other_expense']) - $this->getTaxExpense($balances);
+        $pbt = $ebit + $otherIncome - $otherExpense;
 
-        $taxExpense        = $this->getTaxExpense($balances);
-        $netProfit         = $pbt - $taxExpense;
+        $taxExpense = $this->getTaxExpense($balances);
+        $netProfit = $pbt - $taxExpense;
 
         return [
-            'period'             => ['from' => $from->toDateString(), 'to' => $to->toDateString()],
-            'revenue'            => $this->getLineItems($balances, ['revenue']),
-            'revenue_total'      => round($revenue, 2),
-            'cogs'               => $this->getLineItems($balances, ['cogs']),
-            'cogs_total'         => round($cogs, 2),
-            'gross_profit'       => round($grossProfit, 2),
-            'gross_margin_pct'   => $revenue > 0 ? round($grossProfit / $revenue * 100, 1) : 0,
+            'period' => ['from' => $from->toDateString(), 'to' => $to->toDateString()],
+            'revenue' => $this->getLineItems($balances, ['revenue']),
+            'revenue_total' => round($revenue, 2),
+            'cogs' => $this->getLineItems($balances, ['cogs']),
+            'cogs_total' => round($cogs, 2),
+            'gross_profit' => round($grossProfit, 2),
+            'gross_margin_pct' => $revenue > 0 ? round($grossProfit / $revenue * 100, 1) : 0,
             'operating_expenses' => $this->getLineItems($balances, ['expense']),
-            'opex_total'         => round($operatingExpenses, 2),
-            'ebit'               => round($ebit, 2),
-            'ebit_margin_pct'    => $revenue > 0 ? round($ebit / $revenue * 100, 1) : 0,
-            'other_income'       => $this->getLineItems($balances, ['other_income']),
-            'other_expense'      => $this->getLineItems($balances, ['other_expense'], excludeTax: true),
-            'profit_before_tax'  => round($pbt, 2),
-            'tax_expense'        => round($taxExpense, 2),
-            'net_profit'         => round($netProfit, 2),
-            'net_margin_pct'     => $revenue > 0 ? round($netProfit / $revenue * 100, 1) : 0,
+            'opex_total' => round($operatingExpenses, 2),
+            'ebit' => round($ebit, 2),
+            'ebit_margin_pct' => $revenue > 0 ? round($ebit / $revenue * 100, 1) : 0,
+            'other_income' => $this->getLineItems($balances, ['other_income']),
+            'other_expense' => $this->getLineItems($balances, ['other_expense'], excludeTax: true),
+            'profit_before_tax' => round($pbt, 2),
+            'tax_expense' => round($taxExpense, 2),
+            'net_profit' => round($netProfit, 2),
+            'net_margin_pct' => $revenue > 0 ? round($netProfit / $revenue * 100, 1) : 0,
         ];
     }
 
@@ -156,38 +153,38 @@ class FinancialStatementService
         $trial = $this->trialBalance($asOf, true);
         $accts = collect($trial['accounts'])->keyBy('code');
 
-        $currentAssets    = $this->getBSSection($accts, 'asset', ['cash','bank','accounts_receivable','inventory','prepaid','other_current_asset'], $asOf);
-        $nonCurrentAssets = $this->getBSSection($accts, 'asset', ['fixed_asset','accumulated_depreciation','intangible','other_non_current_asset'], $asOf);
+        $currentAssets = $this->getBSSection($accts, 'asset', ['cash', 'bank', 'accounts_receivable', 'inventory', 'prepaid', 'other_current_asset'], $asOf);
+        $nonCurrentAssets = $this->getBSSection($accts, 'asset', ['fixed_asset', 'accumulated_depreciation', 'intangible', 'other_non_current_asset'], $asOf);
 
         $totalAssets = $currentAssets['total'] + $nonCurrentAssets['total'];
 
-        $currentLiabilities    = $this->getBSSection($accts, 'liability', ['accounts_payable','accrued_liability','deferred_revenue','tax_payable','short_term_debt'], $asOf);
-        $nonCurrentLiabilities = $this->getBSSection($accts, 'liability', ['long_term_debt','other_liability'], $asOf);
+        $currentLiabilities = $this->getBSSection($accts, 'liability', ['accounts_payable', 'accrued_liability', 'deferred_revenue', 'tax_payable', 'short_term_debt'], $asOf);
+        $nonCurrentLiabilities = $this->getBSSection($accts, 'liability', ['long_term_debt', 'other_liability'], $asOf);
 
         $totalLiabilities = $currentLiabilities['total'] + $nonCurrentLiabilities['total'];
 
-        $equity = $this->getBSSection($accts, 'equity', ['share_capital','retained_earnings','current_earnings','other_equity'], $asOf);
+        $equity = $this->getBSSection($accts, 'equity', ['share_capital', 'retained_earnings', 'current_earnings', 'other_equity'], $asOf);
 
         // P&L for the current fiscal year flows into equity as current earnings
-        $currentFY       = $this->getCurrentFYDateRange($asOf);
-        $plData          = $this->profitAndLoss($currentFY['from'], $currentFY['to']);
+        $currentFY = $this->getCurrentFYDateRange($asOf);
+        $plData = $this->profitAndLoss($currentFY['from'], $currentFY['to']);
         $currentEarnings = $plData['net_profit'];
 
         $totalEquity = $equity['total'] + $currentEarnings;
 
         return [
-            'as_of'                    => $asOf->toDateString(),
-            'current_assets'           => $currentAssets,
-            'non_current_assets'       => $nonCurrentAssets,
-            'total_assets'             => round($totalAssets, 2),
-            'current_liabilities'      => $currentLiabilities,
-            'non_current_liabilities'  => $nonCurrentLiabilities,
-            'total_liabilities'        => round($totalLiabilities, 2),
-            'equity'                   => $equity,
-            'current_year_earnings'    => round($currentEarnings, 2),
-            'total_equity'             => round($totalEquity, 2),
+            'as_of' => $asOf->toDateString(),
+            'current_assets' => $currentAssets,
+            'non_current_assets' => $nonCurrentAssets,
+            'total_assets' => round($totalAssets, 2),
+            'current_liabilities' => $currentLiabilities,
+            'non_current_liabilities' => $nonCurrentLiabilities,
+            'total_liabilities' => round($totalLiabilities, 2),
+            'equity' => $equity,
+            'current_year_earnings' => round($currentEarnings, 2),
+            'total_equity' => round($totalEquity, 2),
             'total_liabilities_equity' => round($totalLiabilities + $totalEquity, 2),
-            'is_balanced'              => abs($totalAssets - ($totalLiabilities + $totalEquity)) < 0.05,
+            'is_balanced' => abs($totalAssets - ($totalLiabilities + $totalEquity)) < 0.05,
         ];
     }
 
@@ -205,15 +202,15 @@ class FinancialStatementService
         $pl = $this->profitAndLoss($from, $to);
 
         // Opening and closing balances of working capital accounts
-        $arOpen  = $this->accountBalance('1100', $from->copy()->subDay());
+        $arOpen = $this->accountBalance('1100', $from->copy()->subDay());
         $arClose = $this->accountBalance('1100', $to);
-        $apOpen  = $this->accountBalance('3100', $from->copy()->subDay());
+        $apOpen = $this->accountBalance('3100', $from->copy()->subDay());
         $apClose = $this->accountBalance('3100', $to);
 
         // Non-cash adjustments
-        $depreciation  = $this->plAccountBalance('8600', $from, $to);
-        $amortisation  = $this->plAccountBalance('8610', $from, $to);
-        $badDebt       = $this->plAccountBalance('8700', $from, $to);
+        $depreciation = $this->plAccountBalance('8600', $from, $to);
+        $amortisation = $this->plAccountBalance('8610', $from, $to);
+        $badDebt = $this->plAccountBalance('8700', $from, $to);
 
         // Working capital changes
         $deltaAR = $arOpen - $arClose;  // Increase in AR = cash used
@@ -227,29 +224,29 @@ class FinancialStatementService
             + $deltaAP;
 
         // Cash from investing (capital expenditure)
-        $capex = $this->plAccountDebitBalance(['2100','2200'], $from, $to);
+        $capex = $this->plAccountDebitBalance(['2100', '2200'], $from, $to);
 
         // Cash at opening and closing
-        $cashAccounts    = ChartOfAccount::where('is_cash_account', true)->orWhere('is_bank_account', true)->pluck('code');
-        $openingCash     = $cashAccounts->sum(fn ($code) => $this->accountBalance($code, $from->copy()->subDay()));
-        $closingCash     = $cashAccounts->sum(fn ($code) => $this->accountBalance($code, $to));
+        $cashAccounts = ChartOfAccount::where('is_cash_account', true)->orWhere('is_bank_account', true)->pluck('code');
+        $openingCash = $cashAccounts->sum(fn ($code) => $this->accountBalance($code, $from->copy()->subDay()));
+        $closingCash = $cashAccounts->sum(fn ($code) => $this->accountBalance($code, $to));
 
         return [
-            'period'                    => ['from' => $from->toDateString(), 'to' => $to->toDateString()],
-            'net_profit'                => round($pl['net_profit'], 2),
+            'period' => ['from' => $from->toDateString(), 'to' => $to->toDateString()],
+            'net_profit' => round($pl['net_profit'], 2),
             'adjustments' => [
-                'depreciation'          => round($depreciation, 2),
-                'amortisation'          => round($amortisation, 2),
-                'bad_debt_expense'      => round($badDebt, 2),
+                'depreciation' => round($depreciation, 2),
+                'amortisation' => round($amortisation, 2),
+                'bad_debt_expense' => round($badDebt, 2),
                 'change_in_receivables' => round($deltaAR, 2),
-                'change_in_payables'    => round($deltaAP, 2),
+                'change_in_payables' => round($deltaAP, 2),
             ],
-            'cash_from_operations'      => round($cashFromOperations, 2),
-            'cash_from_investing'       => round(-$capex, 2),
-            'cash_from_financing'       => 0, // Extend with loan/equity movements
-            'net_change_in_cash'        => round($cashFromOperations - $capex, 2),
-            'opening_cash_balance'      => round($openingCash, 2),
-            'closing_cash_balance'      => round($closingCash, 2),
+            'cash_from_operations' => round($cashFromOperations, 2),
+            'cash_from_investing' => round(-$capex, 2),
+            'cash_from_financing' => 0, // Extend with loan/equity movements
+            'net_change_in_cash' => round($cashFromOperations - $capex, 2),
+            'opening_cash_balance' => round($openingCash, 2),
+            'closing_cash_balance' => round($closingCash, 2),
         ];
     }
 
@@ -276,6 +273,7 @@ class FinancialStatementService
                 $balance = $row->normal_balance === 'debit'
                     ? (float) $row->total_debits - (float) $row->total_credits
                     : (float) $row->total_credits - (float) $row->total_debits;
+
                 return (object) array_merge((array) $row, ['balance' => round($balance, 2)]);
             });
     }
@@ -296,9 +294,10 @@ class FinancialStatementService
         if ($excludeTax) {
             $items = $items->where('sub_type', '!=', 'tax_expense');
         }
+
         return $items->map(fn ($a) => [
-            'code'    => $a->code,
-            'name'    => $a->name,
+            'code' => $a->code,
+            'name' => $a->name,
             'balance' => $a->balance,
         ])->values()->toArray();
     }
@@ -320,12 +319,14 @@ class FinancialStatementService
     private function accountBalance(string $code, Carbon $asOf): float
     {
         $account = ChartOfAccount::where('code', $code)->first();
+
         return $account ? $account->balance($asOf) : 0.0;
     }
 
     private function plAccountBalance(string $code, Carbon $from, Carbon $to): float
     {
         $balances = $this->getPLBalances($from, $to);
+
         return $balances->where('code', $code)->sum('balance');
     }
 
@@ -347,7 +348,7 @@ class FinancialStatementService
         // Assumes calendar year fiscal year — adjust for non-calendar FY if needed
         return [
             'from' => Carbon::create($asOf->year, 1, 1)->startOfDay(),
-            'to'   => $asOf->copy()->endOfDay(),
+            'to' => $asOf->copy()->endOfDay(),
         ];
     }
 }

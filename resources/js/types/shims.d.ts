@@ -6,7 +6,6 @@ declare interface Window {
 }
 
 // Ziggy / route() helper (some files rely on route() being global)
-declare const route: typeof import('ziggy-js').route;
 
 // Jest / testing globals used in tests
 declare function beforeAll(fn: () => void | Promise<void>): void;

@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\Lead;
-use App\Models\User;
-use App\Models\PipelineStage;
 use App\Enums\LeadStatus;
+use App\Models\Lead;
+use App\Models\PipelineStage;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Lead>
+ * @extends Factory<Lead>
  */
 class LeadFactory extends Factory
 {
@@ -35,19 +35,19 @@ class LeadFactory extends Factory
             'currency' => $this->faker->randomElement(array_keys(Lead::CURRENCIES)),
             'type' => $this->faker->randomElement(['document', 'conversation']),
             'status' => $this->faker->randomElement([
-                LeadStatus::NEW->value, 
-                LeadStatus::CONTACTED->value, 
-                LeadStatus::QUALIFIED->value, 
-                LeadStatus::PROPOSAL_SENT->value, 
-                LeadStatus::NEGOTIATION->value, 
-                LeadStatus::WON->value, 
-                LeadStatus::LOST->value, 
-                LeadStatus::ARCHIVED->value
+                LeadStatus::NEW->value,
+                LeadStatus::CONTACTED->value,
+                LeadStatus::QUALIFIED->value,
+                LeadStatus::PROPOSAL_SENT->value,
+                LeadStatus::NEGOTIATION->value,
+                LeadStatus::WON->value,
+                LeadStatus::LOST->value,
+                LeadStatus::ARCHIVED->value,
             ]),
             'created_by' => $createdBy,
             'owner_id' => $ownerId,
             'pipeline_stage_id' => $pipelineStage->id,
-            'order' => $this->faker->randomNumber(1,8),
+            'order' => $this->faker->randomNumber(1, 8),
             'metadata' => [
                 'requirements' => $this->faker->sentences(2, true),
                 'summary' => $this->faker->sentence(),

@@ -13,12 +13,19 @@ class PosSaleItem extends Model
     ];
 
     protected $casts = [
-        'quantity'   => 'integer',
+        'quantity' => 'integer',
         'unit_price' => 'decimal:2',
-        'discount'   => 'decimal:2',
+        'discount' => 'decimal:2',
         'line_total' => 'decimal:2',
     ];
 
-    public function sale(): BelongsTo    { return $this->belongsTo(PosSale::class, 'pos_sale_id'); }
-    public function product(): BelongsTo { return $this->belongsTo(Product::class); }
+    public function sale(): BelongsTo
+    {
+        return $this->belongsTo(PosSale::class, 'pos_sale_id');
+    }
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

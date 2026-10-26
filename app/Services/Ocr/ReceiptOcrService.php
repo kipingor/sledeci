@@ -22,13 +22,14 @@ use Illuminate\Support\Facades\Storage;
  */
 class ReceiptOcrService
 {
-    private const MODEL     = 'claude-sonnet-4-6';
+    private const MODEL = 'claude-sonnet-4-6';
+
     private const MAX_TOKENS = 512;
 
     /**
      * Extract structured expense data from a stored receipt image.
      *
-     * @param  string  $imagePath   Storage path (private disk) to the receipt image
+     * @param  string  $imagePath  Storage path (private disk) to the receipt image
      * @return array{
      *   vendor: string|null,
      *   amount: float|null,
@@ -43,9 +44,9 @@ class ReceiptOcrService
      */
     public function extractFromPath(string $imagePath): array
     {
-        $imageData  = Storage::disk('private')->get($imagePath);
-        $mimeType   = $this->detectMimeType($imagePath, $imageData);
-        $base64     = base64_encode($imageData);
+        $imageData = Storage::disk('private')->get($imagePath);
+        $mimeType = $this->detectMimeType($imagePath, $imageData);
+        $base64 = base64_encode($imageData);
 
         return $this->extract($base64, $mimeType);
     }
@@ -61,6 +62,7 @@ class ReceiptOcrService
         if (! preg_match('/^data:(image\/[a-z]+);base64,(.+)$/', $dataUrl, $m)) {
             throw new \InvalidArgumentException('Invalid data URL format.');
         }
+
         return $this->extract($m[2], $m[1]);
     }
 
@@ -92,21 +94,21 @@ PROMPT;
 
         try {
             $response = Http::withHeaders([
-                'x-api-key'         => config('services.anthropic.api_key'),
+                'x-api-key' => config('services.anthropic.api_key'),
                 'anthropic-version' => '2023-06-01',
-                'content-type'      => 'application/json',
+                'content-type' => 'application/json',
             ])->timeout(30)->post('https://api.anthropic.com/v1/messages', [
-                'model'      => self::MODEL,
+                'model' => self::MODEL,
                 'max_tokens' => self::MAX_TOKENS,
-                'messages'   => [[
-                    'role'    => 'user',
+                'messages' => [[
+                    'role' => 'user',
                     'content' => [
                         [
-                            'type'   => 'image',
+                            'type' => 'image',
                             'source' => [
-                                'type'       => 'base64',
+                                'type' => 'base64',
                                 'media_type' => $mimeType,
-                                'data'       => $base64Image,
+                                'data' => $base64Image,
                             ],
                         ],
                         ['type' => 'text', 'text' => $prompt],
@@ -115,30 +117,32 @@ PROMPT;
             ]);
 
             if ($response->failed()) {
-                throw new \RuntimeException('Claude API error: ' . $response->status() . ' ' . $response->body());
+                throw new \RuntimeException('Claude API error: '.$response->status().' '.$response->body());
             }
 
             $rawText = $response->json('content.0.text', '');
-            $parsed  = json_decode($rawText, true);
+            $parsed = json_decode($rawText, true);
 
             if (! is_array($parsed)) {
                 Log::warning('ReceiptOcrService: could not parse Claude response', ['raw' => $rawText]);
+
                 return $this->emptyResult($rawText);
             }
 
             return [
-                'vendor'      => $parsed['vendor']      ?? null,
-                'amount'      => isset($parsed['amount']) ? (float) $parsed['amount'] : null,
-                'currency'    => $parsed['currency']    ?? null,
-                'date'        => $parsed['date']        ?? null,
-                'category'    => $parsed['category']    ?? null,
+                'vendor' => $parsed['vendor'] ?? null,
+                'amount' => isset($parsed['amount']) ? (float) $parsed['amount'] : null,
+                'currency' => $parsed['currency'] ?? null,
+                'date' => $parsed['date'] ?? null,
+                'category' => $parsed['category'] ?? null,
                 'description' => $parsed['description'] ?? null,
-                'vat'         => isset($parsed['vat']) ? (float) $parsed['vat'] : null,
-                'confidence'  => $parsed['confidence']  ?? 'low',
-                'raw'         => $rawText,
+                'vat' => isset($parsed['vat']) ? (float) $parsed['vat'] : null,
+                'confidence' => $parsed['confidence'] ?? 'low',
+                'raw' => $rawText,
             ];
         } catch (\Throwable $e) {
             Log::error('ReceiptOcrService failed', ['error' => $e->getMessage()]);
+
             return $this->emptyResult($e->getMessage());
         }
     }
@@ -149,8 +153,7 @@ PROMPT;
      * Pre-fill an expense with OCR-extracted data.
      * Only overwrites null / empty fields — does not overwrite user edits.
      *
-     * @param  Expense  $expense
-     * @param  array    $extracted  Return value from extract*()
+     * @param  array  $extracted  Return value from extract*()
      */
     public function applyToExpense(Expense $expense, array $extracted): void
     {
@@ -162,7 +165,7 @@ PROMPT;
         if (empty($expense->vendor) && $extracted['vendor']) {
             $updates['vendor'] = $extracted['vendor'];
         }
-        if ((float)$expense->amount === 0.0 && $extracted['amount']) {
+        if ((float) $expense->amount === 0.0 && $extracted['amount']) {
             $updates['amount'] = $extracted['amount'];
         }
         if ($extracted['currency']) {
@@ -185,12 +188,13 @@ PROMPT;
     private function detectMimeType(string $path, string $data): string
     {
         $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+
         return match ($ext) {
             'jpg', 'jpeg' => 'image/jpeg',
-            'png'         => 'image/png',
-            'webp'        => 'image/webp',
-            'gif'         => 'image/gif',
-            default       => 'image/jpeg',
+            'png' => 'image/png',
+            'webp' => 'image/webp',
+            'gif' => 'image/gif',
+            default => 'image/jpeg',
         };
     }
 
@@ -198,8 +202,8 @@ PROMPT;
     {
         return [
             'vendor' => null, 'amount' => null, 'currency' => null,
-            'date'   => null, 'category' => null, 'description' => null,
-            'vat'    => null, 'confidence' => 'low', 'raw' => $raw,
+            'date' => null, 'category' => null, 'description' => null,
+            'vat' => null, 'confidence' => 'low', 'raw' => $raw,
         ];
     }
 }

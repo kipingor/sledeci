@@ -2,17 +2,15 @@
 
 namespace App\Services;
 
-use ZipArchive;
 use Spatie\PdfToText\Pdf as SpatiePdf;
+use ZipArchive;
 
 class DocumentParserService
 {
     /**
      * Parse a file and return extracted text.
      *
-     * @param string $path Absolute path to file
-     * @param string|null $mime
-     * @return string
+     * @param  string  $path  Absolute path to file
      */
     public function extractText(string $path, ?string $mime = null): string
     {
@@ -30,20 +28,21 @@ class DocumentParserService
                     $escaped = escapeshellarg($path);
                     $output = null;
                     @exec("pdftotext -layout $escaped -", $output);
-                    if (!empty($output)) {
+                    if (! empty($output)) {
                         return trim(implode("\n", $output));
                     }
                 } catch (\Throwable $e) {
                     // ignore
                 }
             }
+
             return '';
         }
 
         // DOCX (zip containing word/document.xml)
         if (str_contains($mime, 'officedocument') || str_ends_with(strtolower($path), '.docx')) {
             try {
-                $zip = new ZipArchive();
+                $zip = new ZipArchive;
                 if ($zip->open($path) === true) {
                     $index = $zip->locateName('word/document.xml');
                     if ($index !== false) {
@@ -53,6 +52,7 @@ class DocumentParserService
                         $text = strip_tags($xml);
                         // Normalize whitespace
                         $text = preg_replace('/\s+/u', ' ', $text);
+
                         return trim($text);
                     }
                     $zip->close();
@@ -60,12 +60,14 @@ class DocumentParserService
             } catch (\Exception $e) {
                 // ignore
             }
+
             return '';
         }
 
         // Plain text or other: try reading file
         try {
             $contents = @file_get_contents($path);
+
             return $contents !== false ? trim($contents) : '';
         } catch (\Throwable $e) {
             return '';

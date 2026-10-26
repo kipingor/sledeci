@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Database\Factories\HrLeaveRequestFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class HrLeaveRequest extends Model
 {
-    /** @use HasFactory<\Database\Factories\HrLeaveRequestFactory> */
+    /** @use HasFactory<HrLeaveRequestFactory> */
     use HasFactory;
 
     public const STATUSES = [
@@ -31,7 +32,7 @@ class HrLeaveRequest extends Model
 
     protected $casts = [
         'from_date' => 'date',
-        'to_date'   => 'date',
+        'to_date' => 'date',
     ];
 
     // ── Relations ─────────────────────────────────────────────────────────────
@@ -69,6 +70,6 @@ class HrLeaveRequest extends Model
     public function scopeActive($query)
     {
         return $query->where('status', 'approved')
-                     ->where('to_date', '>=', now());
+            ->where('to_date', '>=', now());
     }
 }

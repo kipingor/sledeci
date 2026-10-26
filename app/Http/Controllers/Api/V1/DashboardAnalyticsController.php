@@ -19,7 +19,7 @@ class DashboardAnalyticsController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data'    => $this->dashboardService->getOverviewMetrics($request->only(['date_from', 'date_to', 'owner_id'])),
+            'data' => $this->dashboardService->getOverviewMetrics($request->only(['date_from', 'date_to', 'owner_id'])),
         ]);
     }
 
@@ -27,7 +27,7 @@ class DashboardAnalyticsController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data'    => $this->dashboardService->getLeadsByStatus($request->all()),
+            'data' => $this->dashboardService->getLeadsByStatus($request->all()),
         ]);
     }
 
@@ -36,7 +36,7 @@ class DashboardAnalyticsController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data'    => $this->dashboardService->getPipelineByStage($request->all()),
+            'data' => $this->dashboardService->getPipelineByStage($request->all()),
         ]);
     }
 
@@ -44,7 +44,7 @@ class DashboardAnalyticsController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data'    => $this->dashboardService->getLeadsOverTime($request->all()),
+            'data' => $this->dashboardService->getLeadsOverTime($request->all()),
         ]);
     }
 
@@ -52,7 +52,7 @@ class DashboardAnalyticsController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data'    => $this->dashboardService->getConversionFunnel($request->all()),
+            'data' => $this->dashboardService->getConversionFunnel($request->all()),
         ]);
     }
 
@@ -60,7 +60,7 @@ class DashboardAnalyticsController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data'    => $this->dashboardService->getTeamPerformance($request->all()),
+            'data' => $this->dashboardService->getTeamPerformance($request->all()),
         ]);
     }
 
@@ -71,7 +71,7 @@ class DashboardAnalyticsController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data'    => $this->dashboardService->getLeadsBySource($request->all()),
+            'data' => $this->dashboardService->getLeadsBySource($request->all()),
         ]);
     }
 
@@ -80,7 +80,7 @@ class DashboardAnalyticsController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data'    => $this->dashboardService->getActivityStats($request->all()),
+            'data' => $this->dashboardService->getActivityStats($request->all()),
         ]);
     }
 
@@ -89,7 +89,7 @@ class DashboardAnalyticsController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data'    => $this->dashboardService->getLeadVelocity($request->all()),
+            'data' => $this->dashboardService->getLeadVelocity($request->all()),
         ]);
     }
 
@@ -98,7 +98,7 @@ class DashboardAnalyticsController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data'    => $this->dashboardService->getWinLossAnalysis($request->all()),
+            'data' => $this->dashboardService->getWinLossAnalysis($request->all()),
         ]);
     }
 
@@ -113,7 +113,7 @@ class DashboardAnalyticsController extends Controller
 
         return response()->json([
             'success' => true,
-            'data'    => $this->dashboardService->getDashboardSnapshot($filters),
+            'data' => $this->dashboardService->getDashboardSnapshot($filters),
         ]);
     }
 }

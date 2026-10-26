@@ -60,7 +60,7 @@ class AutomationLogController extends Controller
 
         try {
             $triggerable = $log->triggerable;
-            if (!$triggerable) {
+            if (! $triggerable) {
                 throw new \Exception('Triggerable model not found');
             }
 
@@ -73,7 +73,7 @@ class AutomationLogController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Retry failed: ' . $e->getMessage(),
+                'message' => 'Retry failed: '.$e->getMessage(),
             ], 500);
         }
     }

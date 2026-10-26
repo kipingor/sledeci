@@ -2,10 +2,10 @@
 
 namespace App\Actions\Lead;
 
+use App\Enums\LeadStatus;
+use App\Events\LeadStatusChanged;
 use App\Models\Lead;
 use App\Services\Lead\LeadService;
-use App\Events\LeadStatusChanged;
-use App\Enums\LeadStatus;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
@@ -23,7 +23,7 @@ class TransitionLeadStatusAction
         try {
             event(new LeadStatusChanged($updatedLead, $oldStatus, LeadStatus::from($newStatus)));
         } catch (Throwable $e) {
-            Log::error('Failed to dispatch LeadStatusChanged event: ' . $e->getMessage());
+            Log::error('Failed to dispatch LeadStatusChanged event: '.$e->getMessage());
         }
 
         return $updatedLead;

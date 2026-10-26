@@ -78,7 +78,7 @@ class InvalidStatusTransitionException extends Exception
                     'label' => $this->attemptedStatus->label(),
                 ],
                 'allowed_transitions' => array_map(
-                    fn($status) => [
+                    fn ($status) => [
                         'value' => $status->value,
                         'label' => $status->label(),
                     ],
@@ -95,7 +95,7 @@ class InvalidStatusTransitionException extends Exception
      */
     protected function getAllowedTransitions(): array
     {
-        if (!isset($this->currentStatus)) {
+        if (! isset($this->currentStatus)) {
             return [];
         }
 

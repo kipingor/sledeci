@@ -18,9 +18,8 @@ class ProposalMail extends Mailable implements ShouldQueue
 
     public function __construct(
         public readonly Proposal $proposal,
-        public readonly string   $message = '',
-    ) {
-    }
+        public readonly string $message = '',
+    ) {}
 
     public function envelope(): Envelope
     {
@@ -39,8 +38,8 @@ class ProposalMail extends Mailable implements ShouldQueue
             view: 'emails.proposal',
             with: [
                 'proposal' => $this->proposal,
-                'company'  => config('company'),
-                'message'  => $this->message,
+                'company' => config('company'),
+                'message' => $this->message,
             ],
         );
     }
@@ -49,10 +48,10 @@ class ProposalMail extends Mailable implements ShouldQueue
     {
         $pdf = Pdf::loadView('pdf.proposal', [
             'proposal' => $this->proposal,
-            'company'  => config('company'),
+            'company' => config('company'),
         ])->setPaper('a4', 'portrait');
 
-        $filename = 'Proposal-' . str($this->proposal->title)->slug() . '.pdf';
+        $filename = 'Proposal-'.str($this->proposal->title)->slug().'.pdf';
 
         return [
             Attachment::fromData(

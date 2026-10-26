@@ -2,13 +2,13 @@
 
 namespace App\Services\Import;
 
-use App\Models\ImportJob;
-use App\Models\Lead;
-use App\Models\User;
-use App\Models\PipelineStage;
 use App\Enums\LeadStatus;
+use App\Models\Lead;
+use App\Models\PipelineStage;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class LeadImportService
@@ -24,14 +24,14 @@ class LeadImportService
         try {
             $spreadsheet = IOFactory::load($fullPath);
             $worksheet = $spreadsheet->getActiveSheet();
-            
+
             // Get first row as headers
             $headers = [];
             $highestColumn = $worksheet->getHighestColumn();
-            $highestColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn);
-            
+            $highestColumnIndex = Coordinate::columnIndexFromString($highestColumn);
+
             for ($col = 1; $col <= $highestColumnIndex; $col++) {
-                $value = $worksheet->getCellByColumnAndRow($col, 1)->getValue();
+                $value = $worksheet->getCell([$col, 1])->getValue();
                 if ($value) {
                     $headers[] = [
                         'index' => $col - 1,
@@ -49,7 +49,7 @@ class LeadImportService
             for ($row = 2; $row <= min(6, $worksheet->getHighestRow()); $row++) {
                 $rowData = [];
                 for ($col = 1; $col <= $highestColumnIndex; $col++) {
-                    $rowData[] = $worksheet->getCellByColumnAndRow($col, $row)->getValue();
+                    $rowData[] = $worksheet->getCell([$col, $row])->getValue();
                 }
                 $preview[] = $rowData;
             }
@@ -60,7 +60,7 @@ class LeadImportService
                 'preview' => $preview,
             ];
         } catch (\Exception $e) {
-            throw new \Exception('Failed to parse file: ' . $e->getMessage());
+            throw new \Exception('Failed to parse file: '.$e->getMessage());
         }
     }
 
@@ -70,7 +70,7 @@ class LeadImportService
     private function suggestField(string $header): ?string
     {
         $header = strtolower(trim($header));
-        
+
         $mappings = [
             'title' => ['title', 'name', 'lead name', 'company', 'company name'],
             'description' => ['description', 'desc', 'notes', 'details'],
@@ -128,7 +128,7 @@ class LeadImportService
                 'label' => 'Status',
                 'required' => false,
                 'type' => 'enum',
-                'options' => array_map(fn($s) => $s->value, LeadStatus::cases()),
+                'options' => array_map(fn ($s) => $s->value, LeadStatus::cases()),
             ],
             [
                 'value' => 'source',
@@ -163,7 +163,7 @@ class LeadImportService
             'description' => 'nullable|string|max:5000',
             'email' => 'nullable|email',
             'phone' => 'nullable|string|max:50',
-            'status' => 'nullable|in:' . implode(',', array_map(fn($s) => $s->value, LeadStatus::cases())),
+            'status' => 'nullable|in:'.implode(',', array_map(fn ($s) => $s->value, LeadStatus::cases())),
             'source' => 'nullable|string|max:100',
             'estimated_value' => 'nullable|numeric|min:0',
             'owner_email' => 'nullable|email',
@@ -210,7 +210,7 @@ class LeadImportService
         try {
             // Find or create owner
             $ownerId = $user->id;
-            if (!empty($data['owner_email'])) {
+            if (! empty($data['owner_email'])) {
                 $owner = User::where('email', $data['owner_email'])->first();
                 if ($owner) {
                     $ownerId = $owner->id;
@@ -220,21 +220,21 @@ class LeadImportService
 
             // Get default pipeline stage
             $pipelineStage = PipelineStage::where('key', 'new')->first();
-            if (!$pipelineStage) {
+            if (! $pipelineStage) {
                 $pipelineStage = PipelineStage::first();
             }
 
             // Handle metadata fields
             $metadata = [];
-            if (!empty($data['email'])) {
+            if (! empty($data['email'])) {
                 $metadata['email'] = $data['email'];
                 unset($data['email']);
             }
-            if (!empty($data['phone'])) {
+            if (! empty($data['phone'])) {
                 $metadata['phone'] = $data['phone'];
                 unset($data['phone']);
             }
-            if (!empty($data['source'])) {
+            if (! empty($data['source'])) {
                 $metadata['source'] = $data['source'];
                 unset($data['source']);
             }
@@ -254,11 +254,12 @@ class LeadImportService
                         ];
                     } elseif ($options['duplicate_handling'] === 'update') {
                         $existing->update($data);
-                        if (!empty($metadata)) {
+                        if (! empty($metadata)) {
                             $existing->update([
                                 'metadata' => array_merge($existing->metadata ?? [], $metadata),
                             ]);
                         }
+
                         return [
                             'success' => true,
                             'updated' => true,

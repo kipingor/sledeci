@@ -2,11 +2,11 @@
 
 namespace Tests\Unit;
 
+use App\Enums\LeadDocumentStatus;
 use App\Events\LeadDocumentProcessed;
 use App\Jobs\ProcessLeadDocument;
 use App\Models\Lead;
 use App\Models\LeadDocument;
-use App\Enums\LeadDocumentStatus;
 use App\Services\AI\AiClientInterface;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
@@ -28,7 +28,7 @@ class ProcessLeadDocumentTest extends TestCase
             'filename' => 'sample.txt',
             'storage_path' => 'lead_documents/sample.txt',
             'mime_type' => 'text/plain',
-            'extracted_text' => ['text' => "This is a test document. It has several sentences to summarize."],
+            'extracted_text' => ['text' => 'This is a test document. It has several sentences to summarize.'],
             'status' => LeadDocumentStatus::QUEUED,
         ]);
 
@@ -42,7 +42,7 @@ class ProcessLeadDocumentTest extends TestCase
         // Run the job handler directly (DocumentParserService is not used because extracted_text exists)
         $job->handle(
             app()->make('\App\Services\DocumentParserService'),
-            app()->make(\App\Services\AI\AiClientInterface::class)
+            app()->make(AiClientInterface::class)
         );
 
         $document->refresh();

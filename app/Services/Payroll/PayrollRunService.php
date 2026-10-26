@@ -19,9 +19,7 @@ use RuntimeException;
  */
 class PayrollRunService
 {
-    public function __construct(private readonly KenyaPayrollService $calculator)
-    {
-    }
+    public function __construct(private readonly KenyaPayrollService $calculator) {}
 
     public function create(int $year, int $month, ?string $notes = null): PayrollRun
     {

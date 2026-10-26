@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Expense;
+use App\Models\Project;
 use App\Services\Ocr\ReceiptOcrService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,40 +27,40 @@ use Inertia\Response;
 class ExpenseController extends Controller
 {
     public function __construct(private ReceiptOcrService $ocr) {}
-    
+
     public function index(Request $request): Response
     {
         $expenses = Expense::with('project:id,name')
             ->when($request->filled('project_id'), fn ($q) => $q->where('project_id', $request->project_id))
-            ->when($request->filled('search'),     fn ($q) => $q->where('description', 'like', "%{$request->search}%"))
+            ->when($request->filled('search'), fn ($q) => $q->where('description', 'like', "%{$request->search}%"))
             ->latest()
             ->paginate(20)
             ->withQueryString();
 
         return Inertia::render('expenses/index', [
             'expenses' => $expenses,
-            'filters'  => $request->only(['project_id', 'search']),
+            'filters' => $request->only(['project_id', 'search']),
         ]);
     }
 
     public function create(): Response
     {
         return Inertia::render('expenses/create', [
-            'projects' => \App\Models\Project::select(['id', 'name'])->orderBy('name')->get(),
+            'projects' => Project::select(['id', 'name'])->orderBy('name')->get(),
         ]);
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'project_id'  => ['nullable', 'exists:projects,id'],
+            'project_id' => ['nullable', 'exists:projects,id'],
             'description' => ['required', 'string', 'max:255'],
-            'amount'      => ['required', 'numeric', 'min:0'],
-            'currency'    => ['nullable', 'string', 'size:3'],
-            'date'        => ['required', 'date'],
-            'category'    => ['nullable', 'string', 'in:travel,accommodation,software,hardware,meals,supplies,marketing,utilities,fuel,rent,other'],
-            'notes'       => ['nullable', 'string'],
-            'receipt'     => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'], // 5MB
+            'amount' => ['required', 'numeric', 'min:0'],
+            'currency' => ['nullable', 'string', 'size:3'],
+            'date' => ['required', 'date'],
+            'category' => ['nullable', 'string', 'in:travel,accommodation,software,hardware,meals,supplies,marketing,utilities,fuel,rent,other'],
+            'notes' => ['nullable', 'string'],
+            'receipt' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'], // 5MB
         ]);
 
         // ── Idempotency check (offline queue replay protection) ────────────────
@@ -75,14 +76,14 @@ class ExpenseController extends Controller
         $data['incurred_at'] = $data['date'];
         unset($data['date']);
 
-        $data['entered_by']  = Auth::id();
-        $data['currency']    = $data['currency'] ?? config('company.functional_currency', 'KES');
-        $data['category']    = $data['category'] ?? 'other';
+        $data['entered_by'] = Auth::id();
+        $data['currency'] = $data['currency'] ?? config('company.functional_currency', 'KES');
+        $data['category'] = $data['category'] ?? 'other';
         $data['idempotency_key'] = $idempotencyKey;
 
         // ── Receipt upload (online, full resolution) ────────────────────────────
         if ($request->hasFile('receipt')) {
-            $path = $request->file('receipt')->store('receipts/' . now()->format('Y/m'), 'private');
+            $path = $request->file('receipt')->store('receipts/'.now()->format('Y/m'), 'private');
             $data['receipt_path'] = $path;
         }
 
@@ -90,7 +91,7 @@ class ExpenseController extends Controller
         if ($request->filled('receipt_thumbnail') && empty($data['receipt_path'])) {
             $data['receipt_path'] = $this->storeBase64Thumbnail($request->input('receipt_thumbnail'));
             $data['receipt_pending_upload'] = $request->boolean('receipt_pending_upload');
-            $data['receipt_filename_hint']  = $request->input('receipt_filename');
+            $data['receipt_filename_hint'] = $request->input('receipt_filename');
         }
 
         $expense = Expense::create($data);
@@ -116,22 +117,22 @@ class ExpenseController extends Controller
     public function edit(Expense $expense): Response
     {
         return Inertia::render('expenses/edit', [
-            'expense'  => $expense,
-            'projects' => \App\Models\Project::select(['id', 'name'])->orderBy('name')->get(),
+            'expense' => $expense,
+            'projects' => Project::select(['id', 'name'])->orderBy('name')->get(),
         ]);
     }
 
     public function update(Request $request, Expense $expense)
     {
         $data = $request->validate([
-            'project_id'  => ['nullable', 'exists:projects,id'],
+            'project_id' => ['nullable', 'exists:projects,id'],
             'description' => ['required', 'string', 'max:255'],
-            'amount'      => ['required', 'numeric', 'min:0'],
-            'currency'    => ['nullable', 'string', 'size:3'],
-            'date'        => ['required', 'date'],
-            'category'    => ['nullable', 'string'],
-            'notes'       => ['nullable', 'string'],
-            'receipt'     => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'amount' => ['required', 'numeric', 'min:0'],
+            'currency' => ['nullable', 'string', 'size:3'],
+            'date' => ['required', 'date'],
+            'category' => ['nullable', 'string'],
+            'notes' => ['nullable', 'string'],
+            'receipt' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
         ]);
 
         // Map frontend 'date' field to the model's 'incurred_at' column
@@ -142,11 +143,12 @@ class ExpenseController extends Controller
             if ($expense->receipt_path) {
                 Storage::disk('private')->delete($expense->receipt_path);
             }
-            $data['receipt_path'] = $request->file('receipt')->store('receipts/' . now()->format('Y/m'), 'private');
+            $data['receipt_path'] = $request->file('receipt')->store('receipts/'.now()->format('Y/m'), 'private');
             $data['receipt_pending_upload'] = false;
         }
 
         $expense->update($data);
+
         return redirect()->route('web.expenses.index')->with('success', 'Expense updated.');
     }
 
@@ -156,6 +158,7 @@ class ExpenseController extends Controller
             Storage::disk('private')->delete($expense->receipt_path);
         }
         $expense->delete();
+
         return redirect()->route('web.expenses.index')->with('success', 'Expense deleted.');
     }
 
@@ -226,8 +229,8 @@ class ExpenseController extends Controller
         }
 
         $extension = $matches[1] === 'jpeg' ? 'jpg' : $matches[1];
-        $content   = base64_decode($matches[2]);
-        $filename  = 'receipts/' . now()->format('Y/m') . '/' . Str::uuid() . '.' . $extension;
+        $content = base64_decode($matches[2]);
+        $filename = 'receipts/'.now()->format('Y/m').'/'.Str::uuid().'.'.$extension;
 
         Storage::disk('private')->put($filename, $content);
 

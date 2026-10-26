@@ -15,11 +15,11 @@ class TaxCode extends Model
         'output_account_id',
         'is_active',
         'is_default',
-        'jurisdiction'
+        'jurisdiction',
     ];
 
     protected $casts = [
-        'is_active'     => 'boolean',
-        'is_default'    => 'boolean',
+        'is_active' => 'boolean',
+        'is_default' => 'boolean',
     ];
 }

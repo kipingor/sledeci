@@ -4,16 +4,26 @@ namespace App\Policies;
 
 use App\Models\ContactFollowUp;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use Sledeci\Core\Policies\ChecksModuleRoles;
 
+/**
+ * Access follows the "contacts" module in config/access.php.
+ */
 class ContactFollowUpPolicy
 {
+    use ChecksModuleRoles;
+
+    protected function modules(): array
+    {
+        return ['contacts'];
+    }
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $this->canRead($user);
     }
 
     /**
@@ -21,7 +31,7 @@ class ContactFollowUpPolicy
      */
     public function view(User $user, ContactFollowUp $contactFollowUp): bool
     {
-        return false;
+        return $this->canRead($user);
     }
 
     /**
@@ -29,7 +39,7 @@ class ContactFollowUpPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
     /**
@@ -37,7 +47,7 @@ class ContactFollowUpPolicy
      */
     public function update(User $user, ContactFollowUp $contactFollowUp): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
     /**
@@ -45,7 +55,7 @@ class ContactFollowUpPolicy
      */
     public function delete(User $user, ContactFollowUp $contactFollowUp): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
     /**
@@ -53,11 +63,11 @@ class ContactFollowUpPolicy
      */
     public function restore(User $user, ContactFollowUp $contactFollowUp): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Permanent deletion is never allowed through the application.
      */
     public function forceDelete(User $user, ContactFollowUp $contactFollowUp): bool
     {

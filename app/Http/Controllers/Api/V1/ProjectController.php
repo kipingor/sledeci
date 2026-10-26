@@ -49,7 +49,7 @@ class ProjectController extends Controller
             'message' => $validated['status'] === 'completed'
                 ? 'Project marked as complete.'
                 : 'Project reopened.',
-            'data'    => $project->fresh(),
+            'data' => $project->fresh(),
         ]);
     }
 
@@ -83,7 +83,7 @@ class ProjectController extends Controller
                 'data' => $task,
             ], 201);
         } catch (\Exception $e) {
-            Log::error('Task creation failed: ' . $e->getMessage());
+            Log::error('Task creation failed: '.$e->getMessage());
 
             return response()->json([
                 'success' => false,
@@ -134,7 +134,7 @@ class ProjectController extends Controller
                 'data' => $task,
             ]);
         } catch (\Exception $e) {
-            Log::error('Task update failed: ' . $e->getMessage());
+            Log::error('Task update failed: '.$e->getMessage());
 
             return response()->json([
                 'success' => false,
@@ -177,7 +177,7 @@ class ProjectController extends Controller
                 'data' => $task,
             ]);
         } catch (\Exception $e) {
-            Log::error('Task move failed: ' . $e->getMessage());
+            Log::error('Task move failed: '.$e->getMessage());
 
             return response()->json([
                 'success' => false,
@@ -202,7 +202,7 @@ class ProjectController extends Controller
                 'message' => 'Task deleted successfully',
             ]);
         } catch (\Exception $e) {
-            Log::error('Task deletion failed: ' . $e->getMessage());
+            Log::error('Task deletion failed: '.$e->getMessage());
 
             return response()->json([
                 'success' => false,
@@ -275,7 +275,7 @@ class ProjectController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Bulk task update failed: ' . $e->getMessage());
+            Log::error('Bulk task update failed: '.$e->getMessage());
 
             return response()->json([
                 'success' => false,

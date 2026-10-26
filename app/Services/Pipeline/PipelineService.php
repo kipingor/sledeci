@@ -2,14 +2,16 @@
 
 namespace App\Services\Pipeline;
 
-use App\Models\Lead;
-use App\Models\User;
-use App\Models\PipelineStage;
 use App\Events\LeadMoved;
+use App\Models\Activity;
 use App\Models\AuditLog;
-use Illuminate\Support\Facades\DB;
+use App\Models\Lead;
+use App\Models\Opportunity;
+use App\Models\PipelineStage;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PipelineService
 {
@@ -19,6 +21,7 @@ class PipelineService
     public function moveToStage(Lead $lead, string $stage, User $user)
     {
         $stageModel = PipelineStage::where('key', $stage)->firstOrFail();
+
         return $this->moveLead($lead, $stageModel->id);
     }
 
@@ -42,8 +45,8 @@ class PipelineService
                 ->orderBy('order')
                 ->with([
                     'owner',
-                    'opportunity:id,lead_id,estimated_value'
-                ])
+                    'opportunity:id,lead_id,estimated_value',
+                ]),
         ])
             ->orderBy('order')
             ->get();
@@ -57,7 +60,7 @@ class PipelineService
                 'leads' => function ($q) {
                     $q->orderBy('order')
                         ->with(['owner:id,name,avatar']);
-                }
+                },
             ])
             ->get()
             ->map(fn ($stage) => [
@@ -123,14 +126,14 @@ class PipelineService
 
             $old = [
                 'pipeline_stage_id' => $oldStageId,
-                'order' => $oldOrder
+                'order' => $oldOrder,
             ];
 
             // Dispatch event
             event(new LeadMoved($lead, $oldStageId, $newStageId));
 
             // Log the change
-            if (class_exists(\App\Models\AuditLog::class)) {
+            if (class_exists(AuditLog::class)) {
                 try {
                     AuditLog::create([
                         'auditable_type' => Lead::class,
@@ -199,10 +202,10 @@ class PipelineService
 
         // Calculate total value from opportunities if available
         $totalValue = 0;
-        if (class_exists(\App\Models\Opportunity::class)) {
+        if (class_exists(Opportunity::class)) {
             try {
                 // FIX: Opportunity stage values are 'closed_won'/'closed_lost', not 'won'/'lost'
-                $totalValue = \App\Models\Opportunity::whereNotIn('stage', ['closed_won', 'closed_lost'])
+                $totalValue = Opportunity::whereNotIn('stage', ['closed_won', 'closed_lost'])
                     ->sum('estimated_value') ?? 0;
             } catch (\Exception $e) {
                 $totalValue = 0;
@@ -211,9 +214,9 @@ class PipelineService
 
         // Calculate total opportunities
         $totalOpportunities = 0;
-        if (class_exists(\App\Models\Opportunity::class)) {
+        if (class_exists(Opportunity::class)) {
             try {
-                $totalOpportunities = \App\Models\Opportunity::count();
+                $totalOpportunities = Opportunity::count();
             } catch (\Exception $e) {
                 $totalOpportunities = 0;
             }
@@ -289,6 +292,7 @@ class PipelineService
 
         $totalDays = $closedLeads->sum(function ($lead) {
             $closeDate = $lead->won_at ?? $lead->lost_at ?? $lead->updated_at;
+
             return $lead->created_at->diffInDays($closeDate);
         });
 
@@ -305,7 +309,7 @@ class PipelineService
         // Try to get from activities table if it exists
         $movementsThisWeek = 0;
 
-        if (class_exists(\App\Models\Activity::class)) {
+        if (class_exists(Activity::class)) {
             try {
                 $movementsThisWeek = DB::table('activities')
                     ->where('action', 'stage_changed')

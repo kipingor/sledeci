@@ -15,14 +15,14 @@ return new class extends Migration
             $table->id();
             $table->foreignId('payroll_run_id')->constrained('payroll_runs')->cascadeOnDelete();
             $table->foreignId('employee_id')->constrained('employees')->cascadeOnDelete();
- 
+
             // Earnings
             $table->decimal('basic_salary', 15, 2);
             $table->decimal('house_allowance', 15, 2)->default(0);
             $table->decimal('transport_allowance', 15, 2)->default(0);
             $table->decimal('other_allowances', 15, 2)->default(0);
             $table->decimal('gross_pay', 15, 2);
- 
+
             // Statutory deductions (Kenya-specific)
             $table->decimal('paye', 15, 2)->default(0)
                 ->comment('Pay As You Earn income tax — KRA brackets');
@@ -36,21 +36,21 @@ return new class extends Migration
                 ->comment('Affordable Housing Levy — 1.5% of gross (employee + employer match)');
             $table->decimal('helb', 15, 2)->default(0)
                 ->comment('Higher Education Loans Board repayment');
- 
+
             // Other deductions (loans, salary advance, SACCO)
             $table->decimal('other_deductions', 15, 2)->default(0);
             $table->decimal('total_deductions', 15, 2);
             $table->decimal('net_pay', 15, 2);
- 
+
             $table->enum('payment_status', ['pending', 'paid', 'failed'])->default('pending');
             $table->string('payment_reference')->nullable();
             $table->timestamp('paid_at')->nullable();
- 
+
             $table->timestamps();
             $table->unique(['payroll_run_id', 'employee_id']);
         });
 
-         Schema::create('payslip_deductions', function (Blueprint $table) {
+        Schema::create('payslip_deductions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('payslip_id')->constrained('payslips')->cascadeOnDelete();
             $table->string('name');

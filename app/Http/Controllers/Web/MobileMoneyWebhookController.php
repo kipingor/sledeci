@@ -57,6 +57,7 @@ class MobileMoneyWebhookController extends Controller
     public function mpesaC2BValidation(Request $request)
     {
         Log::info('M-Pesa C2B validation', $request->all());
+
         return response()->json(['ResultCode' => 0, 'ResultDesc' => 'Accepted']);
     }
 

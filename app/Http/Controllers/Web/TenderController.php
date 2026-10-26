@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Support\SqlOrder;
 use App\Http\Controllers\Controller;
 use App\Jobs\AnalyzeTenderJob;
 use App\Models\CompanySetting;
 use App\Models\Tender;
 use App\Services\MakerCheckerService;
 use App\Services\Tender\TenderAgentService;
+use App\Support\SqlOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -17,10 +17,9 @@ use Inertia\Inertia;
 class TenderController extends Controller
 {
     public function __construct(
-        private TenderAgentService  $agent,
+        private TenderAgentService $agent,
         private MakerCheckerService $makerChecker,
-    ) {
-    }
+    ) {}
 
     // ── Index ──────────────────────────────────────────────────────────────────
 
@@ -34,9 +33,9 @@ class TenderController extends Controller
         if ($search = $request->get('search')) {
             $query->where(
                 fn ($q) => $q
-                ->where('title', 'like', "%{$search}%")
-                ->orWhere('issuer', 'like', "%{$search}%")
-                ->orWhere('reference_number', 'like', "%{$search}%")
+                    ->where('title', 'like', "%{$search}%")
+                    ->orWhere('issuer', 'like', "%{$search}%")
+                    ->orWhere('reference_number', 'like', "%{$search}%")
             );
         }
 
@@ -50,20 +49,20 @@ class TenderController extends Controller
             'data' => $paginator->items(),
             'meta' => [
                 'current_page' => $paginator->currentPage(),
-                'last_page'    => $paginator->lastPage(),
-                'per_page'     => $paginator->perPage(),
-                'total'        => $paginator->total(),
-                'from'         => $paginator->firstItem(),
-                'to'           => $paginator->lastItem(),
+                'last_page' => $paginator->lastPage(),
+                'per_page' => $paginator->perPage(),
+                'total' => $paginator->total(),
+                'from' => $paginator->firstItem(),
+                'to' => $paginator->lastItem(),
             ],
         ];
 
         $counts = [
             'reviewing' => Tender::where('owner_id', Auth::id())->where('status', 'reviewing')->count(),
-            'drafting'  => Tender::where('owner_id', Auth::id())->where('status', 'drafting')->count(),
+            'drafting' => Tender::where('owner_id', Auth::id())->where('status', 'drafting')->count(),
             'submitted' => Tender::where('owner_id', Auth::id())->where('status', 'submitted')->count(),
-            'won'       => Tender::where('owner_id', Auth::id())->where('status', 'won')->count(),
-            'lost'      => Tender::where('owner_id', Auth::id())->where('status', 'lost')->count(),
+            'won' => Tender::where('owner_id', Auth::id())->where('status', 'won')->count(),
+            'lost' => Tender::where('owner_id', Auth::id())->where('status', 'lost')->count(),
         ];
 
         $urgentCount = Tender::where('owner_id', Auth::id())
@@ -94,38 +93,38 @@ class TenderController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'               => 'required|string|max:255',
-            'issuer'              => 'nullable|string|max:255',
-            'reference_number'    => 'nullable|string|max:100',
+            'title' => 'required|string|max:255',
+            'issuer' => 'nullable|string|max:255',
+            'reference_number' => 'nullable|string|max:100',
             'submission_deadline' => 'nullable|date',
-            'estimated_value'     => 'nullable|numeric|min:0',
-            'currency'            => 'nullable|string|size:3',
-            'notes'               => 'nullable|string',
-            'document'            => 'nullable|file|mimes:pdf,txt,doc,docx,md|max:20480',
+            'estimated_value' => 'nullable|numeric|min:0',
+            'currency' => 'nullable|string|size:3',
+            'notes' => 'nullable|string',
+            'document' => 'nullable|file|mimes:pdf,txt,doc,docx,md|max:20480',
         ]);
 
         $documentPath = null;
         $documentName = null;
         if ($request->hasFile('document')) {
-            $file         = $request->file('document');
-            $documentPath = $file->store('tenders/' . Auth::id(), 'private');
+            $file = $request->file('document');
+            $documentPath = $file->store('tenders/'.Auth::id(), 'private');
             $documentName = $file->getClientOriginalName();
         }
 
         $tender = Tender::create([
-            'owner_id'            => Auth::id(),
-            'title'               => $data['title'],
-            'issuer'              => $data['issuer'] ?? null,
-            'reference_number'    => $data['reference_number'] ?? null,
+            'owner_id' => Auth::id(),
+            'title' => $data['title'],
+            'issuer' => $data['issuer'] ?? null,
+            'reference_number' => $data['reference_number'] ?? null,
             'submission_deadline' => $data['submission_deadline'] ?? null,
-            'estimated_value'     => $data['estimated_value'] ?? null,
-            'currency'            => $data['currency'] ?? CompanySetting::current()->default_currency,
-            'notes'               => $data['notes'] ?? null,
-            'document_path'       => $documentPath,
-            'document_name'       => $documentName,
-            'analysis_status'     => $documentPath ? 'pending' : null,
-            'status'              => 'reviewing',
-            'approval_status'     => 'not_required',
+            'estimated_value' => $data['estimated_value'] ?? null,
+            'currency' => $data['currency'] ?? CompanySetting::current()->default_currency,
+            'notes' => $data['notes'] ?? null,
+            'document_path' => $documentPath,
+            'document_name' => $documentName,
+            'analysis_status' => $documentPath ? 'pending' : null,
+            'status' => 'reviewing',
+            'approval_status' => 'not_required',
         ]);
 
         // Analysis runs several sequential AI calls — dispatch to the queue so the
@@ -147,14 +146,14 @@ class TenderController extends Controller
         $tender->load(['lead:id,title,status', 'opportunity:id,title,stage', 'project:id,name,status',
             'submitter:id,name', 'approver:id,name']);
 
-        $pendingApproval   = $tender->approvalRequests()->where('status', 'pending')->first();
+        $pendingApproval = $tender->approvalRequests()->where('status', 'pending')->first();
         $makerCheckerActive = CompanySetting::current()->makerCheckerEnabledFor('tenders');
 
         return Inertia::render('tenders/show', [
-            'tender'             => $tender,
-            'pendingApproval'    => $pendingApproval,
+            'tender' => $tender,
+            'pendingApproval' => $pendingApproval,
             'makerCheckerActive' => $makerCheckerActive,
-            'canApprove'         => $pendingApproval
+            'canApprove' => $pendingApproval
                 ? $this->makerChecker->canApprove(Auth::user(), $pendingApproval)
                 : false,
         ]);
@@ -166,14 +165,14 @@ class TenderController extends Controller
     {
         $this->authorize('update', $tender);
         $tender->update($request->validate([
-            'title'               => 'sometimes|required|string|max:255',
-            'issuer'              => 'nullable|string|max:255',
-            'reference_number'    => 'nullable|string|max:100',
+            'title' => 'sometimes|required|string|max:255',
+            'issuer' => 'nullable|string|max:255',
+            'reference_number' => 'nullable|string|max:100',
             'submission_deadline' => 'nullable|date',
-            'estimated_value'     => 'nullable|numeric',
-            'currency'            => 'nullable|string|size:3',
-            'notes'               => 'nullable|string',
-            'status'              => 'nullable|in:reviewing,drafting,submitted,won,lost,withdrawn',
+            'estimated_value' => 'nullable|numeric',
+            'currency' => 'nullable|string|size:3',
+            'notes' => 'nullable|string',
+            'status' => 'nullable|in:reviewing,drafting,submitted,won,lost,withdrawn',
         ]));
 
         return back()->with('success', 'Tender updated.');
@@ -186,6 +185,7 @@ class TenderController extends Controller
             Storage::disk('private')->delete($tender->document_path);
         }
         $tender->delete();
+
         return redirect()->route('web.tenders.index')->with('success', 'Tender removed.');
     }
 
@@ -254,6 +254,7 @@ class TenderController extends Controller
         $this->authorize('update', $tender);
         $tender->update(['analysis_status' => 'pending']);
         AnalyzeTenderJob::dispatch($tender);
+
         return back()->with('success', 'Re-analysis started — this runs in the background.');
     }
 
@@ -262,6 +263,7 @@ class TenderController extends Controller
         $this->authorize('update', $tender);
         $request->validate(['type' => 'required|string', 'additional_context' => 'nullable|string']);
         $doc = $this->agent->generateDocument($tender, $request->input('type'), $request->input('additional_context'));
+
         return response()->json(['success' => true, 'document' => $doc]);
     }
 
@@ -270,6 +272,7 @@ class TenderController extends Controller
         $this->authorize('update', $tender);
         $request->validate(['message' => 'required|string|max:2000']);
         $response = $this->agent->chat($tender, $request->input('message'));
+
         return response()->json(['response' => $response]);
     }
 
@@ -278,6 +281,7 @@ class TenderController extends Controller
         $this->authorize('update', $tender);
         $request->validate(['gap_index' => 'required|integer|min:0', 'answer' => 'required|string']);
         $this->agent->answerGap($tender, $request->integer('gap_index'), $request->input('answer'));
+
         return response()->json(['success' => true, 'gaps' => $tender->fresh()->information_gaps]);
     }
 
@@ -286,6 +290,7 @@ class TenderController extends Controller
         $this->authorize('update', $tender);
         $request->validate(['item_index' => 'required|integer|min:0', 'done' => 'required|boolean']);
         $this->agent->toggleChecklistItem($tender, $request->integer('item_index'), $request->boolean('done'));
+
         return response()->json(['success' => true, 'checklist' => $tender->fresh()->checklist]);
     }
 
@@ -300,6 +305,7 @@ class TenderController extends Controller
         }
 
         $tender->update(['status' => 'submitted', 'submitted_at' => now()->toDateString()]);
+
         return back()->with('success', 'Tender marked as submitted.');
     }
 
@@ -307,14 +313,16 @@ class TenderController extends Controller
     {
         $this->authorize('update', $tender);
         $tender->update(['status' => 'won']);
+
         return back()->with('success', 'Congratulations! Tender marked as won.');
     }
 
     public function markLost(Request $request, Tender $tender)
     {
         $this->authorize('update', $tender);
-        $notes = $tender->notes ? $tender->notes . "\n\nLost reason: " . $request->input('reason', '') : 'Lost reason: ' . $request->input('reason', '');
+        $notes = $tender->notes ? $tender->notes."\n\nLost reason: ".$request->input('reason', '') : 'Lost reason: '.$request->input('reason', '');
         $tender->update(['status' => 'lost', 'notes' => $notes]);
+
         return back()->with('success', 'Tender marked as lost.');
     }
 
@@ -328,6 +336,7 @@ class TenderController extends Controller
             return response()->json(['error' => 'Project already created.'], 422);
         }
         $project = $this->agent->convertToProject($tender, $request->only('client_id'));
+
         return response()->json(['success' => true, 'project_id' => $project->id, 'project_url' => route('web.projects.show', $project)]);
     }
 
@@ -338,6 +347,7 @@ class TenderController extends Controller
             return response()->json(['error' => 'Lead already created.'], 422);
         }
         $result = $this->agent->createLeadAndOpportunity($tender);
+
         return response()->json(['success' => true, 'lead_id' => $result['lead']->id, 'opportunity_id' => $result['opportunity']->id, 'lead_url' => route('web.leads.show', $result['lead'])]);
     }
 }

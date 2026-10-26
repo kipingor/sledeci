@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Rfp extends Model
 {
@@ -23,25 +23,48 @@ class Rfp extends Model
     ];
 
     protected $casts = [
-        'issue_date'             => 'date',
-        'submission_deadline'    => 'date',
-        'award_date'             => 'date',
-        'approval_requested_at'  => 'datetime',
-        'approved_at'            => 'datetime',
-        'budget'                 => 'decimal:2',
-        'requirements'           => 'array',
-        'evaluation_criteria'    => 'array',
-        'metadata'               => 'array',
+        'issue_date' => 'date',
+        'submission_deadline' => 'date',
+        'award_date' => 'date',
+        'approval_requested_at' => 'datetime',
+        'approved_at' => 'datetime',
+        'budget' => 'decimal:2',
+        'requirements' => 'array',
+        'evaluation_criteria' => 'array',
+        'metadata' => 'array',
     ];
 
     // ── Relationships ──────────────────────────────────────────────────────────
 
-    public function owner(): BelongsTo        { return $this->belongsTo(User::class, 'owner_id'); }
-    public function lead(): BelongsTo         { return $this->belongsTo(Lead::class); }
-    public function opportunity(): BelongsTo  { return $this->belongsTo(Opportunity::class); }
-    public function project(): BelongsTo      { return $this->belongsTo(Project::class); }
-    public function submitter(): BelongsTo    { return $this->belongsTo(User::class, 'submitted_by'); }
-    public function approver(): BelongsTo     { return $this->belongsTo(User::class, 'approved_by'); }
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    public function lead(): BelongsTo
+    {
+        return $this->belongsTo(Lead::class);
+    }
+
+    public function opportunity(): BelongsTo
+    {
+        return $this->belongsTo(Opportunity::class);
+    }
+
+    public function project(): BelongsTo
+    {
+        return $this->belongsTo(Project::class);
+    }
+
+    public function submitter(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'submitted_by');
+    }
+
+    public function approver(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
 
     public function approvalRequests(): MorphMany
     {
@@ -57,7 +80,10 @@ class Rfp extends Model
 
     public function daysUntilDeadline(): ?int
     {
-        if (! $this->submission_deadline) return null;
+        if (! $this->submission_deadline) {
+            return null;
+        }
+
         return (int) now()->startOfDay()->diffInDays($this->submission_deadline, false);
     }
 
@@ -70,6 +96,7 @@ class Rfp extends Model
     public function needsApprovalToPublish(): bool
     {
         $settings = CompanySetting::current();
+
         return $settings->makerCheckerEnabledFor('rfp')
             && $this->approval_status !== 'approved';
     }

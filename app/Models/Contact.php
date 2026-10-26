@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Contact extends Model
 {
@@ -21,12 +21,12 @@ class Contact extends Model
     ];
 
     protected $casts = [
-        'met_at'                => 'date',
-        'last_contact_at'       => 'datetime',
-        'next_follow_up_at'     => 'datetime',
-        'key_topics'            => 'array',
+        'met_at' => 'date',
+        'last_contact_at' => 'datetime',
+        'next_follow_up_at' => 'datetime',
+        'key_topics' => 'array',
         'ai_follow_up_schedule' => 'array',
-        'ai_context_summary'    => 'array',
+        'ai_context_summary' => 'array',
     ];
 
     public function owner(): BelongsTo

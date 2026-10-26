@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\JournalEntry;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Sledeci\Accounting\Models\JournalEntry;
 
 /**
  * @extends Factory<JournalEntry>

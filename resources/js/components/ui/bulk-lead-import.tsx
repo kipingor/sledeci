@@ -20,7 +20,7 @@ import {
     Info,
 } from 'lucide-react';
 import { router } from '@inertiajs/react';
-import { route } from 'ziggy-js';
+import * as leadRoutes from '@/routes/web/leads';
 import { useToast } from '@/hooks/use-toast';
 
 interface ImportResult {
@@ -99,7 +99,7 @@ export function BulkLeadImport({ onComplete }: BulkLeadImportProps) {
             // Make the actual upload request
             await new Promise<void>((resolve, reject) => {
                 router.post(
-                    route('web.leads.import'),
+                    leadRoutes.bulkImport().url,
                     formData,
                     {
                         forceFormData: true,

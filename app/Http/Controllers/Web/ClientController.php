@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\ClientFollowUp;
+use App\Models\Invoice;
 use App\Models\Lead;
 use App\Models\Opportunity;
-use App\Models\Invoice;
 use App\Models\Project;
-use App\Models\ClientFollowUp;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -25,8 +25,8 @@ class ClientController extends Controller
         if ($search = $request->get('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('company', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('company', 'like', "%{$search}%");
             });
         }
 
@@ -37,9 +37,9 @@ class ClientController extends Controller
             ->withQueryString();
 
         $stats = [
-            'total'     => User::where('is_client', true)->count(),
+            'total' => User::where('is_client', true)->count(),
             'new_month' => User::where('is_client', true)->whereMonth('client_since', now()->month)->count(),
-            'active'    => User::where('is_client', true)->whereHas('projects', fn($q) => $q->where('status', 'active'))->count(),
+            'active' => User::where('is_client', true)->whereHas('projects', fn ($q) => $q->where('status', 'active'))->count(),
         ];
 
         return Inertia::render('clients/index', compact('clients', 'stats'));
@@ -56,12 +56,12 @@ class ClientController extends Controller
             if ($lead) {
                 $meta = $lead->metadata ?? [];
                 $prefill = [
-                    'name'       => $meta['contact_name'] ?? '',
-                    'email'      => $meta['contact_email'] ?? $meta['email'] ?? '',
-                    'phone'      => $meta['contact_phone'] ?? $meta['phone'] ?? '',
-                    'company'    => $meta['company_name'] ?? $meta['company'] ?? '',
-                    'notes'      => $lead->description,
-                    '_lead_id'   => $leadId,
+                    'name' => $meta['contact_name'] ?? '',
+                    'email' => $meta['contact_email'] ?? $meta['email'] ?? '',
+                    'phone' => $meta['contact_phone'] ?? $meta['phone'] ?? '',
+                    'company' => $meta['company_name'] ?? $meta['company'] ?? '',
+                    'notes' => $lead->description,
+                    '_lead_id' => $leadId,
                 ];
             }
         }
@@ -69,9 +69,9 @@ class ClientController extends Controller
             $opp = Opportunity::find($oppId);
             if ($opp) {
                 $prefill = array_merge($prefill, [
-                    'name'    => $opp->contact_name ?? '',
-                    'email'   => $opp->contact_email ?? '',
-                    'phone'   => $opp->contact_phone ?? '',
+                    'name' => $opp->contact_name ?? '',
+                    'email' => $opp->contact_email ?? '',
+                    'phone' => $opp->contact_phone ?? '',
                     '_opportunity_id' => $oppId,
                 ]);
             }
@@ -85,35 +85,35 @@ class ClientController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name'           => 'required|string|max:255',
-            'email'          => 'required|email|unique:users,email',
-            'phone'          => 'nullable|string|max:50',
-            'company'        => 'nullable|string|max:255',
-            'address'        => 'nullable|string',
-            'notes'          => 'nullable|string',
-            'client_since'   => 'nullable|date',
-            '_lead_id'       => 'nullable|exists:leads,id',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'phone' => 'nullable|string|max:50',
+            'company' => 'nullable|string|max:255',
+            'address' => 'nullable|string',
+            'notes' => 'nullable|string',
+            'client_since' => 'nullable|date',
+            '_lead_id' => 'nullable|exists:leads,id',
             '_opportunity_id' => 'nullable|exists:opportunities,id',
         ]);
 
         $client = DB::transaction(function () use ($data) {
             $client = User::create([
-                'name'         => $data['name'],
-                'email'        => $data['email'],
-                'phone'        => $data['phone'] ?? null,
-                'company'      => $data['company'] ?? null,
-                'address'      => $data['address'] ?? null,
-                'notes'        => $data['notes'] ?? null,
-                'is_client'    => true,
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'phone' => $data['phone'] ?? null,
+                'company' => $data['company'] ?? null,
+                'address' => $data['address'] ?? null,
+                'notes' => $data['notes'] ?? null,
+                'is_client' => true,
                 'client_since' => $data['client_since'] ?? now()->toDateString(),
-                'password'     => bcrypt(Str::random(16)), // unusable password
+                'password' => bcrypt(Str::random(16)), // unusable password
             ]);
 
             // Link back to lead/opportunity
-            if (!empty($data['_lead_id'])) {
+            if (! empty($data['_lead_id'])) {
                 Lead::where('id', $data['_lead_id'])->update(['client_id' => $client->id]);
             }
-            if (!empty($data['_opportunity_id'])) {
+            if (! empty($data['_opportunity_id'])) {
                 Opportunity::where('id', $data['_opportunity_id'])->update(['client_id' => $client->id]);
             }
 
@@ -154,10 +154,10 @@ class ClientController extends Controller
             ->limit(5)->get();
 
         $financials = [
-            'total_billed'    => Invoice::where('client_id', $client->id)->whereNotIn('status', ['draft', 'cancelled'])->sum('total'),
+            'total_billed' => Invoice::where('client_id', $client->id)->whereNotIn('status', ['draft', 'cancelled'])->sum('total'),
             'total_collected' => Invoice::where('client_id', $client->id)->join('payments', 'invoices.id', 'payments.invoice_id')->sum('payments.amount'),
-            'total_overdue'   => Invoice::where('client_id', $client->id)->where('status', 'overdue')->sum('total'),
-            'projects_count'  => Project::where('client_id', $client->id)->count(),
+            'total_overdue' => Invoice::where('client_id', $client->id)->where('status', 'overdue')->sum('total'),
+            'projects_count' => Project::where('client_id', $client->id)->count(),
         ];
 
         return Inertia::render('clients/show', compact(
@@ -170,6 +170,7 @@ class ClientController extends Controller
     public function edit(User $client)
     {
         abort_unless($client->is_client, 404);
+
         return Inertia::render('clients/edit', compact('client'));
     }
 
@@ -178,12 +179,12 @@ class ClientController extends Controller
         abort_unless($client->is_client, 404);
 
         $data = $request->validate([
-            'name'         => 'required|string|max:255',
-            'email'        => "required|email|unique:users,email,{$client->id}",
-            'phone'        => 'nullable|string|max:50',
-            'company'      => 'nullable|string|max:255',
-            'address'      => 'nullable|string',
-            'notes'        => 'nullable|string',
+            'name' => 'required|string|max:255',
+            'email' => "required|email|unique:users,email,{$client->id}",
+            'phone' => 'nullable|string|max:50',
+            'company' => 'nullable|string|max:255',
+            'address' => 'nullable|string',
+            'notes' => 'nullable|string',
             'client_since' => 'nullable|date',
         ]);
 
@@ -202,13 +203,13 @@ class ClientController extends Controller
             return redirect()->route('web.clients.show', $lead->client_id);
         }
 
-        $meta    = $lead->metadata ?? [];
+        $meta = $lead->metadata ?? [];
         $prefill = [
-            'name'     => $meta['contact_name'] ?? '',
-            'email'    => $meta['contact_email'] ?? $meta['email'] ?? '',
-            'phone'    => $meta['contact_phone'] ?? $meta['phone'] ?? '',
-            'company'  => $meta['company_name'] ?? $meta['company'] ?? '',
-            'notes'    => $lead->description,
+            'name' => $meta['contact_name'] ?? '',
+            'email' => $meta['contact_email'] ?? $meta['email'] ?? '',
+            'phone' => $meta['contact_phone'] ?? $meta['phone'] ?? '',
+            'company' => $meta['company_name'] ?? $meta['company'] ?? '',
+            'notes' => $lead->description,
             '_lead_id' => $lead->id,
         ];
 
@@ -222,9 +223,9 @@ class ClientController extends Controller
         }
 
         $prefill = [
-            'name'    => $opportunity->contact_name ?? '',
-            'email'   => $opportunity->contact_email ?? '',
-            'phone'   => $opportunity->contact_phone ?? '',
+            'name' => $opportunity->contact_name ?? '',
+            'email' => $opportunity->contact_email ?? '',
+            'phone' => $opportunity->contact_phone ?? '',
             '_opportunity_id' => $opportunity->id,
         ];
 
@@ -238,6 +239,7 @@ class ClientController extends Controller
         abort_unless($client->is_client, 404);
         // Just unflag — don't delete the user record
         $client->update(['is_client' => false]);
+
         return redirect()->route('web.clients.index')
             ->with('success', 'Client removed from CRM.');
     }
