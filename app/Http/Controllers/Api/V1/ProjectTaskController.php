@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\ProjectTaskResource;
 use App\Models\Task;
-use Illuminate\Http\JsonResponse;
+use App\Http\Resources\ProjectTaskResource;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 /**
  * FIX: update() used $request->all() — mass-assignment risk, no validation.
@@ -21,7 +21,7 @@ class ProjectTaskController extends Controller
     {
         $tasks = Task::with(['project:id,name', 'assignee:id,name,avatar'])
             ->when($request->filled('project_id'), fn ($q) => $q->where('project_id', $request->project_id))
-            ->when($request->filled('status'), fn ($q) => $q->where('status', $request->status))
+            ->when($request->filled('status'),     fn ($q) => $q->where('status', $request->status))
             ->paginate(20);
 
         return response()->json(ProjectTaskResource::collection($tasks));
@@ -30,16 +30,16 @@ class ProjectTaskController extends Controller
     public function store(Request $request): JsonResponse
     {
         $data = $request->validate([
-            'project_id' => ['required', 'exists:projects,id'],
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'assigned_to' => ['nullable', 'exists:users,id'],
-            'priority' => ['nullable', 'string', 'in:low,medium,high,critical'],
-            'status' => ['nullable', 'string'],
-            'estimated_hours' => ['nullable', 'numeric', 'min:0'],
-            'due_date' => ['nullable', 'date'],
-            'wbs_code' => ['nullable', 'string', 'max:50'],
-            'parent_id' => ['nullable', 'exists:tasks,id'],
+            'project_id'       => ['required', 'exists:projects,id'],
+            'title'            => ['required', 'string', 'max:255'],
+            'description'      => ['nullable', 'string'],
+            'assigned_to'      => ['nullable', 'exists:users,id'],
+            'priority'         => ['nullable', 'string', 'in:low,medium,high,critical'],
+            'status'           => ['nullable', 'string'],
+            'estimated_hours'  => ['nullable', 'numeric', 'min:0'],
+            'due_date'         => ['nullable', 'date'],
+            'wbs_code'         => ['nullable', 'string', 'max:50'],
+            'parent_id'        => ['nullable', 'exists:tasks,id'],
         ]);
 
         return response()->json(new ProjectTaskResource(Task::create($data)), 201);
@@ -56,19 +56,19 @@ class ProjectTaskController extends Controller
     {
         // FIX: was $request->all() — no validation, mass-assignment risk
         $task->update($request->validate([
-            'title' => ['sometimes', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'assigned_to' => ['nullable', 'exists:users,id'],
-            'priority' => ['nullable', 'string', 'in:low,medium,high,critical'],
-            'status' => ['nullable', 'string'],
+            'title'           => ['sometimes', 'string', 'max:255'],
+            'description'     => ['nullable', 'string'],
+            'assigned_to'     => ['nullable', 'exists:users,id'],
+            'priority'        => ['nullable', 'string', 'in:low,medium,high,critical'],
+            'status'          => ['nullable', 'string'],
             'estimated_hours' => ['nullable', 'numeric', 'min:0'],
-            'spent_hours' => ['nullable', 'numeric', 'min:0'],
-            'due_date' => ['nullable', 'date'],
-            'completed_at' => ['nullable', 'date'],
-            'wbs_code' => ['nullable', 'string', 'max:50'],
-            'sort_order' => ['nullable', 'integer'],
-            'delay_reason' => ['nullable', 'string'],
-            'mitigation' => ['nullable', 'string'],
+            'spent_hours'     => ['nullable', 'numeric', 'min:0'],
+            'due_date'        => ['nullable', 'date'],
+            'completed_at'    => ['nullable', 'date'],
+            'wbs_code'        => ['nullable', 'string', 'max:50'],
+            'sort_order'      => ['nullable', 'integer'],
+            'delay_reason'    => ['nullable', 'string'],
+            'mitigation'      => ['nullable', 'string'],
         ]));
 
         return response()->json(new ProjectTaskResource($task->fresh()));
@@ -77,7 +77,6 @@ class ProjectTaskController extends Controller
     public function destroy(Task $task): JsonResponse
     {
         $task->delete();
-
         return response()->json(null, 204);
     }
 }

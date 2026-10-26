@@ -1,0 +1,27 @@
+{
+    "name": "sledeci/kenya-payments",
+    "description": "Mobile-money collections for the Sledeci suite: M-Pesa (STK push, C2B), Airtel Money and MTN MoMo, with webhook handling.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "sledeci/core": "^0.1 || @dev",
+        "sledeci/accounting": "^0.1 || @dev"
+    },
+    "suggest": {
+        "sledeci/pos": "Take M-Pesa payments at the till."
+    },
+    "autoload": {
+        "psr-4": {
+            "Sledeci\\KenyaPayments\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Sledeci\\KenyaPayments\\KenyaPaymentsServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable"
+}

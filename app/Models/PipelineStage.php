@@ -2,10 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PipelineStage extends Model
 {
@@ -42,7 +40,7 @@ class PipelineStage extends Model
     /**
      * Get all leads in this pipeline stage.
      *
-     * @return HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function leads()
     {
@@ -52,8 +50,8 @@ class PipelineStage extends Model
     /**
      * Scope a query to order stages by their order field.
      *
-     * @param  Builder  $query
-     * @return Builder
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeOrdered($query)
     {
@@ -63,8 +61,9 @@ class PipelineStage extends Model
     /**
      * Scope a query to find a stage by its key.
      *
-     * @param  Builder  $query
-     * @return Builder
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $key
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeByKey($query, string $key)
     {

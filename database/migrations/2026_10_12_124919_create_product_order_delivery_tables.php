@@ -45,7 +45,7 @@ return new class extends Migration
             $table->foreignId('project_id')->nullable()->constrained('projects')->nullOnDelete();
             $table->foreignId('client_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
-            $table->enum('status', ['draft', 'sent', 'confirmed', 'partially_delivered', 'delivered', 'cancelled'])->default('draft');
+            $table->enum('status', ['draft','sent','confirmed','partially_delivered','delivered','cancelled'])->default('draft');
             $table->date('order_date')->nullable();
             $table->date('expected_delivery_date')->nullable();
             $table->string('currency', 10)->default('USD');
@@ -69,7 +69,7 @@ return new class extends Migration
             $table->foreignId('client_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('received_by')->nullable()->constrained('users')->nullOnDelete();
             $table->string('number')->nullable();
-            $table->enum('status', ['pending', 'in_transit', 'delivered', 'partial', 'rejected'])->default('pending');
+            $table->enum('status', ['pending','in_transit','delivered','partial','rejected'])->default('pending');
             $table->string('carrier')->nullable();        // delivery company name
             $table->string('tracking_number')->nullable();
             $table->string('tracking_url')->nullable();
@@ -101,7 +101,7 @@ return new class extends Migration
             $table->string('file_name')->nullable();
             $table->string('mime_type')->nullable();
             $table->bigInteger('file_size')->nullable();
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->enum('status', ['pending','approved','rejected'])->default('pending');
             $table->text('notes')->nullable();
             $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamp('approved_at')->nullable();

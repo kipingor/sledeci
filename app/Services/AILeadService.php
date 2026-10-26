@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Cache;
 
 /**
  * AI Service for Lead Intelligence
- *
+ * 
  * This service provides AI-powered insights for leads including:
  * - Lead scoring
  * - Next best action recommendations
@@ -25,7 +25,7 @@ class AILeadService
         return Cache::remember(
             "lead_insights_{$lead->id}",
             3600,
-            fn () => $this->computeInsights($lead)
+            fn() => $this->computeInsights($lead)
         );
     }
 
@@ -104,7 +104,7 @@ class AILeadService
             $factors[] = [
                 'name' => 'Deal Size',
                 'impact' => $budgetScore,
-                'value' => '$'.number_format($lead->estimated_value),
+                'value' => '$' . number_format($lead->estimated_value),
             ];
         }
 
@@ -163,7 +163,7 @@ class AILeadService
         }
 
         // Action based on time since last contact
-        $daysSinceContact = $lead->last_contacted_at
+        $daysSinceContact = $lead->last_contacted_at 
             ? $lead->last_contacted_at->diffInDays(now())
             : 999;
 
@@ -171,7 +171,7 @@ class AILeadService
             $actions[] = [
                 'action' => 'Send Follow-up Email',
                 'priority' => 2,
-                'reasoning' => 'It\'s been '.$daysSinceContact.' days since last contact',
+                'reasoning' => 'It\'s been ' . $daysSinceContact . ' days since last contact',
                 'estimated_impact' => 25,
             ];
         }
@@ -221,8 +221,8 @@ class AILeadService
 
         // Find leads with similar characteristics
         $similar = $query
-            ->when($lead->source, fn ($q) => $q->where('source', $lead->source))
-            ->when($lead->company_size, fn ($q) => $q->where('company_size', $lead->company_size))
+            ->when($lead->source, fn($q) => $q->where('source', $lead->source))
+            ->when($lead->company_size, fn($q) => $q->where('company_size', $lead->company_size))
             ->limit(5)
             ->get();
 
@@ -301,7 +301,7 @@ class AILeadService
         }
 
         // Risk: No decision maker contact
-        if (! $lead->decision_maker_identified) {
+        if (!$lead->decision_maker_identified) {
             $risks[] = [
                 'factor' => 'Decision Maker Not Identified',
                 'severity' => 'high',
@@ -342,7 +342,7 @@ class AILeadService
         if (count($relatedProducts) > 0) {
             $insights[] = [
                 'insight' => 'Cross-sell Opportunity',
-                'value' => 'Interest shown in '.implode(', ', $relatedProducts),
+                'value' => 'Interest shown in ' . implode(', ', $relatedProducts),
                 'actionable' => true,
             ];
         }
@@ -381,13 +381,8 @@ class AILeadService
      */
     private function getEngagementLabel(int $score): string
     {
-        if ($score >= 30) {
-            return 'High';
-        }
-        if ($score >= 15) {
-            return 'Medium';
-        }
-
+        if ($score >= 30) return 'High';
+        if ($score >= 15) return 'Medium';
         return 'Low';
     }
 
@@ -399,43 +394,28 @@ class AILeadService
             'medium' => 5,
             'small' => 0,
         ];
-
         return $scores[strtolower($size)] ?? 0;
     }
 
     private function getTimeInPipelineScore(Lead $lead): int
     {
         $days = $lead->created_at->diffInDays(now());
-
+        
         // Optimal: 7-30 days
-        if ($days >= 7 && $days <= 30) {
-            return 10;
-        }
+        if ($days >= 7 && $days <= 30) return 10;
         // Too new: 0-7 days
-        if ($days < 7) {
-            return 5;
-        }
+        if ($days < 7) return 5;
         // Getting stale: 30-60 days
-        if ($days <= 60) {
-            return -5;
-        }
-
+        if ($days <= 60) return -5;
         // Very stale: 60+ days
         return -15;
     }
 
     private function getBudgetScore(float $value): int
     {
-        if ($value >= 100000) {
-            return 20;
-        }
-        if ($value >= 50000) {
-            return 15;
-        }
-        if ($value >= 10000) {
-            return 10;
-        }
-
+        if ($value >= 100000) return 20;
+        if ($value >= 50000) return 15;
+        if ($value >= 10000) return 10;
         return 5;
     }
 
@@ -450,7 +430,7 @@ class AILeadService
         ];
 
         $filledFields = collect($fields)
-            ->filter(fn ($field) => ! empty($lead->$field))
+            ->filter(fn($field) => !empty($lead->$field))
             ->count();
 
         return $filledFields / count($fields);
@@ -458,13 +438,8 @@ class AILeadService
 
     private function getPrediction(int $score): string
     {
-        if ($score >= 80) {
-            return 'high';
-        }
-        if ($score >= 60) {
-            return 'medium';
-        }
-
+        if ($score >= 80) return 'high';
+        if ($score >= 60) return 'medium';
         return 'low';
     }
 

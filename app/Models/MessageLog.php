@@ -17,10 +17,10 @@ class MessageLog extends Model
     ];
 
     protected $casts = [
-        'cost' => 'decimal:6',
-        'sent_at' => 'datetime',
+        'cost'         => 'decimal:6',
+        'sent_at'      => 'datetime',
         'delivered_at' => 'datetime',
-        'read_at' => 'datetime',
+        'read_at'      => 'datetime',
     ];
 
     public function messageable(): MorphTo

@@ -26,8 +26,8 @@ return new class extends Migration
             $table->string('event_name')->nullable();
             $table->string('event_location')->nullable();
             $table->date('met_at')->nullable();
-            $table->enum('source', ['networking_event', 'conference', 'referral', 'cold_outreach', 'social_media', 'other'])
-                ->default('networking_event');
+            $table->enum('source', ['networking_event','conference','referral','cold_outreach','social_media','other'])
+                  ->default('networking_event');
 
             // What we discussed
             $table->text('talking_points')->nullable();  // raw user input
@@ -35,8 +35,8 @@ return new class extends Migration
             $table->text('notes')->nullable();           // private notes
 
             // Status tracking
-            $table->enum('status', ['new', 'email_sent', 'following_up', 'responded', 'converted', 'dropped'])
-                ->default('new');
+            $table->enum('status', ['new','email_sent','following_up','responded','converted','dropped'])
+                  ->default('new');
             $table->integer('follow_up_count')->default(0);
             $table->timestamp('last_contact_at')->nullable();
             $table->timestamp('next_follow_up_at')->nullable();
@@ -59,7 +59,7 @@ return new class extends Migration
             $table->integer('sequence')->default(1);
             $table->string('subject');
             $table->text('body');
-            $table->enum('status', ['scheduled', 'sent', 'replied', 'skipped'])->default('scheduled');
+            $table->enum('status', ['scheduled','sent','replied','skipped'])->default('scheduled');
             $table->timestamp('scheduled_at');
             $table->timestamp('sent_at')->nullable();
             $table->text('reply_notes')->nullable();

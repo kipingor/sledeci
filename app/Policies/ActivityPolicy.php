@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\Activity;
 use App\Models\User;
+use App\Models\Activity;
 
 class ActivityPolicy
 {
@@ -16,7 +16,7 @@ class ActivityPolicy
     {
         return $user->hasRole('admin') ||
                $activity->causer_id === $user->id ||
-               $activity->subject?->owner_id === $user->id ||
+               $activity->subject?->owner_id === $user->id  ||
                $user->hasRole('admin');
     }
 }

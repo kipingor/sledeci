@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use App\Enums\LeadDocumentStatus;
-use App\Policies\LeadDocumentPolicy;
-use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Policies\LeadDocumentPolicy;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
+use App\Enums\LeadDocumentStatus;
 
 #[UsePolicy(LeadDocumentPolicy::class)]
 class LeadDocument extends Model
@@ -120,7 +120,7 @@ class LeadDocument extends Model
     public function markAsFailed(?string $error = null): void
     {
         $metadata = $this->metadata ?? [];
-
+        
         if ($error) {
             $metadata['processing_error'] = $error;
             $metadata['processing_failed_at'] = now()->toISOString();

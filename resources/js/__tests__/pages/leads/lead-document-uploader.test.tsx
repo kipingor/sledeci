@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import LeadDocumentUploader from '@/pages/leads/lead-document-uploader';
-import { vi, describe, it, expect, beforeEach, afterEach } from 'vite-plus/test';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 class FakeXHR {
     public upload: any = {};

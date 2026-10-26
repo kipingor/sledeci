@@ -7,12 +7,9 @@ use App\Models\Opportunity;
 use App\Models\Project;
 use App\Models\Tender;
 use App\Services\AI\AiClientInterface;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use PhpOffice\PhpWord\IOFactory;
-use Smalot\PdfParser\Parser;
 
 class TenderAgentService
 {
@@ -37,35 +34,30 @@ class TenderAgentService
 
         try {
             $extracted = $this->extractStructuredData($docText, $tender);
-            $analysis = $this->buildStrategicAnalysis($docText, $extracted);
+            $analysis  = $this->buildStrategicAnalysis($docText, $extracted);
             $checklist = $this->buildChecklist($extracted);
-            $gaps = $this->identifyInformationGaps($docText, $extracted);
+            $gaps      = $this->identifyInformationGaps($docText, $extracted);
 
             // Back-fill fields from extracted data if not already set
             $updates = [
-                'extracted_data' => $extracted,
-                'ai_analysis' => $analysis,
-                'checklist' => $checklist,
+                'extracted_data'   => $extracted,
+                'ai_analysis'      => $analysis,
+                'checklist'        => $checklist,
                 'information_gaps' => $gaps,
-                'analysis_status' => 'completed',
+                'analysis_status'  => 'completed',
             ];
-            if (! $tender->issuer && ! empty($extracted['issuer'])) {
+            if (!$tender->issuer && !empty($extracted['issuer'])) {
                 $updates['issuer'] = $extracted['issuer'];
             }
-            if (! $tender->reference_number && ! empty($extracted['reference_number'])) {
+            if (!$tender->reference_number && !empty($extracted['reference_number'])) {
                 $updates['reference_number'] = $extracted['reference_number'];
             }
-            if (! $tender->submission_deadline && ! empty($extracted['submission_deadline'])) {
-                try {
-                    $updates['submission_deadline'] = Carbon::parse($extracted['submission_deadline'])->toDateString();
-                } catch (\Exception $e) {
-                }
+            if (!$tender->submission_deadline && !empty($extracted['submission_deadline'])) {
+                try { $updates['submission_deadline'] = \Carbon\Carbon::parse($extracted['submission_deadline'])->toDateString(); } catch (\Exception $e) {}
             }
-            if (! $tender->estimated_value && ! empty($extracted['estimated_budget'])) {
+            if (!$tender->estimated_value && !empty($extracted['estimated_budget'])) {
                 $val = preg_replace('/[^0-9.]/', '', (string) $extracted['estimated_budget']);
-                if ($val) {
-                    $updates['estimated_value'] = (float) $val;
-                }
+                if ($val) $updates['estimated_value'] = (float) $val;
             }
 
             $tender->update($updates);
@@ -84,20 +76,20 @@ class TenderAgentService
     public function generateDocument(Tender $tender, string $type, ?string $additionalContext = null): array
     {
         $labels = [
-            'cover_letter' => 'Cover Letter',
+            'cover_letter'         => 'Cover Letter',
             'capability_statement' => 'Capability Statement',
-            'compliance_matrix' => 'Compliance Matrix',
-            'executive_summary' => 'Executive Summary',
-            'methodology' => 'Proposed Methodology',
-            'pricing_schedule' => 'Pricing Schedule',
+            'compliance_matrix'    => 'Compliance Matrix',
+            'executive_summary'    => 'Executive Summary',
+            'methodology'          => 'Proposed Methodology',
+            'pricing_schedule'     => 'Pricing Schedule',
         ];
 
-        $label = $labels[$type] ?? ucwords(str_replace('_', ' ', $type));
+        $label         = $labels[$type] ?? ucwords(str_replace('_', ' ', $type));
         $extractedJson = json_encode($tender->extracted_data ?? [], JSON_PRETTY_PRINT);
-        $analysisJson = json_encode($tender->ai_analysis ?? [], JSON_PRETTY_PRINT);
-        $answeredGaps = $this->formatAnsweredGaps($tender);
+        $analysisJson  = json_encode($tender->ai_analysis ?? [], JSON_PRETTY_PRINT);
+        $answeredGaps  = $this->formatAnsweredGaps($tender);
 
-        $additionalInstructions = $additionalContext ? "Additional instructions:\n{$additionalContext}" : '';
+        $additionalInstructions = $additionalContext ? "Additional instructions:\n{$additionalContext}" : "";
         $prompt = <<<PROMPT
 You are an expert tender writer. Generate a professional {$label} for this bid.
 
@@ -126,14 +118,14 @@ PROMPT;
         $content = $this->ai->chat($prompt, ['max_tokens' => 2000, 'temperature' => 0.4]);
 
         $doc = [
-            'type' => $type,
-            'title' => $label,
-            'content' => $content,
+            'type'       => $type,
+            'title'      => $label,
+            'content'    => $content,
             'created_at' => now()->toISOString(),
         ];
 
         $docs = $tender->generated_documents ?? [];
-        $idx = array_search($type, array_column($docs, 'type'));
+        $idx  = array_search($type, array_column($docs, 'type'));
         if ($idx !== false) {
             $docs[$idx] = $doc;
         } else {
@@ -142,7 +134,7 @@ PROMPT;
 
         $tender->update([
             'generated_documents' => $docs,
-            'status' => $tender->status === 'reviewing' ? 'drafting' : $tender->status,
+            'status'              => $tender->status === 'reviewing' ? 'drafting' : $tender->status,
         ]);
 
         return $doc;
@@ -160,10 +152,10 @@ PROMPT;
 
         // Flatten into a single prompt with system context prepended
         // (uses the AiClientInterface single-string chat method)
-        $conversationText = $systemPrompt."\n\n---\n\n";
+        $conversationText = $systemPrompt . "\n\n---\n\n";
         foreach ($history as $msg) {
-            $prefix = strtoupper($msg['role'] ?? 'user').': ';
-            $conversationText .= $prefix.($msg['content'] ?? '')."\n\n";
+            $prefix           = strtoupper($msg['role'] ?? 'user') . ': ';
+            $conversationText .= $prefix . ($msg['content'] ?? '') . "\n\n";
         }
         $conversationText .= "USER: {$userMessage}\n\nASSISTANT:";
 
@@ -184,7 +176,7 @@ PROMPT;
     {
         $gaps = $tender->information_gaps ?? [];
         if (isset($gaps[$gapIndex])) {
-            $gaps[$gapIndex]['answer'] = $answer;
+            $gaps[$gapIndex]['answer']   = $answer;
             $gaps[$gapIndex]['resolved'] = true;
         }
         $tender->update(['information_gaps' => $gaps]);
@@ -210,21 +202,21 @@ PROMPT;
         $extracted = $tender->extracted_data ?? [];
 
         $project = Project::create([
-            'name' => $tender->title,
+            'name'        => $tender->title,
             'description' => implode("\n\n", array_filter([
                 $tender->ai_analysis['summary'] ?? null,
                 $tender->notes,
             ])),
-            'status' => 'active',
-            'owner_id' => $tender->owner_id,
-            'start_date' => now()->toDateString(),
-            'end_date' => $extracted['project_timeline']['end_date'] ?? null,
-            'budget' => $tender->estimated_value,
-            'metadata' => [
-                'source' => 'tender',
-                'tender_id' => $tender->id,
+            'status'      => 'active',
+            'owner_id'    => $tender->owner_id,
+            'start_date'  => now()->toDateString(),
+            'end_date'    => $extracted['project_timeline']['end_date'] ?? null,
+            'budget'      => $tender->estimated_value,
+            'metadata'    => [
+                'source'           => 'tender',
+                'tender_id'        => $tender->id,
                 'tender_reference' => $tender->reference_number,
-                'issuer' => $tender->issuer,
+                'issuer'           => $tender->issuer,
             ],
             ...$extra,
         ]);
@@ -240,33 +232,33 @@ PROMPT;
     public function createLeadAndOpportunity(Tender $tender): array
     {
         $lead = Lead::create([
-            'title' => "Tender: {$tender->title}",
+            'title'      => "Tender: {$tender->title}",
             'description' => $tender->ai_analysis['summary'] ?? $tender->notes ?? '',
-            'status' => 'new',
-            'type' => 'manual',
+            'status'     => 'new',
+            'type'       => 'manual',
             'created_by' => Auth::id(),
-            'owner_id' => $tender->owner_id,
-            'metadata' => ['source' => 'tender', 'tender_id' => $tender->id],
+            'owner_id'   => $tender->owner_id,
+            'metadata'   => ['source' => 'tender', 'tender_id' => $tender->id],
         ]);
 
         $opportunity = Opportunity::create([
-            'lead_id' => $lead->id,
-            'owner_id' => $tender->owner_id,
-            'title' => $tender->title,
-            'summary' => $tender->ai_analysis['summary'] ?? '',
+            'lead_id'         => $lead->id,
+            'owner_id'        => $tender->owner_id,
+            'title'           => $tender->title,
+            'summary'         => $tender->ai_analysis['summary'] ?? '',
             'estimated_value' => $tender->estimated_value,
-            'stage' => 'proposal',
-            'status' => 'open',
-            'metadata' => [
-                'source' => 'tender',
+            'stage'           => 'proposal',
+            'status'          => 'open',
+            'metadata'        => [
+                'source'    => 'tender',
                 'tender_id' => $tender->id,
-                'issuer' => $tender->issuer,
-                'deadline' => $tender->submission_deadline?->toDateString(),
+                'issuer'    => $tender->issuer,
+                'deadline'  => $tender->submission_deadline?->toDateString(),
             ],
         ]);
 
         $tender->update([
-            'lead_id' => $lead->id,
+            'lead_id'        => $lead->id,
             'opportunity_id' => $opportunity->id,
         ]);
 
@@ -277,29 +269,21 @@ PROMPT;
 
     private function readDocument(Tender $tender): string
     {
-        if (! $tender->document_path) {
-            return '';
-        }
+        if (!$tender->document_path) return '';
         try {
             $path = Storage::disk('private')->path($tender->document_path);
-            if (! file_exists($path)) {
-                return '';
-            }
+            if (!file_exists($path)) return '';
             $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
-            if (in_array($ext, ['txt', 'md'])) {
-                return file_get_contents($path);
+            if (in_array($ext, ['txt', 'md'])) return file_get_contents($path);
+            if ($ext === 'pdf' && class_exists(\Smalot\PdfParser\Parser::class)) {
+                return (new \Smalot\PdfParser\Parser())->parseFile($path)->getText();
             }
-            if ($ext === 'pdf' && class_exists(Parser::class)) {
-                return (new Parser)->parseFile($path)->getText();
-            }
-            if (in_array($ext, ['docx', 'doc']) && class_exists(IOFactory::class)) {
+            if (in_array($ext, ['docx', 'doc']) && class_exists(\PhpOffice\PhpWord\IOFactory::class)) {
                 return $this->readWordDocument($path, $ext);
             }
-
             return file_get_contents($path);
         } catch (\Exception $e) {
             Log::warning('TenderAgentService: read failed', ['error' => $e->getMessage()]);
-
             return '';
         }
     }
@@ -309,8 +293,8 @@ PROMPT;
      */
     private function readWordDocument(string $path, string $ext): string
     {
-        $reader = $ext === 'doc' ? 'MsDoc' : 'Word2007';
-        $phpWord = IOFactory::load($path, $reader);
+        $reader  = $ext === 'doc' ? 'MsDoc' : 'Word2007';
+        $phpWord = \PhpOffice\PhpWord\IOFactory::load($path, $reader);
 
         $lines = [];
         foreach ($phpWord->getSections() as $section) {
@@ -352,7 +336,7 @@ PROMPT;
             }
         }
 
-        return trim(implode(' ', array_filter($parts, fn ($p) => is_string($p) && $p !== '')));
+        return trim(implode(' ', array_filter($parts, fn($p) => is_string($p) && $p !== '')));
     }
 
     private function extractStructuredData(string $docText, Tender $tender): array
@@ -386,19 +370,16 @@ Return ONLY valid JSON.
 PROMPT;
 
         try {
-            $raw = $this->ai->chat($prompt, ['max_tokens' => 1200, 'temperature' => 0.2]);
-            $raw = preg_replace('/```json\s*|\s*```/', '', trim($raw));
+            $raw  = $this->ai->chat($prompt, ['max_tokens' => 1200, 'temperature' => 0.2]);
+            $raw  = preg_replace('/```json\s*|\s*```/', '', trim($raw));
             $data = json_decode($raw, true);
-
             return is_array($data) ? $data : [];
-        } catch (\Exception $e) {
-            return [];
-        }
+        } catch (\Exception $e) { return []; }
     }
 
     private function buildStrategicAnalysis(string $docText, array $extracted): array
     {
-        $json = json_encode($extracted, JSON_PRETTY_PRINT);
+        $json    = json_encode($extracted, JSON_PRETTY_PRINT);
         $snippet = mb_substr($docText, 0, 5000);
 
         $prompt = <<<PROMPT
@@ -425,22 +406,19 @@ Return ONLY valid JSON.
 PROMPT;
 
         try {
-            $raw = $this->ai->chat($prompt, ['max_tokens' => 800, 'temperature' => 0.4]);
-            $raw = preg_replace('/```json\s*|\s*```/', '', trim($raw));
+            $raw  = $this->ai->chat($prompt, ['max_tokens' => 800, 'temperature' => 0.4]);
+            $raw  = preg_replace('/```json\s*|\s*```/', '', trim($raw));
             $data = json_decode($raw, true);
-
             return is_array($data) ? $data : [];
-        } catch (\Exception $e) {
-            return [];
-        }
+        } catch (\Exception $e) { return []; }
     }
 
     private function buildChecklist(array $extracted): array
     {
         $requiredDocs = $extracted['required_documents'] ?? [];
-        $eligibility = $extracted['eligibility_requirements'] ?? [];
-        $docsJson = json_encode($requiredDocs);
-        $eligJson = json_encode($eligibility);
+        $eligibility  = $extracted['eligibility_requirements'] ?? [];
+        $docsJson     = json_encode($requiredDocs);
+        $eligJson     = json_encode($eligibility);
 
         $prompt = <<<PROMPT
 Create a comprehensive submission checklist for a tender bid.
@@ -456,19 +434,16 @@ Return ONLY valid JSON array.
 PROMPT;
 
         try {
-            $raw = $this->ai->chat($prompt, ['max_tokens' => 1000, 'temperature' => 0.2]);
-            $raw = preg_replace('/```json\s*|\s*```/', '', trim($raw));
+            $raw   = $this->ai->chat($prompt, ['max_tokens' => 1000, 'temperature' => 0.2]);
+            $raw   = preg_replace('/```json\s*|\s*```/', '', trim($raw));
             $items = json_decode($raw, true);
-
             return is_array($items) ? $items : $this->defaultChecklist();
-        } catch (\Exception $e) {
-            return $this->defaultChecklist();
-        }
+        } catch (\Exception $e) { return $this->defaultChecklist(); }
     }
 
     private function identifyInformationGaps(string $docText, array $extracted): array
     {
-        $json = json_encode($extracted, JSON_PRETTY_PRINT);
+        $json    = json_encode($extracted, JSON_PRETTY_PRINT);
         $snippet = mb_substr($docText, 0, 4000);
 
         $prompt = <<<PROMPT
@@ -488,22 +463,19 @@ Return ONLY valid JSON array.
 PROMPT;
 
         try {
-            $raw = $this->ai->chat($prompt, ['max_tokens' => 800, 'temperature' => 0.3]);
-            $raw = preg_replace('/```json\s*|\s*```/', '', trim($raw));
+            $raw  = $this->ai->chat($prompt, ['max_tokens' => 800, 'temperature' => 0.3]);
+            $raw  = preg_replace('/```json\s*|\s*```/', '', trim($raw));
             $data = json_decode($raw, true);
-
             return is_array($data) ? $data : [];
-        } catch (\Exception $e) {
-            return [];
-        }
+        } catch (\Exception $e) { return []; }
     }
 
     private function buildSystemPrompt(Tender $tender): string
     {
         $extracted = json_encode($tender->extracted_data ?? [], JSON_PRETTY_PRINT);
-        $analysis = json_encode($tender->ai_analysis ?? [], JSON_PRETTY_PRINT);
-        $progress = $tender->checklistProgress();
-        $gaps = $tender->unresolvedGaps();
+        $analysis  = json_encode($tender->ai_analysis ?? [], JSON_PRETTY_PRINT);
+        $progress  = $tender->checklistProgress();
+        $gaps      = $tender->unresolvedGaps();
 
         return <<<PROMPT
 You are an expert bid consultant and tender agent helping to WIN this tender.
@@ -534,13 +506,10 @@ PROMPT;
 
     private function formatAnsweredGaps(Tender $tender): string
     {
-        $answered = array_filter($tender->information_gaps ?? [], fn ($g) => $g['resolved'] ?? false);
-        if (empty($answered)) {
-            return '';
-        }
-        $lines = array_map(fn ($g) => "- {$g['question']}: {$g['answer']}", $answered);
-
-        return "Bidder information provided:\n".implode("\n", $lines);
+        $answered = array_filter($tender->information_gaps ?? [], fn($g) => $g['resolved'] ?? false);
+        if (empty($answered)) return '';
+        $lines = array_map(fn($g) => "- {$g['question']}: {$g['answer']}", $answered);
+        return "Bidder information provided:\n" . implode("\n", $lines);
     }
 
     private function defaultChecklist(): array
@@ -549,7 +518,7 @@ PROMPT;
             ['id' => 'cover_letter',        'category' => 'Documents',      'label' => 'Write cover letter',                     'done' => false, 'notes' => ''],
             ['id' => 'capability_statement', 'category' => 'Documents',      'label' => 'Prepare capability statement',            'done' => false, 'notes' => ''],
             ['id' => 'company_registration', 'category' => 'Compliance',     'label' => 'Attach company registration certificate', 'done' => false, 'notes' => ''],
-            ['id' => 'tax_clearance',        'category' => 'Compliance',     'label' => 'Obtain current tax clearance certificate', 'done' => false, 'notes' => ''],
+            ['id' => 'tax_clearance',        'category' => 'Compliance',     'label' => 'Obtain current tax clearance certificate','done' => false, 'notes' => ''],
             ['id' => 'case_studies',         'category' => 'Technical',      'label' => 'Prepare 3 relevant case studies',         'done' => false, 'notes' => ''],
             ['id' => 'pricing',              'category' => 'Financial',      'label' => 'Complete pricing schedule',               'done' => false, 'notes' => ''],
             ['id' => 'review',               'category' => 'Administrative', 'label' => 'Internal review and sign-off',            'done' => false, 'notes' => ''],

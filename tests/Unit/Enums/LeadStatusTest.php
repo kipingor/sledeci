@@ -127,7 +127,7 @@ class LeadStatusTest extends TestCase
     public function test_get_allowed_transitions_for_new(): void
     {
         $transitions = LeadStatus::NEW->getAllowedTransitions();
-
+        
         $this->assertCount(3, $transitions);
         $this->assertContains(LeadStatus::CONTACTED, $transitions);
         $this->assertContains(LeadStatus::LOST, $transitions);
@@ -140,7 +140,7 @@ class LeadStatusTest extends TestCase
     public function test_get_allowed_transitions_for_qualified(): void
     {
         $transitions = LeadStatus::QUALIFIED->getAllowedTransitions();
-
+        
         $this->assertCount(3, $transitions);
         $this->assertContains(LeadStatus::PROPOSAL_SENT, $transitions);
         $this->assertContains(LeadStatus::LOST, $transitions);
@@ -153,7 +153,7 @@ class LeadStatusTest extends TestCase
     public function test_get_allowed_transitions_for_archived(): void
     {
         $transitions = LeadStatus::ARCHIVED->getAllowedTransitions();
-
+        
         $this->assertCount(0, $transitions);
     }
 
@@ -180,7 +180,7 @@ class LeadStatusTest extends TestCase
         $this->assertTrue(LeadStatus::WON->isTerminal());
         $this->assertTrue(LeadStatus::LOST->isTerminal());
         $this->assertTrue(LeadStatus::ARCHIVED->isTerminal());
-
+        
         $this->assertFalse(LeadStatus::NEW->isTerminal());
         $this->assertFalse(LeadStatus::CONTACTED->isTerminal());
         $this->assertFalse(LeadStatus::QUALIFIED->isTerminal());
@@ -224,14 +224,14 @@ class LeadStatusTest extends TestCase
     public function test_active_statuses(): void
     {
         $active = LeadStatus::active();
-
+        
         $this->assertCount(5, $active);
         $this->assertContains(LeadStatus::NEW, $active);
         $this->assertContains(LeadStatus::CONTACTED, $active);
         $this->assertContains(LeadStatus::QUALIFIED, $active);
         $this->assertContains(LeadStatus::PROPOSAL_SENT, $active);
         $this->assertContains(LeadStatus::NEGOTIATION, $active);
-
+        
         $this->assertNotContains(LeadStatus::WON, $active);
         $this->assertNotContains(LeadStatus::LOST, $active);
         $this->assertNotContains(LeadStatus::ARCHIVED, $active);

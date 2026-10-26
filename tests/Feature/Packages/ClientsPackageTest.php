@@ -61,9 +61,9 @@ class ClientsPackageTest extends TestCase
         $this->actingAs($sales)->get('/clients')->assertOk();
     }
 
-    public function test_the_host_supplies_real_financial_data_and_core_falls_back_to_nothing(): void
+    public function test_accounting_supplies_the_financial_data_and_core_keeps_a_null_fallback(): void
     {
-        // The host binds the Eloquent implementation, overriding core's null fallback.
+        // Accounting binds the Eloquent implementation, overriding core's null fallback.
         $this->assertNotInstanceOf(NullClientFinancialSummary::class, $this->app->make(ClientFinancialSummary::class));
 
         $null = new NullClientFinancialSummary;

@@ -15,22 +15,22 @@ use Illuminate\Support\Str;
 class LeadDocumentService
 {
     /**
-     * @param  DocumentParserService|null  $parser  Reserved for future inline
-     *                                              text-extraction on upload. Not required by any method today —
-     *                                              kept optional so `new LeadDocumentService(new DocumentParserService())`
-     *                                              (as called from Api\V1\LeadDocumentController) keeps working.
+     * @param DocumentParserService|null $parser Reserved for future inline
+     *        text-extraction on upload. Not required by any method today —
+     *        kept optional so `new LeadDocumentService(new DocumentParserService())`
+     *        (as called from Api\V1\LeadDocumentController) keeps working.
      */
     public function __construct(private readonly ?DocumentParserService $parser = null) {}
 
     /**
      * Upload and store a lead document.
      *
-     * @param  array  $additionalData  Optional extra data; 'metadata' key merged into the record's metadata.
+     * @param array $additionalData Optional extra data; 'metadata' key merged into the record's metadata.
      */
     public function upload(Lead $lead, UploadedFile $file, array $additionalData = []): LeadDocument
     {
         return DB::transaction(function () use ($lead, $file, $additionalData) {
-            $path = $file->store('lead-documents/'.$lead->id, 'private');
+            $path = $file->store('lead-documents/' . $lead->id, 'private');
 
             $document = LeadDocument::create([
                 'lead_id' => $lead->id,
@@ -61,7 +61,7 @@ class LeadDocumentService
                 Storage::disk('private')->delete($document->storage_path);
             }
 
-            $path = $file->store('lead-documents/'.$document->lead_id, 'private');
+            $path = $file->store('lead-documents/' . $document->lead_id, 'private');
 
             $document->update([
                 'filename' => basename($path),
@@ -158,7 +158,7 @@ class LeadDocumentService
 
     public function getFileContents(LeadDocument $document): string
     {
-        if (! $this->fileExists($document)) {
+        if (!$this->fileExists($document)) {
             throw new \Exception('Document file not found');
         }
 
@@ -235,8 +235,8 @@ class LeadDocumentService
     {
         return DB::transaction(function () use ($document, $targetLead) {
             $extension = pathinfo($document->filename, PATHINFO_EXTENSION);
-            $newPath = 'lead-documents/'.$targetLead->id.'/'.Str::random(40)
-                .($extension ? '.'.$extension : '');
+            $newPath = 'lead-documents/' . $targetLead->id . '/' . Str::random(40)
+                . ($extension ? '.' . $extension : '');
 
             Storage::disk('private')->copy($document->storage_path, $newPath);
 
@@ -258,7 +258,7 @@ class LeadDocumentService
     }
 
     /**
-     * @param  int[]  $documentIds
+     * @param int[] $documentIds
      * @return int Number of documents deleted.
      */
     public function bulkDelete(array $documentIds): int
@@ -280,12 +280,12 @@ class LeadDocumentService
         return LeadDocument::where(function ($query) {
             $query->where('status', LeadDocumentStatus::FAILED->value);
         })
-            ->orWhere(function ($query) use ($daysOld) {
-                $query->where('status', LeadDocumentStatus::PENDING->value)
-                    ->where('created_at', '<', now()->subDays($daysOld));
-            })
-            ->with('lead')
-            ->get();
+        ->orWhere(function ($query) use ($daysOld) {
+            $query->where('status', LeadDocumentStatus::PENDING->value)
+                ->where('created_at', '<', now()->subDays($daysOld));
+        })
+        ->with('lead')
+        ->get();
     }
 
     /**
@@ -299,8 +299,8 @@ class LeadDocumentService
         $errors = [];
 
         $extension = strtolower($file->getClientOriginalExtension());
-        if (! in_array($extension, $allowedExtensions, true)) {
-            $errors[] = "File type '{$extension}' is not allowed. Allowed types: ".implode(', ', $allowedExtensions);
+        if (!in_array($extension, $allowedExtensions, true)) {
+            $errors[] = "File type '{$extension}' is not allowed. Allowed types: " . implode(', ', $allowedExtensions);
         }
 
         if ($file->getSize() > $maxSize) {
@@ -316,7 +316,7 @@ class LeadDocumentService
             'text/csv',
         ];
         $mimeType = $file->getMimeType();
-        if (! in_array($mimeType, $allowedMimes, true)) {
+        if (!in_array($mimeType, $allowedMimes, true)) {
             $errors[] = "Invalid file mime type: {$mimeType}";
         }
 

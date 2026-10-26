@@ -13,14 +13,15 @@ class LeadAnalysisService
     public function __construct(
         private AiClientInterface $client,
         private DocumentExtractionService $extractor
-    ) {}
+    ) {
+    }
 
     /**
      * Analyze a lead by id or payload. If document_id is provided, extract text and analyze.
      * Returns structured array with summary and clarifying questions.
      *
-     * @param  array  $payload  ['lead_id' => int|null, 'document_id' => int|null, 'context' => string|null]
-     *
+     * @param array $payload ['lead_id' => int|null, 'document_id' => int|null, 'context' => string|null]
+     * @return array
      * @throws Exception
      */
     public function analyze(array $payload): array
@@ -29,9 +30,9 @@ class LeadAnalysisService
         $lead = null;
 
         // Get document content if document_id provided
-        if (! empty($payload['document_id'])) {
+        if (!empty($payload['document_id'])) {
             $doc = LeadDocument::find($payload['document_id']);
-            if (! $doc) {
+            if (!$doc) {
                 throw new Exception('Document not found');
             }
             $extracted = $this->extractor->extract($doc);
@@ -39,11 +40,11 @@ class LeadAnalysisService
         }
 
         // Get lead description if lead_id provided
-        if (! empty($payload['lead_id'])) {
+        if (!empty($payload['lead_id'])) {
             $lead = Lead::find($payload['lead_id']);
             if ($lead && $lead->description) {
                 // Only append if leadText already present (from doc)
-                $leadText = trim(($leadText ? $leadText."\n\n" : '').$lead->description);
+                $leadText = trim(($leadText ? $leadText . "\n\n" : '') . $lead->description);
             }
         }
 
@@ -56,16 +57,16 @@ class LeadAnalysisService
         $json = $this->extractJsonFromResponse($aiResponse);
 
         // Store metadata/questions on lead if lead_id given and lead exists
-        if (! empty($payload['lead_id']) && $lead && is_array($json)) {
+        if (!empty($payload['lead_id']) && $lead && is_array($json)) {
             // Store requirements as metadata (null if missing)
             $lead->metadata = $json['requirements'] ?? null;
             $lead->ai_reviewed = true;
             $lead->save();
 
             // Insert questions as LeadQuestion records (skip if no questions array)
-            if (! empty($json['questions']) && is_array($json['questions'])) {
+            if (!empty($json['questions']) && is_array($json['questions'])) {
                 foreach ($json['questions'] as $i => $q) {
-                    if (! empty($q)) {
+                    if (!empty($q)) {
                         LeadQuestion::create([
                             'lead_id' => $lead->id,
                             'question' => $q,
@@ -86,14 +87,14 @@ class LeadAnalysisService
             if (empty($doc->extracted_text) || empty($doc->extracted_text['text'])) {
                 $extracted = $this->extractor->extract($doc);
                 $text = $extracted['text'] ?? '';
-                if (! empty($text)) {
+                if (!empty($text)) {
                     $doc->extracted_text = ['text' => $text];
                     $doc->save();
                 }
             }
 
             if (empty($doc->ai_summary)) {
-                $prompt = "Summarize this document into 3–6 bullet points and list action items:\n\n".
+                $prompt = "Summarize this document into 3–6 bullet points and list action items:\n\n" .
                           mb_substr($doc->extracted_text['text'] ?? '', 0, 30000);
 
                 $summary = $this->client->chat($prompt, [
@@ -112,9 +113,9 @@ class LeadAnalysisService
 
         // Additional: generate lead-level suggestions (questions, next steps)
         $leadPrompt = "Given the following documents and lead description, suggest 5 follow-up questions and next steps.\n\nLead:\n".
-                      ($lead->description ?? '')."\n\nDocuments:\n";
+                      ($lead->description ?? '') . "\n\nDocuments:\n";
         foreach ($lead->leadDocuments as $d) {
-            $leadPrompt .= ($d->ai_summary['summary'] ?? '')."\n";
+            $leadPrompt .= ($d->ai_summary['summary'] ?? '') . "\n";
         }
 
         $leadSuggestions = $this->client->chat($leadPrompt, ['max_tokens' => 400, 'temperature' => 0.2]);
@@ -134,7 +135,7 @@ class LeadAnalysisService
     public function analyzeUploadedDocument(Lead $lead, int $documentId): void
     {
         $document = LeadDocument::find($documentId);
-        if (! $document) {
+        if (!$document) {
             return;
         }
 
@@ -145,13 +146,12 @@ class LeadAnalysisService
 
     private function buildPromptForAnalysis(string $text, string $context = ''): string
     {
-        $instructions = 'You are an expert requirements analyst. Given the following document or description, extract a concise summary, a structured list of requirements, and produce up to 8 clarifying questions to ask the client. Respond in JSON with keys: summary, requirements (array of {id, title, details}), questions (array of strings).';
-        $prompt = $instructions."\n\n";
+        $instructions = "You are an expert requirements analyst. Given the following document or description, extract a concise summary, a structured list of requirements, and produce up to 8 clarifying questions to ask the client. Respond in JSON with keys: summary, requirements (array of {id, title, details}), questions (array of strings).";
+        $prompt = $instructions . "\n\n";
         if ($context !== '') {
-            $prompt .= "Context:\n".$context."\n\n";
+            $prompt .= "Context:\n" . $context . "\n\n";
         }
-        $prompt .= "Document:\n".($text !== '' ? $text : '[no text provided]');
-
+        $prompt .= "Document:\n" . ($text !== '' ? $text : '[no text provided]');
         return $prompt;
     }
 

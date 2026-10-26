@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Tender extends Model
 {
@@ -26,18 +26,18 @@ class Tender extends Model
     ];
 
     protected $casts = [
-        'submission_deadline' => 'date',
-        'submitted_at' => 'date',
-        'approval_requested_at' => 'datetime',
-        'approved_at' => 'datetime',
-        'estimated_value' => 'decimal:2',
-        'extracted_data' => 'array',
-        'ai_analysis' => 'array',
-        'checklist' => 'array',
-        'information_gaps' => 'array',
-        'generated_documents' => 'array',
-        'agent_conversation' => 'array',
-        'metadata' => 'array',
+        'submission_deadline'    => 'date',
+        'submitted_at'           => 'date',
+        'approval_requested_at'  => 'datetime',
+        'approved_at'            => 'datetime',
+        'estimated_value'        => 'decimal:2',
+        'extracted_data'         => 'array',
+        'ai_analysis'            => 'array',
+        'checklist'              => 'array',
+        'information_gaps'       => 'array',
+        'generated_documents'    => 'array',
+        'agent_conversation'     => 'array',
+        'metadata'               => 'array',
     ];
 
     // ── Relationships ──────────────────────────────────────────────────────────
@@ -46,27 +46,22 @@ class Tender extends Model
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
-
     public function lead(): BelongsTo
     {
         return $this->belongsTo(Lead::class);
     }
-
     public function opportunity(): BelongsTo
     {
         return $this->belongsTo(Opportunity::class);
     }
-
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
     }
-
     public function submitter(): BelongsTo
     {
         return $this->belongsTo(User::class, 'submitted_by');
     }
-
     public function approver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by');
@@ -89,7 +84,6 @@ class Tender extends Model
         if (! $this->submission_deadline) {
             return null;
         }
-
         return (int) now()->startOfDay()->diffInDays($this->submission_deadline, false);
     }
 
@@ -97,11 +91,10 @@ class Tender extends Model
     {
         $items = $this->checklist ?? [];
         $total = count($items);
-        $done = count(array_filter($items, fn ($i) => $i['done'] ?? false));
-
+        $done  = count(array_filter($items, fn ($i) => $i['done'] ?? false));
         return [
-            'total' => $total,
-            'done' => $done,
+            'total'   => $total,
+            'done'    => $done,
             'percent' => $total > 0 ? (int) round($done / $total * 100) : 0,
         ];
     }
@@ -114,7 +107,6 @@ class Tender extends Model
     public function needsApprovalToSubmit(): bool
     {
         $settings = CompanySetting::current();
-
         return $settings->makerCheckerEnabledFor('tenders')
             && $this->approval_status !== 'approved';
     }

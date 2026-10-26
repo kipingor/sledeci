@@ -2,15 +2,15 @@
 
 namespace Tests\Feature;
 
-use App\Events\LeadMoved;
-use App\Models\AuditLog;
 use App\Models\Lead;
-use App\Models\PipelineStage;
 use App\Models\User;
+use App\Models\PipelineStage;
+use App\Enums\LeadStatus;
 use App\Services\Pipeline\PipelineService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
+use App\Events\LeadMoved;
 use Tests\TestCase;
 
 class PipelineMovementTest extends TestCase
@@ -18,16 +18,15 @@ class PipelineMovementTest extends TestCase
     use RefreshDatabase;
 
     protected User $user;
-
     protected PipelineService $pipelineService;
 
     protected function setUp(): void
     {
         parent::setUp();
-
+        
         $this->user = User::factory()->create();
         $this->pipelineService = app(PipelineService::class);
-
+        
         // Seed pipeline stages
         $this->seedPipelineStages();
     }
@@ -216,22 +215,22 @@ class PipelineMovementTest extends TestCase
 
         // Simulate two concurrent move requests
         DB::beginTransaction();
-
+        
         try {
             // First move
             $this->pipelineService->moveLead($lead, $discoveryStage->id);
-
+            
             // Refresh to get latest state
             $lead->refresh();
-
+            
             // Second move should work without error
             $proposalStage = PipelineStage::where('key', 'proposal')->first();
             $this->pipelineService->moveLead($lead, $proposalStage->id);
-
+            
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            $this->fail('Concurrent moves failed: '.$e->getMessage());
+            $this->fail('Concurrent moves failed: ' . $e->getMessage());
         }
 
         $lead->refresh();
@@ -252,7 +251,7 @@ class PipelineMovementTest extends TestCase
         $this->actingAs($this->user, 'sanctum');
         $this->pipelineService->moveLead($lead, $discoveryStage->id);
 
-        if (class_exists(AuditLog::class)) {
+        if (class_exists(\App\Models\AuditLog::class)) {
             $this->assertDatabaseHas('audit_logs', [
                 'auditable_type' => Lead::class,
                 'auditable_id' => $lead->id,
@@ -278,7 +277,7 @@ class PipelineMovementTest extends TestCase
             ->getJson('/api/v1/pipelines');
 
         $response->assertOk();
-
+        
         $intakeLeads = collect($response->json('data.leadsByStage'))
             ->firstWhere('key', 'intake')['leads'];
 

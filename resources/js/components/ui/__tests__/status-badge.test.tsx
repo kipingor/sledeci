@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vite-plus/test';
+import { describe, it, expect } from 'vitest';
 import { StatusBadge, LEAD_STATUS_CONFIG } from '../status-badge';
 
 describe('StatusBadge', () => {

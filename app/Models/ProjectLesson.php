@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Database\Factories\ProjectLessonFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProjectLesson extends Model
 {
-    /** @use HasFactory<ProjectLessonFactory> */
+    /** @use HasFactory<\Database\Factories\ProjectLessonFactory> */
     use HasFactory;
 
     protected $table = 'project_lessons';

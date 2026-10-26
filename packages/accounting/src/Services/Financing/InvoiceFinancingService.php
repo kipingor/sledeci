@@ -2,10 +2,10 @@
 
 namespace Sledeci\Accounting\Services\Financing;
 
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 use Sledeci\Accounting\Models\Invoice;
 use Sledeci\Accounting\Models\Payment;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 /**
  * InvoiceFinancingService
@@ -30,6 +30,7 @@ class InvoiceFinancingService
      * Build the full financing readiness report.
      *
      * @param  string  $functionalCurrency  e.g. 'KES'
+     * @return array
      */
     public function buildReport(string $functionalCurrency = 'KES'): array
     {
@@ -42,42 +43,33 @@ class InvoiceFinancingService
 
         // ── Aged buckets ───────────────────────────────────────────────────
         $aged = [
-            '0_30' => ['label' => '0 – 30 days',   'invoices' => [], 'total' => 0],
+            '0_30'  => ['label' => '0 – 30 days',   'invoices' => [], 'total' => 0],
             '31_60' => ['label' => '31 – 60 days',  'invoices' => [], 'total' => 0],
             '61_90' => ['label' => '61 – 90 days',  'invoices' => [], 'total' => 0],
-            '90plus' => ['label' => '90+ days',       'invoices' => [], 'total' => 0],
+            '90plus'=> ['label' => '90+ days',       'invoices' => [], 'total' => 0],
         ];
 
         $totalOutstanding = 0;
 
         foreach ($outstanding as $inv) {
             $daysPastDue = max(0, (int) $now->diffInDays($inv->due_date, false) * -1);
-            $amountDue = $inv->amountDue();
+            $amountDue   = $inv->amountDue();
             $totalOutstanding += $amountDue;
 
             $entry = [
-                'id' => $inv->id,
-                'number' => $inv->number,
-                'client' => $inv->client?->name,
-                'amount_due' => $amountDue,
-                'due_date' => $inv->due_date?->toDateString(),
-                'days_past_due' => $daysPastDue,
-                'currency' => $inv->currency,
+                'id'           => $inv->id,
+                'number'       => $inv->number,
+                'client'       => $inv->client?->name,
+                'amount_due'   => $amountDue,
+                'due_date'     => $inv->due_date?->toDateString(),
+                'days_past_due'=> $daysPastDue,
+                'currency'     => $inv->currency,
             ];
 
-            if ($daysPastDue <= 30) {
-                $aged['0_30']['invoices'][] = $entry;
-                $aged['0_30']['total'] += $amountDue;
-            } elseif ($daysPastDue <= 60) {
-                $aged['31_60']['invoices'][] = $entry;
-                $aged['31_60']['total'] += $amountDue;
-            } elseif ($daysPastDue <= 90) {
-                $aged['61_90']['invoices'][] = $entry;
-                $aged['61_90']['total'] += $amountDue;
-            } else {
-                $aged['90plus']['invoices'][] = $entry;
-                $aged['90plus']['total'] += $amountDue;
-            }
+            if ($daysPastDue <= 30)      { $aged['0_30']['invoices'][]   = $entry; $aged['0_30']['total']   += $amountDue; }
+            elseif ($daysPastDue <= 60)  { $aged['31_60']['invoices'][]  = $entry; $aged['31_60']['total']  += $amountDue; }
+            elseif ($daysPastDue <= 90)  { $aged['61_90']['invoices'][]  = $entry; $aged['61_90']['total']  += $amountDue; }
+            else                         { $aged['90plus']['invoices'][]  = $entry; $aged['90plus']['total'] += $amountDue; }
         }
 
         // ── DSO (Days Sales Outstanding) — rolling 90-day ────────────────
@@ -98,12 +90,11 @@ class InvoiceFinancingService
             ->groupBy('client_id')
             ->map(function ($invoices, $clientId) use ($totalOutstanding) {
                 $client = $invoices->first()->client;
-                $total = $invoices->sum(fn ($i) => $i->amountDue());
-
+                $total  = $invoices->sum(fn ($i) => $i->amountDue());
                 return [
-                    'client_id' => $clientId,
+                    'client_id'   => $clientId,
                     'client_name' => $client?->name ?? 'Unknown',
-                    'total_due' => round($total, 2),
+                    'total_due'   => round($total, 2),
                     'pct_of_book' => $totalOutstanding > 0
                         ? round(($total / $totalOutstanding) * 100, 1)
                         : 0,
@@ -119,10 +110,10 @@ class InvoiceFinancingService
 
         // ── Financing score ───────────────────────────────────────────────
         $score = $this->computeFinancingScore(
-            dso: $dso,
+            dso:                  $dso,
             collectionEfficiency: $collectionEfficiency,
-            pctCurrent: $totalOutstanding > 0 ? ($aged['0_30']['total'] / $totalOutstanding) * 100 : 0,
-            pct90Plus: $totalOutstanding > 0 ? ($aged['90plus']['total'] / $totalOutstanding) * 100 : 0,
+            pctCurrent:           $totalOutstanding > 0 ? ($aged['0_30']['total'] / $totalOutstanding) * 100 : 0,
+            pct90Plus:            $totalOutstanding > 0 ? ($aged['90plus']['total'] / $totalOutstanding) * 100 : 0,
         );
 
         // ── Financing eligibility summary ─────────────────────────────────
@@ -131,22 +122,22 @@ class InvoiceFinancingService
         $estimatedFacility = round($eligibleReceivables * $advanceRate, 2);
 
         return [
-            'generated_at' => $now->toIso8601String(),
-            'functional_currency' => $functionalCurrency,
+            'generated_at'         => $now->toIso8601String(),
+            'functional_currency'  => $functionalCurrency,
             'summary' => [
-                'total_outstanding' => round($totalOutstanding, 2),
+                'total_outstanding'    => round($totalOutstanding, 2),
                 'eligible_receivables' => round($eligibleReceivables, 2),
-                'dso_days' => $dso,
-                'collection_efficiency' => $collectionEfficiency,
-                'financing_score' => $score,
-                'score_label' => $this->scoreLabel($score),
-                'estimated_facility' => $estimatedFacility,
-                'advance_rate_pct' => $advanceRate * 100,
+                'dso_days'             => $dso,
+                'collection_efficiency'=> $collectionEfficiency,
+                'financing_score'      => $score,
+                'score_label'          => $this->scoreLabel($score),
+                'estimated_facility'   => $estimatedFacility,
+                'advance_rate_pct'     => $advanceRate * 100,
             ],
-            'aged_receivables' => $aged,
+            'aged_receivables'     => $aged,
             'debtor_concentration' => $debtorConcentration,
-            'payment_behaviour' => $paymentBehaviour,
-            'recommendations' => $this->buildRecommendations($score, $dso, $collectionEfficiency, $aged),
+            'payment_behaviour'    => $paymentBehaviour,
+            'recommendations'      => $this->buildRecommendations($score, $dso, $collectionEfficiency, $aged),
         ];
     }
 
@@ -154,7 +145,7 @@ class InvoiceFinancingService
 
     private function computeDso(int $days = 90): float
     {
-        $since = now()->subDays($days);
+        $since       = now()->subDays($days);
         $avgReceivables = Invoice::whereNotIn('status', ['draft', 'cancelled'])
             ->where('issue_date', '>=', $since)
             ->avg('total') ?? 0;
@@ -163,9 +154,7 @@ class InvoiceFinancingService
             ->where('issue_date', '>=', $since)
             ->sum('total') / $days;
 
-        if ($dailyRevenue <= 0) {
-            return 0;
-        }
+        if ($dailyRevenue <= 0) return 0;
 
         return round($avgReceivables / $dailyRevenue, 1);
     }
@@ -179,26 +168,26 @@ class InvoiceFinancingService
             ->join('users as u', 'u.id', '=', 'i.client_id')
             ->whereNotIn('i.status', ['draft', 'cancelled'])
             ->whereNotNull('i.due_date')
-            ->selectRaw('
+            ->selectRaw("
                 i.client_id,
                 u.name as client_name,
                 COUNT(DISTINCT i.id) as invoice_count,
                 AVG(DATEDIFF(p.paid_at, i.due_date)) as avg_days_to_pay,
                 SUM(p.amount) as total_paid,
                 MAX(DATEDIFF(p.paid_at, i.due_date)) as worst_delay_days
-            ')
+            ")
             ->groupBy('i.client_id', 'u.name')
             ->orderByDesc('total_paid')
             ->limit(20)
             ->get()
             ->map(fn ($row) => [
-                'client_id' => $row->client_id,
-                'client_name' => $row->client_name,
-                'invoice_count' => (int) $row->invoice_count,
-                'avg_days_to_pay' => round((float) $row->avg_days_to_pay, 1),
-                'total_paid' => round((float) $row->total_paid, 2),
-                'worst_delay_days' => (int) $row->worst_delay_days,
-                'pays_on_time' => (float) $row->avg_days_to_pay <= 5,
+                'client_id'         => $row->client_id,
+                'client_name'       => $row->client_name,
+                'invoice_count'     => (int)   $row->invoice_count,
+                'avg_days_to_pay'   => round((float) $row->avg_days_to_pay, 1),
+                'total_paid'        => round((float) $row->total_paid, 2),
+                'worst_delay_days'  => (int)   $row->worst_delay_days,
+                'pays_on_time'      => (float) $row->avg_days_to_pay <= 5,
             ])
             ->toArray();
     }
@@ -215,11 +204,11 @@ class InvoiceFinancingService
 
         // DSO scoring (max 30 points): lower DSO = better
         $score += match (true) {
-            $dso <= 30 => 30,
-            $dso <= 45 => 25,
-            $dso <= 60 => 18,
-            $dso <= 90 => 10,
-            default => 3,
+            $dso <= 30  => 30,
+            $dso <= 45  => 25,
+            $dso <= 60  => 18,
+            $dso <= 90  => 10,
+            default     => 3,
         };
 
         // Collection efficiency (max 30 points)
@@ -228,7 +217,7 @@ class InvoiceFinancingService
             $collectionEfficiency >= 85 => 24,
             $collectionEfficiency >= 70 => 16,
             $collectionEfficiency >= 50 => 8,
-            default => 2,
+            default                     => 2,
         };
 
         // % current (0-30d) receivables (max 25 points)
@@ -237,15 +226,15 @@ class InvoiceFinancingService
             $pctCurrent >= 60 => 20,
             $pctCurrent >= 40 => 12,
             $pctCurrent >= 20 => 6,
-            default => 2,
+            default           => 2,
         };
 
         // 90+ day overdue penalty (max 15 points deduction)
         $score -= match (true) {
-            $pct90Plus <= 5 => 0,
+            $pct90Plus <= 5  => 0,
             $pct90Plus <= 15 => 5,
             $pct90Plus <= 30 => 10,
-            default => 15,
+            default          => 15,
         };
 
         return max(0, min(100, $score));
@@ -258,7 +247,7 @@ class InvoiceFinancingService
             $score >= 65 => 'Good',
             $score >= 50 => 'Fair',
             $score >= 35 => 'Poor',
-            default => 'High Risk',
+            default      => 'High Risk',
         };
     }
 
@@ -269,7 +258,7 @@ class InvoiceFinancingService
             $score >= 65 => 0.75,
             $score >= 50 => 0.65,
             $score >= 35 => 0.50,
-            default => 0.40,
+            default      => 0.40,
         };
     }
 
@@ -278,13 +267,13 @@ class InvoiceFinancingService
         $recs = [];
 
         if ($dso > 60) {
-            $recs[] = 'Your DSO of '.$dso.' days is above optimal. Send payment reminders earlier — at 7 and 14 days before due date.';
+            $recs[] = 'Your DSO of ' . $dso . ' days is above optimal. Send payment reminders earlier — at 7 and 14 days before due date.';
         }
         if ($efficiency < 80) {
-            $recs[] = 'Collection efficiency is '.$efficiency.'%. Enable M-Pesa payment links on invoices to reduce friction.';
+            $recs[] = 'Collection efficiency is ' . $efficiency . '%. Enable M-Pesa payment links on invoices to reduce friction.';
         }
         if ($aged['90plus']['total'] > 0) {
-            $recs[] = 'You have KES '.number_format($aged['90plus']['total'], 0).' in 90+ day overdue invoices. Write these off or pursue formally to clean your book.';
+            $recs[] = 'You have KES ' . number_format($aged['90plus']['total'], 0) . ' in 90+ day overdue invoices. Write these off or pursue formally to clean your book.';
         }
         if ($score < 65) {
             $recs[] = 'Consider shortening payment terms to 14 days for new clients and offering early-payment discounts.';

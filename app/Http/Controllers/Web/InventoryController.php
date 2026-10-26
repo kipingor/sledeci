@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\StockMovement;
 use App\Services\Inventory\InventoryService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -27,9 +28,9 @@ class InventoryController extends Controller
 
     public function index(): Response
     {
-        $lowStock = $this->inventory->getLowStockProducts();
-        $outOfStock = Product::outOfStock()->with('supplier:id,name')->get();
-        $totalValue = $this->inventory->totalStockValue();
+        $lowStock    = $this->inventory->getLowStockProducts();
+        $outOfStock  = Product::outOfStock()->with('supplier:id,name')->get();
+        $totalValue  = $this->inventory->totalStockValue();
 
         $recentMovements = StockMovement::with('product:id,name,sku', 'creator:id,name')
             ->orderByDesc('created_at')
@@ -37,10 +38,10 @@ class InventoryController extends Controller
             ->get();
 
         $stats = [
-            'total_products' => Product::where('active', true)->count(),
+            'total_products'  => Product::where('active', true)->count(),
             'low_stock_count' => $lowStock->count(),
-            'out_of_stock' => $outOfStock->count(),
-            'total_value' => $totalValue,
+            'out_of_stock'    => $outOfStock->count(),
+            'total_value'     => $totalValue,
         ];
 
         return Inertia::render('inventory/index', compact(
@@ -55,7 +56,7 @@ class InventoryController extends Controller
         $movements = $this->inventory->getMovements($product, 30);
 
         return Inertia::render('inventory/movements', [
-            'product' => $product->load('supplier:id,name'),
+            'product'   => $product->load('supplier:id,name'),
             'movements' => $movements,
         ]);
     }
@@ -66,22 +67,22 @@ class InventoryController extends Controller
     {
         $data = $request->validate([
             'new_quantity' => 'required|integer|min:0',
-            'type' => 'required|in:adjustment,write_off,return_in,return_out,transfer_in,transfer_out',
-            'reason' => 'required|string|max:500',
+            'type'         => 'required|in:adjustment,write_off,return_in,return_out,transfer_in,transfer_out',
+            'reason'       => 'required|string|max:500',
         ]);
 
         $movement = $this->inventory->manualAdjustment(
             product: $product,
-            newQty: $data['new_quantity'],
-            type: $data['type'],
-            reason: $data['reason'],
+            newQty:  $data['new_quantity'],
+            type:    $data['type'],
+            reason:  $data['reason'],
         );
 
         if ($request->wantsJson()) {
             return response()->json([
-                'success' => true,
+                'success'        => true,
                 'quantity_after' => $movement->quantity_after,
-                'delta' => $movement->quantity,
+                'delta'          => $movement->quantity,
             ]);
         }
 
@@ -115,16 +116,16 @@ class InventoryController extends Controller
 
         return response()->json([
             'product' => [
-                'id' => $product->id,
-                'name' => $product->name,
-                'sku' => $product->sku,
-                'barcode' => $product->barcode,
-                'unit_price' => $product->unit_price,
-                'unit_cost' => $product->unit_cost,
-                'currency' => $product->currency,
-                'stock_qty' => $product->stock_qty,
-                'unit' => $product->unit,
-                'low_stock' => $product->isLowStock(),
+                'id'          => $product->id,
+                'name'        => $product->name,
+                'sku'         => $product->sku,
+                'barcode'     => $product->barcode,
+                'unit_price'  => $product->unit_price,
+                'unit_cost'   => $product->unit_cost,
+                'currency'    => $product->currency,
+                'stock_qty'   => $product->stock_qty,
+                'unit'        => $product->unit,
+                'low_stock'   => $product->isLowStock(),
             ],
         ]);
     }
@@ -145,22 +146,22 @@ class InventoryController extends Controller
             ->orderBy('name')
             ->get()
             ->map(fn ($p) => [
-                'id' => $p->id,
-                'name' => $p->name,
-                'sku' => $p->sku,
-                'category' => $p->category,
-                'supplier' => $p->supplier?->name,
-                'stock_qty' => $p->stock_qty,
-                'unit_cost' => (float) $p->unit_cost,
+                'id'          => $p->id,
+                'name'        => $p->name,
+                'sku'         => $p->sku,
+                'category'    => $p->category,
+                'supplier'    => $p->supplier?->name,
+                'stock_qty'   => $p->stock_qty,
+                'unit_cost'   => (float) $p->unit_cost,
                 'stock_value' => $p->stockValue(),
-                'currency' => $p->currency,
+                'currency'    => $p->currency,
             ]);
 
         $totalByCurrency = $products->groupBy('currency')
             ->map(fn ($g) => round($g->sum('stock_value'), 2));
 
         return Inertia::render('inventory/valuation', [
-            'products' => $products,
+            'products'          => $products,
             'total_by_currency' => $totalByCurrency,
         ]);
     }

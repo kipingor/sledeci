@@ -1,0 +1,24 @@
+{
+    "name": "sledeci/kenya-tax",
+    "description": "KRA eTIMS integration for the Sledeci suite: submit invoices, fetch standard codes, test the connection.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "sledeci/core": "^0.1 || @dev",
+        "sledeci/accounting": "^0.1 || @dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sledeci\\KenyaTax\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Sledeci\\KenyaTax\\KenyaTaxServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable"
+}

@@ -2,12 +2,12 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Queue;
 use Sledeci\Accounting\Jobs\SendPaymentReceiptJob;
 use Sledeci\Accounting\Models\Invoice;
 use Sledeci\Accounting\Models\Payment;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Queue;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
@@ -16,7 +16,6 @@ class ManualPaymentTest extends TestCase
     use RefreshDatabase;
 
     private User $accountant;
-
     private Invoice $invoice;
 
     protected function setUp(): void
@@ -34,7 +33,7 @@ class ManualPaymentTest extends TestCase
     private function pay(array $overrides = [])
     {
         return $this->actingAs($this->accountant)->post("/invoices/{$this->invoice->id}/payment", array_merge([
-            'amount' => 1000,
+            'amount'  => 1000,
             'channel' => 'cash',
             'paid_at' => now()->toDateString(),
         ], $overrides));

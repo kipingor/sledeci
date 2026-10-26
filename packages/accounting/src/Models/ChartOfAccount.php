@@ -1,16 +1,15 @@
 <?php
-
 // ─────────────────────────────────────────────────────────────────────────────
 // FILE: app/Models/ChartOfAccount.php
 // ─────────────────────────────────────────────────────────────────────────────
 
 namespace Sledeci\Accounting\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class ChartOfAccount extends Model
 {
@@ -28,14 +27,14 @@ class ChartOfAccount extends Model
 
     protected $casts = [
         'is_foreign_currency' => 'boolean',
-        'is_bank_account' => 'boolean',
-        'is_cash_account' => 'boolean',
-        'is_ar_account' => 'boolean',
-        'is_ap_account' => 'boolean',
-        'is_tax_account' => 'boolean',
-        'is_retained_earnings' => 'boolean',
-        'is_active' => 'boolean',
-        'is_system' => 'boolean',
+        'is_bank_account'     => 'boolean',
+        'is_cash_account'     => 'boolean',
+        'is_ar_account'       => 'boolean',
+        'is_ap_account'       => 'boolean',
+        'is_tax_account'      => 'boolean',
+        'is_retained_earnings'=> 'boolean',
+        'is_active'           => 'boolean',
+        'is_system'           => 'boolean',
     ];
 
     // ── Relations ─────────────────────────────────────────────────────────────
@@ -61,7 +60,7 @@ class ChartOfAccount extends Model
      * Calculate the account balance for a given period or up to a given date.
      * Returns positive = normal balance direction.
      */
-    public function balance(?Carbon $asOf = null, ?int $periodId = null): float
+    public function balance(?\Carbon\Carbon $asOf = null, ?int $periodId = null): float
     {
         $query = $this->journalLines()
             ->whereHas('journalEntry', function ($q) use ($asOf, $periodId) {
@@ -74,7 +73,7 @@ class ChartOfAccount extends Model
                 }
             });
 
-        $debits = (float) (clone $query)->where('type', 'debit')->sum('amount');
+        $debits  = (float) (clone $query)->where('type', 'debit')->sum('amount');
         $credits = (float) (clone $query)->where('type', 'credit')->sum('amount');
 
         return $this->normal_balance === 'debit'
@@ -82,15 +81,8 @@ class ChartOfAccount extends Model
             : $credits - $debits;
     }
 
-    public function isDebitNormal(): bool
-    {
-        return $this->normal_balance === 'debit';
-    }
-
-    public function isCreditNormal(): bool
-    {
-        return $this->normal_balance === 'credit';
-    }
+    public function isDebitNormal(): bool  { return $this->normal_balance === 'debit'; }
+    public function isCreditNormal(): bool { return $this->normal_balance === 'credit'; }
 
     /** Is this account on the Balance Sheet? */
     public function isBalanceSheet(): bool

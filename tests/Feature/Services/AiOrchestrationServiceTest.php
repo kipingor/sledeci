@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Services;
 
+use Tests\TestCase;
 use App\Models\Lead;
 use App\Services\AiOrchestrationService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class AiOrchestrationServiceTest extends TestCase
 {

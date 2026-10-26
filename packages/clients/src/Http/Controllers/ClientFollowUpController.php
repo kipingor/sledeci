@@ -2,13 +2,13 @@
 
 namespace Sledeci\Clients\Http\Controllers;
 
-use App\Models\Project;
+use Sledeci\Core\Http\Controller;
+use Sledeci\Clients\Models\ClientFollowUp;
 use App\Models\User;
+use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-use Sledeci\Clients\Models\ClientFollowUp;
-use Sledeci\Core\Http\Controller;
 
 class ClientFollowUpController extends Controller
 {
@@ -42,9 +42,9 @@ class ClientFollowUpController extends Controller
         $followUps = $query->orderBy('scheduled_at')->paginate(20)->withQueryString();
 
         $counts = [
-            'pending' => ClientFollowUp::whereNull('completed_at')->count(),
-            'overdue' => ClientFollowUp::whereNull('completed_at')->where('scheduled_at', '<', now())->count(),
-            'today' => ClientFollowUp::whereNull('completed_at')->whereDate('scheduled_at', today())->count(),
+            'pending'   => ClientFollowUp::whereNull('completed_at')->count(),
+            'overdue'   => ClientFollowUp::whereNull('completed_at')->where('scheduled_at', '<', now())->count(),
+            'today'     => ClientFollowUp::whereNull('completed_at')->whereDate('scheduled_at', today())->count(),
             'completed' => ClientFollowUp::whereNotNull('completed_at')->count(),
         ];
 
@@ -62,14 +62,14 @@ class ClientFollowUpController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'client_id' => 'required|exists:users,id',
-            'project_id' => 'nullable|exists:projects,id',
-            'invoice_id' => 'nullable|exists:invoices,id',
-            'type' => 'required|in:call,email,meeting,check_in,invoice_reminder,report',
-            'subject' => 'required|string|max:255',
-            'notes' => 'nullable|string',
+            'client_id'    => 'required|exists:users,id',
+            'project_id'   => 'nullable|exists:projects,id',
+            'invoice_id'   => 'nullable|exists:invoices,id',
+            'type'         => 'required|in:call,email,meeting,check_in,invoice_reminder,report',
+            'subject'      => 'required|string|max:255',
+            'notes'        => 'nullable|string',
             'scheduled_at' => 'nullable|date',
-            'priority' => 'in:low,normal,high',
+            'priority'     => 'in:low,normal,high',
         ]);
 
         ClientFollowUp::create(array_merge($data, ['created_by' => Auth::id()]));
@@ -80,15 +80,14 @@ class ClientFollowUpController extends Controller
     public function update(Request $request, ClientFollowUp $followUp)
     {
         $data = $request->validate([
-            'subject' => 'sometimes|required|string|max:255',
-            'notes' => 'nullable|string',
+            'subject'      => 'sometimes|required|string|max:255',
+            'notes'        => 'nullable|string',
             'scheduled_at' => 'nullable|date',
-            'priority' => 'in:low,normal,high',
-            'type' => 'in:call,email,meeting,check_in,invoice_reminder,report',
+            'priority'     => 'in:low,normal,high',
+            'type'         => 'in:call,email,meeting,check_in,invoice_reminder,report',
         ]);
 
         $followUp->update($data);
-
         return back()->with('success', 'Follow-up updated.');
     }
 
@@ -96,18 +95,16 @@ class ClientFollowUpController extends Controller
     {
         $data = $request->validate([
             'outcome' => 'nullable|string|max:255',
-            'notes' => 'nullable|string',
+            'notes'   => 'nullable|string',
         ]);
 
         $followUp->update(array_merge($data, ['completed_at' => now()]));
-
         return back()->with('success', 'Follow-up marked as complete.');
     }
 
     public function destroy(ClientFollowUp $followUp)
     {
         $followUp->delete();
-
         return back()->with('success', 'Follow-up removed.');
     }
 }

@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use App\Enums\ActivityType;
-use App\Policies\ActivityPolicy;
-use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Enums\ActivityType;
+use App\Policies\ActivityPolicy;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 
 #[UsePolicy(ActivityPolicy::class)]
 class Activity extends Model
@@ -89,7 +89,6 @@ class Activity extends Model
         if ($type instanceof ActivityType) {
             $type = $type->value;
         }
-
         return $query->where('type', $type);
     }
 
@@ -127,9 +126,9 @@ class Activity extends Model
      */
     public function isOverdue(): bool
     {
-        return $this->scheduled_at
-            && $this->scheduled_at->isPast()
-            && ! $this->isCompleted();
+        return $this->scheduled_at 
+            && $this->scheduled_at->isPast() 
+            && !$this->isCompleted();
     }
 
     /**

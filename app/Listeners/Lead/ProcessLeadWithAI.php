@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * Process Lead With AI Listener
- *
+ * 
  * Queues AI processing job for new leads.
  * Implements ShouldQueue for async processing.
  */
@@ -42,7 +42,6 @@ class ProcessLeadWithAI implements ShouldQueue
                     'lead_id' => $lead->id,
                     'type' => $lead->type,
                 ]);
-
                 return;
             }
 
@@ -51,7 +50,6 @@ class ProcessLeadWithAI implements ShouldQueue
                 Log::info('Skipping AI processing - no content', [
                     'lead_id' => $lead->id,
                 ]);
-
                 return;
             }
 
@@ -69,7 +67,7 @@ class ProcessLeadWithAI implements ShouldQueue
                 'lead_id' => $event->lead->id,
                 'error' => $e->getMessage(),
             ]);
-
+            
             // Don't throw - AI processing is optional
         }
     }

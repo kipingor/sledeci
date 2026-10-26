@@ -43,7 +43,7 @@ class PipelineAnalyticsService
 
             $averageTimes[$stage->name] = $count > 0 ? ($totalTime / $count) : 0;
         }
-
+        
         return $averageTimes;
     }
 

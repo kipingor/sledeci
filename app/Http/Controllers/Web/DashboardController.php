@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\Task;
 use App\Services\Dashboard\DashboardMetricsService;
+use App\Models\Activity;
 use App\Services\Lead\LeadService;
 use App\Services\Pipeline\PipelineService;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -20,7 +21,8 @@ class DashboardController extends Controller
         protected DashboardMetricsService $metricsService,
         protected LeadService $leadService,
         protected PipelineService $pipelineService,
-    ) {}
+    ) {
+    }
 
     /**
      * Display the dashboard.
@@ -37,7 +39,7 @@ class DashboardController extends Controller
             // Calculate changes (comparing with last period)
             $lastMonthMetrics = $this->metricsService->getActivityMetrics('month');
             $lastWeekMetrics = $this->metricsService->getActivityMetrics('week');
-
+            
             // Build metrics object for dashboard
             $metrics = [
                 'totalLeads' => $overview['leads'] ?? 0,
@@ -192,12 +194,12 @@ class DashboardController extends Controller
     private function getUpcomingTasks(): array
     {
         // Check if Task model exists
-        if (! class_exists(Task::class)) {
+        if (!class_exists(\App\Models\Task::class)) {
             return [];
         }
 
         try {
-            $tasks = Task::with('lead')
+            $tasks = \App\Models\Task::with('lead')
                 ->where('status', '!=', 'done')
                 ->whereDate('due_date', '>=', now())
                 ->orderBy('due_date', 'asc')
@@ -226,7 +228,7 @@ class DashboardController extends Controller
     private function getPipelineDistribution(): array
     {
         $statusCounts = $this->leadService->getStatusCounts();
-
+        
         return $statusCounts;
     }
 }

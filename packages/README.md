@@ -6,8 +6,12 @@ into its own repository and published on Packagist.
 | Package | Namespace | Provides |
 |---|---|---|
 | `core` | `Sledeci\Core` | Module registry, `ModuleServiceProvider` base class, role-based policy trait, shared contracts, base controller |
-| `clients` | `Sledeci\Clients` | Clients, follow-ups, client reports |
+| `clients` | `Sledeci\Clients` | Clients, follow-ups, client reports (requires `accounting`) |
 | `accounting` | `Sledeci\Accounting` | Chart of accounts, journals, invoices, payments, expenses, statements, forex, financing |
+| `kenya-tax` | `Sledeci\KenyaTax` | KRA eTIMS: submit invoices, standard codes, connection test (requires `accounting`) |
+| `kenya-payments` | `Sledeci\KenyaPayments` | M-Pesa, Airtel Money, MTN MoMo collections and public webhooks; implements `PaymentGateway` (requires `accounting`) |
+| `hr` | `Sledeci\Hr` | Staff directory and leave (recruitment screens are still in the host) |
+| `kenya-payroll` | `Sledeci\KenyaPayroll` | Employees, payroll runs (PAYE, SHIF, NSSF, Housing Levy, HELB), payslips, P9 export |
 
 ## How packages are loaded today
 
@@ -38,9 +42,11 @@ registry and the Inertia page path are wired by the base class.
 
 ## Rules
 
-1. **Packages depend on `sledeci/core`, never on each other's concrete classes.** Cross-package needs go through
-   interfaces in `Sledeci\Core\Contracts` (for example `ClientFinancialSummary`, implemented by accounting and
-   consumed by clients, with a null fallback in core).
+1. **Dependencies run one way and are declared.** `tests/Feature/Guards/PackageBoundariesTest` holds the allowed
+   graph (`core` ← `accounting` ← `clients`, `kenya-tax`, `kenya-payments`; `core` ← `hr`; `core` ← `kenya-payroll`) and fails if a package imports one it has not
+   declared, or if `composer.json` disagrees. Where the natural direction would create a cycle, use an interface in
+   `Sledeci\Core\Contracts` instead: accounting starts a mobile-money push through `PaymentGateway` (implemented by
+   kenya-payments) and shows follow-ups through `PendingFollowUps` (implemented by clients), each with a safe fallback.
 2. **Host coupling is tracked, not hidden.** Packages currently still import a few host classes (`App\Models\User`,
    `Project`, `Lead`, `Opportunity`, ...) because those modules are not extracted yet. `tools/verification/README.md`
    explains how to list them; the list should only shrink.

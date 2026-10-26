@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\LeadQuestion;
 use App\Models\User;
+use App\Models\LeadQuestion;
 
 class LeadQuestionPolicy
 {

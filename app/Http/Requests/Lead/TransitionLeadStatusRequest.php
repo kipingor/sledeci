@@ -3,11 +3,9 @@
 namespace App\Http\Requests\Lead;
 
 use App\Enums\LeadStatus;
-use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Contracts\Validation\Validator;
+use App\Models\Lead;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
 
 class TransitionLeadStatusRequest extends FormRequest
 {
@@ -17,14 +15,13 @@ class TransitionLeadStatusRequest extends FormRequest
     public function authorize(): bool
     {
         $lead = $this->route('lead');
-
         return $this->user()->can('update', $lead);
     }
 
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, ValidationRule|array<mixed>|string>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -42,7 +39,7 @@ class TransitionLeadStatusRequest extends FormRequest
                         return;
                     }
 
-                    if (! $lead->status->canTransitionTo($newStatus)) {
+                    if (!$lead->status->canTransitionTo($newStatus)) {
                         $fail("Cannot transition from {$lead->status->label()} to {$newStatus->label()}");
                     }
                 },
@@ -84,14 +81,14 @@ class TransitionLeadStatusRequest extends FormRequest
     /**
      * Handle a failed validation attempt.
      */
-    protected function failedValidation(Validator $validator)
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
         $lead = $this->route('lead');
-
+        
         // Add allowed transitions to error response
         if ($this->expectsJson()) {
             $errors = $validator->errors();
-
+            
             if ($errors->has('status')) {
                 $response = response()->json([
                     'message' => 'The given data was invalid.',
@@ -112,7 +109,7 @@ class TransitionLeadStatusRequest extends FormRequest
                     ],
                 ], 422);
 
-                throw new ValidationException($validator, $response);
+                throw new \Illuminate\Validation\ValidationException($validator, $response);
             }
         }
 

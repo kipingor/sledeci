@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\HrLeaveRequest;
-use App\Models\StaffProfile;
+use Sledeci\Hr\Models\StaffProfile;
+use Sledeci\Hr\Models\HrLeaveRequest;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

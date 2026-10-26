@@ -2,12 +2,12 @@
 
 namespace App\Jobs;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
+use App\Models\Workflow;
 use App\Mail\WorkflowEmail;
 use App\Models\Lead;
 use App\Models\Task;
-use App\Models\Workflow;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Mail;
 
 class ExecuteWorkflowJob implements ShouldQueue
@@ -28,7 +28,7 @@ class ExecuteWorkflowJob implements ShouldQueue
     public function handle()
     {
         foreach ($this->workflow->actions as $action) {
-            match ($action['type']) {
+            match($action['type']) {
                 'send_email' => $this->sendEmail($action),
                 'assign_owner' => $this->assignOwner($action),
                 'change_status' => $this->changeStatus($action),
@@ -55,14 +55,14 @@ class ExecuteWorkflowJob implements ShouldQueue
     private function assignOwner($action)
     {
         $this->lead->update([
-            'owner_id' => $action['config']['owner_id'],
+            'owner_id' => $action['config']['owner_id']
         ]);
     }
 
     private function changeStatus($action)
     {
         $this->lead->update([
-            'status' => $action['config']['status'],
+            'status' => $action['config']['status']
         ]);
     }
 

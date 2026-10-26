@@ -2,8 +2,8 @@
 
 namespace App\Services\Opportunity;
 
-use App\Enums\OpportunityStage;
 use App\Models\Opportunity;
+use App\Enums\OpportunityStage;
 
 class OpportunityService
 {
@@ -15,7 +15,6 @@ class OpportunityService
     public function markAsWon(Opportunity $opportunity): Opportunity
     {
         $opportunity->update(['stage' => OpportunityStage::CLOSED_WON->value]);
-
         return $opportunity->fresh();
     }
 
@@ -25,12 +24,11 @@ class OpportunityService
     public function markAsLost(Opportunity $opportunity, ?string $reason = null): Opportunity
     {
         $opportunity->update([
-            'stage' => OpportunityStage::CLOSED_LOST->value,
+            'stage'       => OpportunityStage::CLOSED_LOST->value,
             'description' => $reason
-                ? trim(($opportunity->description ?? '')."\n\nLost reason: {$reason}")
+                ? trim(($opportunity->description ?? '') . "\n\nLost reason: {$reason}")
                 : $opportunity->description,
         ]);
-
         return $opportunity->fresh();
     }
 
@@ -54,14 +52,14 @@ class OpportunityService
             ->first();
 
         return [
-            'total' => (int) $counts->total,
-            'qualification' => (int) $counts->qualification,
-            'proposal' => (int) $counts->proposal,
-            'negotiation' => (int) $counts->negotiation,
-            'closed_won' => (int) $counts->closed_won,
-            'closed_lost' => (int) $counts->closed_lost,
+            'total'          => (int) $counts->total,
+            'qualification'  => (int) $counts->qualification,
+            'proposal'       => (int) $counts->proposal,
+            'negotiation'    => (int) $counts->negotiation,
+            'closed_won'     => (int) $counts->closed_won,
+            'closed_lost'    => (int) $counts->closed_lost,
             'pipeline_value' => (float) $counts->pipeline_value,
-            'won_value' => (float) $counts->won_value,
+            'won_value'      => (float) $counts->won_value,
         ];
     }
 }

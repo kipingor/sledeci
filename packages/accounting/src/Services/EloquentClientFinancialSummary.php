@@ -2,8 +2,8 @@
 
 namespace Sledeci\Accounting\Services;
 
-use Illuminate\Support\Collection;
 use Sledeci\Accounting\Models\Invoice;
+use Illuminate\Support\Collection;
 use Sledeci\Core\Contracts\ClientFinancialSummary;
 
 /**

@@ -39,11 +39,11 @@ class SendLeadNotification implements ShouldQueue
     {
         try {
             $lead = $event->lead;
-
+            
             // Notify the lead owner
             if ($lead->owner) {
                 $lead->owner->notify(new LeadCreatedNotification($lead));
-
+                
                 Log::info('Lead created notification sent', [
                     'lead_id' => $lead->id,
                     'recipient_id' => $lead->owner->id,
@@ -58,7 +58,7 @@ class SendLeadNotification implements ShouldQueue
                 'lead_id' => $event->lead->id,
                 'error' => $e->getMessage(),
             ]);
-
+            
             // Re-throw to trigger retry
             throw $e;
         }
@@ -76,14 +76,14 @@ class SendLeadNotification implements ShouldQueue
             // Only notify on significant changes
             $shouldNotify = $this->shouldNotifyOnUpdate($lead, $originalData);
 
-            if (! $shouldNotify) {
+            if (!$shouldNotify) {
                 return;
             }
 
             // Notify the lead owner
             if ($lead->owner) {
                 $lead->owner->notify(new LeadUpdatedNotification($lead, $originalData));
-
+                
                 Log::info('Lead updated notification sent', [
                     'lead_id' => $lead->id,
                     'recipient_id' => $lead->owner->id,
@@ -103,7 +103,7 @@ class SendLeadNotification implements ShouldQueue
                 'lead_id' => $event->lead->id,
                 'error' => $e->getMessage(),
             ]);
-
+            
             throw $e;
         }
     }
@@ -140,7 +140,7 @@ class SendLeadNotification implements ShouldQueue
         // Get admin notification preference from config
         $notifyAdmins = config('lead.notify_admins_on_create', false);
 
-        if (! $notifyAdmins) {
+        if (!$notifyAdmins) {
             return;
         }
 

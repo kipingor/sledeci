@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Payroll;
 
-use App\Services\Payroll\KenyaPayrollService;
+use Sledeci\KenyaPayroll\Services\KenyaPayrollService;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -16,7 +16,7 @@ class KenyaPayrollServiceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->svc = new KenyaPayrollService;
+        $this->svc = new KenyaPayrollService();
     }
 
     public function test_mid_salary_100k_breakdown(): void

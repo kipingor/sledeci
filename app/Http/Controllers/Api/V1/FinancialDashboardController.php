@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
-use Sledeci\Accounting\Models\Payment;
 use Sledeci\Accounting\Services\CashFlowForecastService;
 use Sledeci\Accounting\Services\Forex\ForexService;
+use Sledeci\Accounting\Models\Payment;
+use App\Models\CompanySetting;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * FinancialDashboardController
@@ -27,18 +28,18 @@ class FinancialDashboardController extends Controller
 {
     public function __construct(
         private CashFlowForecastService $forecast,
-        private ForexService $forex,
+        private ForexService            $forex,
     ) {}
 
     public function index(Request $request)
     {
         $functional = config('company.functional_currency', 'KES');
 
-        $data = Cache::remember('dashboard_financial_pulse_'.$functional, 300, function () use ($functional) {
+        $data = Cache::remember('dashboard_financial_pulse_' . $functional, 300, function () use ($functional) {
             return [
-                'forecast' => $this->forecast->build($functional),
-                'multi_currency' => $this->forex->buildMultiCurrencySummary($functional),
-                'mobile_money' => $this->mobileMoneyBreakdown(),
+                'forecast'        => $this->forecast->build($functional),
+                'multi_currency'  => $this->forex->buildMultiCurrencySummary($functional),
+                'mobile_money'    => $this->mobileMoneyBreakdown(),
                 'functional_currency' => $functional,
             ];
         });
@@ -61,8 +62,8 @@ class FinancialDashboardController extends Controller
             ->get()
             ->map(fn ($row) => [
                 'channel' => $row->channel,
-                'count' => (int) $row->count,
-                'total' => (float) $row->total,
+                'count'   => (int) $row->count,
+                'total'   => (float) $row->total,
             ]);
 
         $unmatchedCount = Payment::whereIn('channel', ['mpesa', 'airtel_money', 'mtn_momo'])
@@ -70,9 +71,9 @@ class FinancialDashboardController extends Controller
             ->count();
 
         return [
-            'by_channel' => $byChannel,
+            'by_channel'      => $byChannel,
             'unmatched_count' => $unmatchedCount,
-            'period_days' => 30,
+            'period_days'     => 30,
         ];
     }
 }

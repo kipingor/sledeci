@@ -5,7 +5,6 @@ namespace Tests\Feature\Site;
 use App\Models\ContactMessage;
 use App\Models\JobApplication;
 use App\Models\JobPosting;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -24,7 +23,7 @@ class PublicSiteTest extends TestCase
 
     public function test_home_redirects_signed_in_users_to_the_dashboard(): void
     {
-        $this->actingAs(User::factory()->create())
+        $this->actingAs(\App\Models\User::factory()->create())
             ->get('/')
             ->assertRedirect(route('web.dashboard'));
     }

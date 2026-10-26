@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\PayrollRun;
+use Sledeci\KenyaPayroll\Models\PayrollRun;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

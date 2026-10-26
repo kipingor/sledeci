@@ -19,11 +19,11 @@ it('saves the stakeholder engagement strategy sent by the form', function () {
 
     $this->actingAs($this->admin)
         ->post(route('web.projects.stakeholders.store', $project), [
-            'name' => 'Jane Doe',
-            'influence' => 'high',
-            'interest' => 'medium',
-            'current_engagement' => 'neutral',
-            'desired_engagement' => 'supportive',
+            'name'                => 'Jane Doe',
+            'influence'           => 'high',
+            'interest'            => 'medium',
+            'current_engagement'  => 'neutral',
+            'desired_engagement'  => 'supportive',
             'engagement_strategy' => 'Monthly one-to-one',
         ])
         ->assertRedirect();

@@ -3,27 +3,28 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Http\Requests\Lead\StoreLeadDocumentRequest;
 use App\Http\Requests\Lead\UpdateLeadDocumentRequest;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use App\Models\Lead;
 use App\Models\LeadDocument;
 use App\Services\Lead\LeadDocumentService;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class LeadDocumentController extends Controller
 {
-    public function __construct(private readonly LeadDocumentService $documentService) {}
+    public function __construct(private readonly LeadDocumentService $documentService)
+    {
+    }
 
     public function index(Request $request)
     {
         $query = $this->getModelQuery(LeadDocument::class);
         $documents = $this->paginateDocuments($query, $request->input('per_page', 15));
-
         return $this->renderDocumentsView('documents.index', $documents);
     }
 
@@ -36,7 +37,6 @@ class LeadDocumentController extends Controller
     {
         $data = $request->validated();
         $document = $this->createDocument($data);
-
         return redirect()->route('documents.show', $document->id)
             ->with('success', 'Document created successfully');
     }
@@ -55,7 +55,6 @@ class LeadDocumentController extends Controller
     {
         $data = $request->validated();
         $this->updateDocument($document, $data);
-
         return redirect()->route('documents.show', $document->id)
             ->with('success', 'Document updated successfully');
     }
@@ -77,7 +76,7 @@ class LeadDocumentController extends Controller
     {
         $this->authorize('view', $document);
 
-        if (! $this->documentService->fileExists($document)) {
+        if (!$this->documentService->fileExists($document)) {
             abort(404, 'Document file not found.');
         }
 
@@ -94,7 +93,7 @@ class LeadDocumentController extends Controller
     {
         $this->authorize('view', $document);
 
-        if (! $this->documentService->fileExists($document)) {
+        if (!$this->documentService->fileExists($document)) {
             abort(404, 'Document file not found.');
         }
 
@@ -142,7 +141,6 @@ class LeadDocumentController extends Controller
             'leads' => Lead::select('id', 'title')->orderByDesc('created_at')->limit(100)->get(),
         ];
     }
-
     protected function getModelQuery(string $modelClass): Builder
     {
         return $modelClass::query();
@@ -166,7 +164,7 @@ class LeadDocumentController extends Controller
     private function renderDocumentsView(string $view, LengthAwarePaginator $documents)
     {
         return Inertia::render($view, [
-            'documents' => $documents,
+            'documents' => $documents
         ]);
     }
 }

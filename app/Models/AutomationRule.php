@@ -74,7 +74,7 @@ class AutomationRule extends Model
         }
 
         foreach ($this->trigger_conditions as $key => $value) {
-            if (! isset($data[$key]) || $data[$key] !== $value) {
+            if (!isset($data[$key]) || $data[$key] !== $value) {
                 return false;
             }
         }

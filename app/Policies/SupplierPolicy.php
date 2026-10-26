@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\Supplier;
 use App\Models\User;
+use App\Models\Supplier;
 
 class SupplierPolicy
 {

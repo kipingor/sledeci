@@ -4,60 +4,50 @@ namespace App\Policies;
 
 use App\Models\Product;
 use App\Models\User;
+use Sledeci\Core\Policies\ChecksModuleRoles;
 
+/**
+ * Access follows the "products" module in config/access.php.
+ */
 class ProductPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
+    use ChecksModuleRoles;
+
+    protected function modules(): array
+    {
+        return ['products'];
+    }
+
     public function viewAny(User $user): bool
     {
-        return false;
+        return $this->canRead($user);
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
     public function view(User $user, Product $product): bool
     {
-        return false;
+        return $this->canRead($user);
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
     public function create(User $user): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
     public function update(User $user, Product $product): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
     public function delete(User $user, Product $product): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
-    /**
-     * Determine whether the user can restore the model.
-     */
     public function restore(User $user, Product $product): bool
     {
-        return false;
+        return $this->canWrite($user);
     }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
     public function forceDelete(User $user, Product $product): bool
     {
         return false;

@@ -2,20 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Builder;
 use App\Enums\LeadStatus;
 use App\Enums\LeadType;
 use App\Jobs\ExecuteWorkflowJob;
 use App\Policies\LeadPolicy;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[UsePolicy(LeadPolicy::class)]
 class Lead extends Model
@@ -61,20 +61,20 @@ class Lead extends Model
     ];
 
     protected $casts = [
-        'type' => LeadType::class,
-        'status' => LeadStatus::class,
-        'ai_reviewed' => 'boolean',
-        'is_starred' => 'boolean',
-        'metadata' => 'array',
-        'contacted_at' => 'datetime',
-        'qualified_at' => 'datetime',
-        'proposal_sent_at' => 'datetime',
-        'negotiation_started_at' => 'datetime',
+        'type'                        => LeadType::class,
+        'status'                      => LeadStatus::class,
+        'ai_reviewed'                 => 'boolean',
+        'is_starred'                  => 'boolean',
+        'metadata'                    => 'array',
+        'contacted_at'                => 'datetime',
+        'qualified_at'                => 'datetime',
+        'proposal_sent_at'            => 'datetime',
+        'negotiation_started_at'      => 'datetime',
         'converted_to_opportunity_at' => 'datetime',
-        'won_at' => 'datetime',
-        'lost_at' => 'datetime',
-        'archived_at' => 'datetime',
-        'estimated_value' => 'decimal:2',
+        'won_at'                      => 'datetime',
+        'lost_at'                     => 'datetime',
+        'archived_at'                 => 'datetime',
+        'estimated_value'             => 'decimal:2',
     ];
 
     protected $appends = ['status_label', 'status_color'];
@@ -189,7 +189,7 @@ class Lead extends Model
     {
         return $query->where(function ($q) use ($term) {
             $q->where('title', 'like', "%{$term}%")
-                ->orWhere('description', 'like', "%{$term}%");
+              ->orWhere('description', 'like', "%{$term}%");
         });
     }
 
@@ -219,7 +219,7 @@ class Lead extends Model
     /**
      * Whether this lead may move to the given status (delegates to the status enum).
      */
-    public function canTransitionTo(LeadStatus $status): bool
+    public function canTransitionTo(\App\Enums\LeadStatus $status): bool
     {
         return $this->status->canTransitionTo($status);
     }

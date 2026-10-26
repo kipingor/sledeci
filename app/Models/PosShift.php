@@ -18,17 +18,11 @@ class PosShift extends Model
         'closing_float' => 'decimal:2',
         'expected_cash' => 'decimal:2',
         'cash_variance' => 'decimal:2',
-        'opened_at' => 'datetime',
-        'closed_at' => 'datetime',
+        'opened_at'     => 'datetime',
+        'closed_at'     => 'datetime',
     ];
 
-    public function cashier(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'cashier_id');
-    }
+    public function cashier(): BelongsTo { return $this->belongsTo(User::class, 'cashier_id'); }
 
-    public function isOpen(): bool
-    {
-        return is_null($this->closed_at);
-    }
+    public function isOpen(): bool { return is_null($this->closed_at); }
 }

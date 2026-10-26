@@ -2,12 +2,13 @@
 
 namespace Database\Factories;
 
+use Sledeci\Accounting\Models\Payment;
+use Sledeci\Accounting\Models\Invoice;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use Sledeci\Accounting\Models\Invoice;
-use Sledeci\Accounting\Models\Payment;
+use Carbon\Carbon;
 
 class PaymentFactory extends Factory
 {
@@ -37,17 +38,17 @@ class PaymentFactory extends Factory
         $paidAt = $this->faker->dateTimeBetween($issueAt, 'now');
 
         return [
-            'invoice_id' => $invoice->id,
-            'project_id' => $projectId,
-            'amount' => $this->faker->randomFloat(2, $min, $max),
-            'currency' => $invoice->currency ?? 'USD',
-            'method' => $this->faker->randomElement(['bank', 'mpesa', 'cash', 'cheque', 'card']),
-            'reference' => Str::upper('TX-'.Str::random(10)),
-            'notes' => $this->faker->sentence(),
-            'paid_at' => $paidAt,
-            'received_by' => $receivedBy,
-            'created_at' => $paidAt,
-            'updated_at' => $paidAt,
+            'invoice_id'   => $invoice->id,
+            'project_id'   => $projectId,
+            'amount'       => $this->faker->randomFloat(2, $min, $max),
+            'currency'     => $invoice->currency ?? 'USD',
+            'method'       => $this->faker->randomElement(['bank', 'mpesa', 'cash', 'cheque', 'card']),
+            'reference'    => Str::upper('TX-' . Str::random(10)),
+            'notes'        => $this->faker->sentence(),
+            'paid_at'      => $paidAt,
+            'received_by'  => $receivedBy,
+            'created_at'   => $paidAt,
+            'updated_at'   => $paidAt,
         ];
     }
 
@@ -96,11 +97,10 @@ class PaymentFactory extends Factory
     public function full(): Factory
     {
         return $this->state(function (array $attributes) {
-            $invoice = Invoice::find($attributes['invoice_id'])
+            $invoice = Invoice::find($attributes['invoice_id']) 
                 ?? Invoice::inRandomOrder()->first();
 
             $maxAmount = $invoice?->total ?? $invoice?->amount ?? 0;
-
             return [
                 'amount' => $maxAmount,
                 'paid_at' => now(),

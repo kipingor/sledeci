@@ -2,6 +2,7 @@
 
 namespace Sledeci\Accounting\Mail;
 
+use Sledeci\Accounting\Models\Invoice;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -10,7 +11,6 @@ use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Sledeci\Accounting\Models\Invoice;
 
 class InvoiceMail extends Mailable implements ShouldQueue
 {
@@ -18,8 +18,9 @@ class InvoiceMail extends Mailable implements ShouldQueue
 
     public function __construct(
         public readonly Invoice $invoice,
-        public readonly string $message = '',
-    ) {}
+        public readonly string  $message = '',
+    ) {
+    }
 
     public function envelope(): Envelope
     {
@@ -37,9 +38,9 @@ class InvoiceMail extends Mailable implements ShouldQueue
         return new Content(
             view: 'emails.invoice',
             with: [
-                'invoice' => $this->invoice,
-                'company' => config('company'),
-                'message' => $this->message,
+                'invoice'  => $this->invoice,
+                'company'  => config('company'),
+                'message'  => $this->message,
             ],
         );
     }

@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\Tender;
 use App\Models\User;
+use App\Models\Tender;
 
 class TenderPolicy
 {

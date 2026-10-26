@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Change Request — PMBOK §4.6 (Perform Integrated Change Control)
@@ -34,11 +34,11 @@ class ProjectChange extends Model
     public const CHANGE_TYPE_LABELS = [
         'corrective_action' => 'Corrective Action',
         'preventive_action' => 'Preventive Action',
-        'defect_repair' => 'Defect Repair',
-        'scope_change' => 'Scope Change',
-        'schedule_change' => 'Schedule Change',
-        'cost_change' => 'Cost Change',
-        'other' => 'Other',
+        'defect_repair'     => 'Defect Repair',
+        'scope_change'      => 'Scope Change',
+        'schedule_change'   => 'Schedule Change',
+        'cost_change'       => 'Cost Change',
+        'other'             => 'Other',
     ];
 
     protected $fillable = [
@@ -51,15 +51,15 @@ class ProjectChange extends Model
     ];
 
     protected $casts = [
-        'impacts_scope' => 'boolean',
-        'impacts_schedule' => 'boolean',
-        'impacts_cost' => 'boolean',
-        'impacts_quality' => 'boolean',
+        'impacts_scope'        => 'boolean',
+        'impacts_schedule'     => 'boolean',
+        'impacts_cost'         => 'boolean',
+        'impacts_quality'      => 'boolean',
         'schedule_impact_days' => 'integer',
-        'cost_impact' => 'decimal:2',
-        'requested_date' => 'date',
-        'decision_date' => 'date',
-        'implementation_date' => 'date',
+        'cost_impact'          => 'decimal:2',
+        'requested_date'       => 'date',
+        'decision_date'        => 'date',
+        'implementation_date'  => 'date',
     ];
 
     // ── Relations ─────────────────────────────────────────────────────────────
@@ -99,10 +99,10 @@ class ProjectChange extends Model
     public function getImpactedBaselinesAttribute(): array
     {
         return array_keys(array_filter([
-            'scope' => $this->impacts_scope,
+            'scope'    => $this->impacts_scope,
             'schedule' => $this->impacts_schedule,
-            'cost' => $this->impacts_cost,
-            'quality' => $this->impacts_quality,
+            'cost'     => $this->impacts_cost,
+            'quality'  => $this->impacts_quality,
         ]));
     }
 }

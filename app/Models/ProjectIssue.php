@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Issue Log entry — PMBOK §4.3.3
@@ -21,10 +21,8 @@ class ProjectIssue extends Model
     protected $table = 'project_issues';
 
     public const SEVERITIES = ['low', 'medium', 'high', 'critical'];
-
-    public const PRIORITIES = ['low', 'medium', 'high', 'urgent'];
-
-    public const STATUSES = ['open', 'in_progress', 'escalated', 'resolved', 'closed'];
+    public const PRIORITIES  = ['low', 'medium', 'high', 'urgent'];
+    public const STATUSES    = ['open', 'in_progress', 'escalated', 'resolved', 'closed'];
 
     protected $fillable = [
         'project_id', 'owner_id', 'raised_by', 'risk_id',
@@ -35,9 +33,9 @@ class ProjectIssue extends Model
     ];
 
     protected $casts = [
-        'raised_date' => 'date',
-        'target_resolution_date' => 'date',
-        'resolved_date' => 'date',
+        'raised_date'             => 'date',
+        'target_resolution_date'  => 'date',
+        'resolved_date'           => 'date',
     ];
 
     // ── Relations ─────────────────────────────────────────────────────────────
@@ -77,8 +75,7 @@ class ProjectIssue extends Model
     public function getDaysOpenAttribute(): int
     {
         $start = $this->raised_date ?? $this->created_at;
-        $end = $this->resolved_date ?? now();
-
+        $end   = $this->resolved_date ?? now();
         return (int) $start->diffInDays($end);
     }
 }

@@ -4,13 +4,11 @@ namespace Sledeci\Accounting\Models;
 
 use App\Models\Project;
 use App\Models\User;
-use Database\Factories\InvoiceFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Sledeci\Clients\Models\ClientFollowUp;
 
 /**
  * BUG FIX: $fillable was missing the five accounting columns added by the
@@ -60,15 +58,15 @@ class Invoice extends Model
     ];
 
     protected $casts = [
-        'lines' => 'array',
-        'subtotal' => 'decimal:2',
-        'tax' => 'decimal:2',
-        'total' => 'decimal:2',
+        'lines'            => 'array',
+        'subtotal'         => 'decimal:2',
+        'tax'              => 'decimal:2',
+        'total'            => 'decimal:2',
         'functional_total' => 'decimal:4',
-        'exchange_rate' => 'decimal:10',
-        'issue_date' => 'date',
-        'due_date' => 'date',
-        'sent_at' => 'datetime',
+        'exchange_rate'    => 'decimal:10',
+        'issue_date'       => 'date',
+        'due_date'         => 'date',
+        'sent_at'          => 'datetime',
     ];
 
     // ── Status helpers ─────────────────────────────────────────────────────────
@@ -102,7 +100,7 @@ class Invoice extends Model
     {
         static::creating(function (Invoice $invoice) {
             if (empty($invoice->number)) {
-                $year = now()->year;
+                $year  = now()->year;
                 $count = static::whereYear('created_at', $year)->withTrashed()->count() + 1;
                 $invoice->number = sprintf('INV-%d-%04d', $year, $count);
             }
@@ -131,16 +129,12 @@ class Invoice extends Model
         return $this->belongsTo(JournalEntry::class);
     }
 
-    public function followUps(): HasMany
-    {
-        return $this->hasMany(ClientFollowUp::class);
-    }
 
     /**
      * Factories stay in database/factories (Database\\Factories), outside this package.
      */
-    protected static function newFactory(): InvoiceFactory
+    protected static function newFactory(): \Database\Factories\InvoiceFactory
     {
-        return InvoiceFactory::new();
+        return \Database\Factories\InvoiceFactory::new();
     }
 }

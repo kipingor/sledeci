@@ -1,33 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import {
-    Activity,
-    Banknote,
-    BookOpen,
-    Boxes,
-    Building2,
-    CalendarDays,
-    ChevronDown,
-    ClipboardList,
-    FileText,
-    Flag,
-    Folder,
-    FolderGit2,
-    GitBranch,
-    Inbox,
-    Landmark,
-    LayoutGrid,
-    Mail,
-    Megaphone,
-    MessageSquare,
-    Package,
-    Receipt,
-    ScrollText,
-    Shield,
-    ShoppingCart,
-    Truck,
-    type LucideIcon,
-    Users,
-} from 'lucide-react';
+import { Activity, BookOpen, CalendarDays, ChevronDown, FileText, Flag, Folder, FolderGit2, Inbox, Landmark, LayoutGrid, Megaphone, Receipt, ScrollText, Shield, type LucideIcon, Users } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { NavFooter } from '@/components/nav-footer';
@@ -80,20 +52,6 @@ const navGroups: SidebarNavGroup[] = [
         items: [
             { title: 'Dashboard', href: web.dashboard().url, icon: LayoutGrid },
             { title: 'Leads', href: web.leads.index().url, icon: FileText },
-            { title: 'Clients', href: web.clients.index().url, icon: Building2 },
-            { title: 'Contacts', href: web.contacts.index().url, icon: Users },
-            {
-                title: 'Opportunities',
-                href: web.opportunities.index().url,
-                icon: Banknote,
-            },
-            { title: 'Pipelines', href: web.pipelines.index().url, icon: GitBranch },
-            { title: 'Activities', href: web.activities.index().url, icon: Activity },
-            {
-                title: 'Follow-ups',
-                href: web.followUps.index().url,
-                icon: CalendarDays,
-            },
         ],
     },
     {
@@ -107,7 +65,7 @@ const navGroups: SidebarNavGroup[] = [
                 icon: Flag,
             },
             {
-                title: 'Tenders',
+                title: 'Tenders & RFPs',
                 href: web.tenders.index().url,
                 icon: ScrollText,
             },
@@ -115,17 +73,6 @@ const navGroups: SidebarNavGroup[] = [
                 title: 'Time Logs',
                 href: web.timeLogs.index().url,
                 icon: Activity,
-            },
-            {
-                title: 'Field Agents',
-                href: web.fieldAgents.index().url,
-                icon: Users,
-            },
-            { title: 'RFPs', href: web.rfps.index().url, icon: FileText },
-            {
-                title: 'Approvals',
-                href: web.approvals.index().url,
-                icon: ClipboardList,
             },
         ],
     },
@@ -147,83 +94,10 @@ const navGroups: SidebarNavGroup[] = [
     {
         label: 'Finance',
         items: [
-            { title: 'Accounting', href: web.accounting.index().url, icon: Landmark },
             {
                 title: 'Invoices',
                 href: web.invoices.index().url,
                 icon: Receipt,
-            },
-            { title: 'Payments', href: web.payments.index().url, icon: Banknote },
-            { title: 'Expenses', href: web.expenses.index().url, icon: Receipt },
-            { title: 'Reports', href: web.reports.index().url, icon: ClipboardList },
-            {
-                title: 'Client Reports',
-                href: web.clientReports.index().url,
-                icon: FileText,
-            },
-            {
-                title: 'Chart of Accounts',
-                href: web.chartOfAccounts.index().url,
-                icon: Landmark,
-            },
-            {
-                title: 'Journal Entries',
-                href: web.journalEntries.index().url,
-                icon: FileText,
-            },
-            {
-                title: 'Accounting Periods',
-                href: web.accountingPeriods.index().url,
-                icon: CalendarDays,
-            },
-            {
-                title: 'Exchange Rates',
-                href: web.exchangeRates.index().url,
-                icon: Banknote,
-            },
-            { title: 'Financing Report', href: web.financing.report().url, icon: Banknote },
-            {
-                title: 'Trade Documents',
-                href: web.tradeDocuments.index().url,
-                icon: FileText,
-            },
-            { title: 'SACCO', href: web.sacco.index().url, icon: Landmark },
-        ],
-    },
-    {
-        label: 'Supply Chain',
-        items: [
-            { title: 'Products', href: web.products.index().url, icon: Package },
-            { title: 'Suppliers', href: web.suppliers.index().url, icon: Building2 },
-            {
-                title: 'Purchase Orders',
-                href: web.purchaseOrders.index().url,
-                icon: ShoppingCart,
-            },
-            { title: 'Deliveries', href: web.deliveries.index().url, icon: Truck },
-            { title: 'Inventory', href: web.inventory.index().url, icon: Boxes },
-            { title: 'Point of Sale', href: web.pos.index().url, icon: ShoppingCart },
-        ],
-    },
-    {
-        label: 'Communications',
-        items: [
-            {
-                title: 'Conversations',
-                href: web.conversations.index().url,
-                icon: MessageSquare,
-            },
-            { title: 'Emails', href: web.emails.index().url, icon: Mail },
-        ],
-    },
-    {
-        label: 'Governance',
-        roles: ['admin', 'auditor'],
-        items: [
-            {
-                title: 'Audit Logs',
-                href: web.auditLogs.index().url,
-                icon: Shield,
             },
         ],
     },
@@ -243,12 +117,12 @@ const navGroups: SidebarNavGroup[] = [
 const footerNavItems: SidebarNavItem[] = [
     {
         title: 'Repository',
-        href: 'https://github.com/kipingor/sledeci',
+        href: 'https://github.com/laravel/react-starter-kit',
         icon: FolderGit2,
     },
     {
-        title: 'Quick Start Guide',
-        href: 'https://github.com/kipingor/sledeci/blob/main/README.md',
+        title: 'Documentation',
+        href: 'https://laravel.com/docs/starter-kits#react',
         icon: BookOpen,
     },
 ];

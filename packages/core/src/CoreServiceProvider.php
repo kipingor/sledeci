@@ -4,7 +4,9 @@ namespace Sledeci\Core;
 
 use Illuminate\Support\ServiceProvider;
 use Sledeci\Core\Contracts\ClientFinancialSummary;
+use Sledeci\Core\Contracts\PendingFollowUps;
 use Sledeci\Core\Fallbacks\NullClientFinancialSummary;
+use Sledeci\Core\Fallbacks\NullPendingFollowUps;
 use Sledeci\Core\Modules\ModuleRegistry;
 
 class CoreServiceProvider extends ServiceProvider
@@ -18,6 +20,7 @@ class CoreServiceProvider extends ServiceProvider
         // Soft dependencies: packages work without their optional partners.
         // The accounting package (or the host) overrides this binding.
         $this->app->bindIf(ClientFinancialSummary::class, NullClientFinancialSummary::class);
+        $this->app->bindIf(PendingFollowUps::class, NullPendingFollowUps::class);
     }
 
     public function boot(): void

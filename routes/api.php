@@ -1,26 +1,23 @@
 <?php
 
-use App\Http\Controllers\Api\V1\ActivityController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\AiController;
-use App\Http\Controllers\Api\V1\AutomationLogController;
-use App\Http\Controllers\Api\V1\AutomationRuleController;
-use App\Http\Controllers\Api\V1\DashboardAnalyticsController;
-use App\Http\Controllers\Api\V1\DashboardController;
-use App\Http\Controllers\Api\V1\FinancialDashboardController;
-use App\Http\Controllers\Api\V1\ImportExportController;
+use App\Http\Controllers\Api\V1\UploadController;
+use App\Http\Controllers\Api\V1\PipelineController;
+use App\Http\Controllers\Api\V1\TaskController;
 use App\Http\Controllers\Api\V1\LeadController;
+use App\Http\Controllers\Api\V1\ActivityController;
+use App\Http\Controllers\Api\V1\ImportExportController;
+use App\Http\Controllers\Api\V1\DashboardAnalyticsController;
 use App\Http\Controllers\Api\V1\LeadDocumentController;
 use App\Http\Controllers\Api\V1\LeadQuestionController;
 use App\Http\Controllers\Api\V1\OpportunityController;
-use App\Http\Controllers\Api\V1\PipelineController;
 use App\Http\Controllers\Api\V1\ProjectController;
-use App\Http\Controllers\Api\V1\ProjectTemplateController;
 use App\Http\Controllers\Api\V1\ProposalController;
-use App\Http\Controllers\Api\V1\TaskController;
-use App\Http\Controllers\Api\V1\UploadController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use Sledeci\Clients\Http\Controllers\ClientReportController;
+use App\Http\Controllers\Api\V1\DashboardController;
+use App\Http\Controllers\Api\V1\FinancialDashboardController;
+use Illuminate\Http\JsonResponse;
 
 /*
 |--------------------------------------------------------------------------
@@ -81,13 +78,13 @@ Route::prefix('v1')->name('api.')->group(function () {
         // Bulk operations
         Route::post('leads/bulk-delete', [LeadController::class, 'bulkDelete'])
             ->name('leads.bulk-delete');
-
+        
         Route::post('leads/bulk-archive', [LeadController::class, 'bulkArchive'])
             ->name('leads.bulk-archive');
-
+        
         Route::post('leads/bulk-update-status', [LeadController::class, 'bulkUpdateStatus'])
             ->name('leads.bulk-update-status');
-
+        
         Route::post('leads/bulk-assign-owner', [LeadController::class, 'bulkAssignOwner'])
             ->name('leads.bulk-assign-owner');
 
@@ -169,11 +166,11 @@ Route::prefix('v1')->name('api.')->group(function () {
                 ->name('status');
             Route::delete('imports/{importJob}', [ImportExportController::class, 'deleteImport'])
                 ->name('delete');
-
+            
             // Export
             Route::post('export', [ImportExportController::class, 'export'])
                 ->name('export');
-
+            
             // Template
             Route::get('template', [ImportExportController::class, 'downloadTemplate'])
                 ->name('template');
@@ -276,9 +273,9 @@ Route::prefix('v1')->name('api.')->group(function () {
             ->name('projects.complete');
 
         // Client report metrics (AJAX — used by report create form)
-        Route::get('client-report-metrics', [ClientReportController::class, 'metrics'])
+        Route::get('client-report-metrics', [\Sledeci\Clients\Http\Controllers\ClientReportController::class, 'metrics'])
             ->name('client-report-metrics');
-
+        
         // ========================================================================
         // PROPOSALS
         // ========================================================================
@@ -312,23 +309,23 @@ Route::prefix('v1')->name('api.')->group(function () {
         // ========================================================================
         // PROJECT TEMPLATES
         // ========================================================================
-        Route::post('project-templates/{template}/duplicate', [ProjectTemplateController::class, 'duplicate'])
+        Route::post('project-templates/{template}/duplicate', [\App\Http\Controllers\Api\V1\ProjectTemplateController::class, 'duplicate'])
             ->name('project-templates.duplicate');
-        Route::apiResource('project-templates', ProjectTemplateController::class);
+        Route::apiResource('project-templates', \App\Http\Controllers\Api\V1\ProjectTemplateController::class);
 
         // ========================================================================
         // AUTOMATION RULES
         // ========================================================================
-        Route::post('automation-rules/{rule}/test', [AutomationRuleController::class, 'test'])
+        Route::post('automation-rules/{rule}/test', [\App\Http\Controllers\Api\V1\AutomationRuleController::class, 'test'])
             ->name('automation-rules.test');
-        Route::apiResource('automation-rules', AutomationRuleController::class);
+        Route::apiResource('automation-rules', \App\Http\Controllers\Api\V1\AutomationRuleController::class);
 
         // ========================================================================
         // AUTOMATION LOGS
         // ========================================================================
-        Route::post('automation-logs/{log}/retry', [AutomationLogController::class, 'retry'])
+        Route::post('automation-logs/{log}/retry', [\App\Http\Controllers\Api\V1\AutomationLogController::class, 'retry'])
             ->name('automation-logs.retry');
-        Route::apiResource('automation-logs', AutomationLogController::class)
+        Route::apiResource('automation-logs', \App\Http\Controllers\Api\V1\AutomationLogController::class)
             ->only(['index', 'show']);
 
         // ========================================================================

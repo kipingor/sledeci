@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Delivery;
 use App\Models\DeliveryDocument;
+use App\Models\PurchaseOrder;
 use App\Services\Inventory\InventoryService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
@@ -36,12 +37,10 @@ class DeliveryController extends Controller
             'client:id,name,company'
         );
 
-        if ($status = $request->get('status')) {
-            $query->where('status', $status);
-        }
+        if ($status = $request->get('status')) $query->where('status', $status);
 
         $deliveries = $query->orderByDesc('created_at')->paginate(20)->withQueryString();
-        $counts = Delivery::selectRaw('status, count(*) as cnt')->groupBy('status')->pluck('cnt', 'status');
+        $counts     = Delivery::selectRaw('status, count(*) as cnt')->groupBy('status')->pluck('cnt', 'status');
 
         return Inertia::render('deliveries/index', compact('deliveries', 'counts'));
     }
@@ -62,7 +61,6 @@ class DeliveryController extends Controller
     public function dispatch(Delivery $delivery)
     {
         $delivery->update(['status' => 'in_transit']);
-
         return back()->with('success', 'Delivery marked as in transit.');
     }
 
@@ -77,10 +75,10 @@ class DeliveryController extends Controller
     public function deliver(Request $request, Delivery $delivery)
     {
         $data = $request->validate([
-            'signed_by' => 'required|string|max:255',
-            'client_notes' => 'nullable|string',
+            'signed_by'      => 'required|string|max:255',
+            'client_notes'   => 'nullable|string',
             'delivered_date' => 'required|date',
-            'items' => 'nullable|array',
+            'items'          => 'nullable|array',
         ]);
 
         // Merge any item-level overrides from the request (partial deliveries)
@@ -89,28 +87,28 @@ class DeliveryController extends Controller
         }
 
         $delivery->update(array_merge($data, [
-            'status' => 'delivered',
-            'signed_at' => now(),
+            'status'      => 'delivered',
+            'signed_at'   => now(),
             'received_by' => Auth::id(),
         ]));
 
         // Update PO status
-        $po = $delivery->purchaseOrder;
+        $po          = $delivery->purchaseOrder;
         $allDelivered = $po->deliveries()->where('status', '!=', 'delivered')->doesntExist();
         $po->update(['status' => $allDelivered ? 'delivered' : 'partially_delivered']);
 
         // Auto-generate GRN document
         DeliveryDocument::create([
-            'delivery_id' => $delivery->id,
+            'delivery_id'       => $delivery->id,
             'purchase_order_id' => $delivery->purchase_order_id,
-            'supplier_id' => $po->supplier_id,
-            'uploaded_by' => Auth::id(),
-            'type' => 'grn',
-            'title' => "GRN – {$delivery->number}",
-            'status' => 'approved',
-            'approved_by' => Auth::id(),
-            'approved_at' => now(),
-            'notes' => "Auto-generated on delivery sign-off by {$data['signed_by']}.",
+            'supplier_id'       => $po->supplier_id,
+            'uploaded_by'       => Auth::id(),
+            'type'              => 'grn',
+            'title'             => "GRN – {$delivery->number}",
+            'status'            => 'approved',
+            'approved_by'       => Auth::id(),
+            'approved_at'       => now(),
+            'notes'             => "Auto-generated on delivery sign-off by {$data['signed_by']}.",
         ]);
 
         // ── STOCK UPDATE (the fix) ─────────────────────────────────────────
@@ -127,28 +125,27 @@ class DeliveryController extends Controller
     {
         $data = $request->validate([
             'client_notes' => 'required|string',
-            'signed_by' => 'nullable|string',
+            'signed_by'    => 'nullable|string',
         ]);
 
         $delivery->update(array_merge($data, ['status' => 'rejected', 'signed_at' => now()]));
-
         return back()->with('success', 'Delivery rejection recorded.');
     }
 
     public function uploadDocument(Request $request, Delivery $delivery)
     {
         $data = $request->validate([
-            'type' => 'required|in:grn,delivery_note,contract,invoice,other',
+            'type'  => 'required|in:grn,delivery_note,contract,invoice,other',
             'title' => 'required|string|max:255',
             'notes' => 'nullable|string',
         ]);
 
         DeliveryDocument::create(array_merge($data, [
-            'delivery_id' => $delivery->id,
+            'delivery_id'       => $delivery->id,
             'purchase_order_id' => $delivery->purchase_order_id,
-            'supplier_id' => $delivery->purchaseOrder->supplier_id ?? null,
-            'uploaded_by' => Auth::id(),
-            'status' => 'pending',
+            'supplier_id'       => $delivery->purchaseOrder->supplier_id ?? null,
+            'uploaded_by'       => Auth::id(),
+            'status'            => 'pending',
         ]));
 
         return back()->with('success', 'Document uploaded.');
@@ -158,17 +155,17 @@ class DeliveryController extends Controller
     {
         $data = $request->validate([
             'action' => 'required|in:approved,rejected',
-            'notes' => 'nullable|string',
+            'notes'  => 'nullable|string',
         ]);
 
         $document->update([
-            'status' => $data['action'],
-            'notes' => $data['notes'] ?? $document->notes,
+            'status'      => $data['action'],
+            'notes'       => $data['notes'] ?? $document->notes,
             'approved_by' => Auth::id(),
             'approved_at' => now(),
         ]);
 
-        return back()->with('success', 'Document '.$data['action'].'.');
+        return back()->with('success', 'Document ' . $data['action'] . '.');
     }
 
     public function confirmationPdf(Delivery $delivery): HttpResponse
@@ -180,7 +177,7 @@ class DeliveryController extends Controller
         );
 
         if (empty($delivery->getAttributes()['confirm_token'] ?? null)) {
-            $meta = $delivery->items ?? [];
+            $meta  = $delivery->items ?? [];
             $token = Str::random(32);
             $delivery->update(['items' => array_merge($meta, ['_confirm_token' => $token])]);
         }
@@ -190,11 +187,11 @@ class DeliveryController extends Controller
         ]);
 
         $company = [
-            'name' => config('app.name', 'LMA'),
+            'name'    => config('app.name', 'LMA'),
             'address' => config('company.address', 'Nairobi, Kenya'),
-            'email' => config('company.email', ''),
-            'phone' => config('company.phone', ''),
-            'logo' => public_path('images/logo.png'),
+            'email'   => config('company.email', ''),
+            'phone'   => config('company.phone', ''),
+            'logo'    => public_path('images/logo.png'),
         ];
 
         $pdf = app('dompdf.wrapper');
@@ -207,34 +204,27 @@ class DeliveryController extends Controller
     public function confirmPage(string $token)
     {
         $delivery = $this->findByToken($token);
-        if (! $delivery) {
-            abort(404, 'Confirmation link is invalid or has expired.');
-        }
+        if (! $delivery) abort(404, 'Confirmation link is invalid or has expired.');
         $delivery->load('purchaseOrder:id,number', 'client:id,name,company');
-
         return Inertia::render('deliveries/confirm', ['delivery' => $delivery, 'token' => $token]);
     }
 
     public function confirmByToken(Request $request, string $token)
     {
         $delivery = $this->findByToken($token);
-        if (! $delivery) {
-            abort(404, 'Confirmation link is invalid or has expired.');
-        }
-        if ($delivery->status === 'delivered') {
-            return back()->with('info', 'This delivery has already been confirmed.');
-        }
+        if (! $delivery) abort(404, 'Confirmation link is invalid or has expired.');
+        if ($delivery->status === 'delivered') return back()->with('info', 'This delivery has already been confirmed.');
 
         $data = $request->validate([
-            'signed_by' => 'required|string|max:255',
+            'signed_by'    => 'required|string|max:255',
             'client_notes' => 'nullable|string|max:1000',
         ]);
 
         $delivery->update([
-            'status' => 'delivered',
-            'signed_by' => $data['signed_by'],
-            'client_notes' => $data['client_notes'] ?? null,
-            'signed_at' => now(),
+            'status'         => 'delivered',
+            'signed_by'      => $data['signed_by'],
+            'client_notes'   => $data['client_notes'] ?? null,
+            'signed_at'      => now(),
             'delivered_date' => now()->toDateString(),
         ]);
 

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use Sledeci\Accounting\Models\ChartOfAccount;
+use Illuminate\Database\Seeder;
 
 /**
  * ChartOfAccountsSeeder
@@ -40,7 +40,7 @@ class ChartOfAccountsSeeder extends Seeder
         // Set parent relationships (second pass, after all records created)
         foreach ($this->parentRelationships() as [$childCode, $parentCode]) {
             $parent = ChartOfAccount::where('code', $parentCode)->first();
-            $child = ChartOfAccount::where('code', $childCode)->first();
+            $child  = ChartOfAccount::where('code', $childCode)->first();
             if ($parent && $child) {
                 $child->update(['parent_id' => $parent->id]);
             }

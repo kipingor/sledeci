@@ -2,8 +2,8 @@
 
 namespace Sledeci\Accounting\Policies;
 
-use App\Models\User;
 use Sledeci\Accounting\Models\Expense;
+use App\Models\User;
 use Sledeci\Core\Policies\ChecksModuleRoles;
 
 /**

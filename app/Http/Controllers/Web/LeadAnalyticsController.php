@@ -3,18 +3,18 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\Lead;
-use Carbon\Carbon;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use App\Models\Lead;
 use Illuminate\Support\Facades\DB;
 
 class LeadAnalyticsController extends Controller
 {
     /**
      * Get analytics data for the dashboard
-     *
-     * @return JsonResponse
+     * 
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getLeadAnalytics(Request $request)
     {
@@ -25,10 +25,10 @@ class LeadAnalyticsController extends Controller
         ]);
 
         $period = $request->input('period', 'month');
-
+        
         // Calculate date range
         $dateRange = $this->getDateRange($period, $request);
-
+        
         $analytics = [
             'totalLeads' => $this->getTotalLeads($request->user()),
             'newLeadsThisMonth' => $this->getNewLeads($dateRange, $request->user()),
@@ -49,7 +49,7 @@ class LeadAnalyticsController extends Controller
     {
         $query = Lead::query();
 
-        if (! $user->isAdmin()) {
+        if (!$user->isAdmin()) {
             $query->where('owner_id', $user->id);
         }
 
@@ -63,7 +63,7 @@ class LeadAnalyticsController extends Controller
     {
         $query = Lead::whereBetween('created_at', [$dateRange['start'], $dateRange['end']]);
 
-        if (! $user->isAdmin()) {
+        if (!$user->isAdmin()) {
             $query->where('owner_id', $user->id);
         }
 
@@ -77,12 +77,12 @@ class LeadAnalyticsController extends Controller
     {
         $query = Lead::whereBetween('created_at', [$dateRange['start'], $dateRange['end']]);
 
-        if (! $user->isAdmin()) {
+        if (!$user->isAdmin()) {
             $query->where('owner_id', $user->id);
         }
 
         $total = $query->count();
-
+        
         if ($total === 0) {
             return 0;
         }
@@ -99,7 +99,7 @@ class LeadAnalyticsController extends Controller
     {
         $query = Lead::query();
 
-        if (! $user->isAdmin()) {
+        if (!$user->isAdmin()) {
             $query->where('owner_id', $user->id);
         }
 
@@ -116,7 +116,7 @@ class LeadAnalyticsController extends Controller
     {
         $query = Lead::query();
 
-        if (! $user->isAdmin()) {
+        if (!$user->isAdmin()) {
             $query->where('owner_id', $user->id);
         }
 
@@ -139,7 +139,7 @@ class LeadAnalyticsController extends Controller
     {
         $query = Lead::query();
 
-        if (! $user->isAdmin()) {
+        if (!$user->isAdmin()) {
             $query->where('owner_id', $user->id);
         }
 
@@ -171,7 +171,7 @@ class LeadAnalyticsController extends Controller
 
             $query = Lead::whereBetween('created_at', [$start, $end]);
 
-            if (! $user->isAdmin()) {
+            if (!$user->isAdmin()) {
                 $query->where('owner_id', $user->id);
             }
 
@@ -201,7 +201,7 @@ class LeadAnalyticsController extends Controller
         }
 
         $end = Carbon::now();
-
+        
         switch ($period) {
             case 'week':
                 $start = Carbon::now()->subWeek();
@@ -230,7 +230,7 @@ class LeadAnalyticsController extends Controller
     private function getMonthsForPeriod($period)
     {
         $months = [];
-        $count = match ($period) {
+        $count = match($period) {
             'week' => 7,
             'quarter' => 3,
             'year' => 12,
@@ -289,7 +289,7 @@ class LeadAnalyticsController extends Controller
             ->where('status', 'won')
             ->whereNotNull('converted_at');
 
-        if (! $user->isAdmin()) {
+        if (!$user->isAdmin()) {
             $query->where('owner_id', $user->id);
         }
 
@@ -310,7 +310,7 @@ class LeadAnalyticsController extends Controller
     {
         // Quality score based on conversion rate, engagement, etc.
         $conversionRate = $this->getConversionRate($dateRange, $user);
-
+        
         // Simplified quality score (0-100)
         $qualityScore = min(100, $conversionRate * 3);
 
@@ -327,22 +327,11 @@ class LeadAnalyticsController extends Controller
      */
     private function getQualityGrade($score)
     {
-        if ($score >= 90) {
-            return 'A+';
-        }
-        if ($score >= 80) {
-            return 'A';
-        }
-        if ($score >= 70) {
-            return 'B';
-        }
-        if ($score >= 60) {
-            return 'C';
-        }
-        if ($score >= 50) {
-            return 'D';
-        }
-
+        if ($score >= 90) return 'A+';
+        if ($score >= 80) return 'A';
+        if ($score >= 70) return 'B';
+        if ($score >= 60) return 'C';
+        if ($score >= 50) return 'D';
         return 'F';
     }
 

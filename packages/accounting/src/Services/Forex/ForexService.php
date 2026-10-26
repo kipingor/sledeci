@@ -2,12 +2,12 @@
 
 namespace Sledeci\Accounting\Services\Forex;
 
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Sledeci\Accounting\Models\ForexRate;
 use Sledeci\Accounting\Models\Invoice;
 use Sledeci\Accounting\Models\Payment;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 /**
  * ForexService
@@ -25,8 +25,7 @@ use Sledeci\Accounting\Models\Payment;
 class ForexService
 {
     private const CACHE_PREFIX = 'forex_rate_';
-
-    private const CACHE_TTL = 3600; // 1 hour
+    private const CACHE_TTL    = 3600; // 1 hour
 
     // African currencies we care about — drives the UI dropdowns
     public const AFRICAN_CURRENCIES = [
@@ -59,13 +58,11 @@ class ForexService
     public function rate(string $from, string $to): float
     {
         $from = strtoupper($from);
-        $to = strtoupper($to);
+        $to   = strtoupper($to);
 
-        if ($from === $to) {
-            return 1.0;
-        }
+        if ($from === $to) return 1.0;
 
-        $cacheKey = self::CACHE_PREFIX."{$from}_{$to}";
+        $cacheKey = self::CACHE_PREFIX . "{$from}_{$to}";
 
         return Cache::remember($cacheKey, self::CACHE_TTL, function () use ($from, $to) {
             return $this->fetchRate($from, $to);
@@ -90,26 +87,26 @@ class ForexService
 
         try {
             $response = Http::timeout(15)->get(
-                'https://v6.exchangerate-api.com/v6/'.config('services.exchangerate_api.key')."/latest/{$base}"
+                "https://v6.exchangerate-api.com/v6/" . config('services.exchangerate_api.key') . "/latest/{$base}"
             );
 
             if ($response->failed()) {
-                throw new \RuntimeException('ExchangeRate-API HTTP error: '.$response->status());
+                throw new \RuntimeException('ExchangeRate-API HTTP error: ' . $response->status());
             }
 
-            $data = $response->json();
+            $data  = $response->json();
             $rates = $data['conversion_rates'] ?? [];
 
             foreach ($rates as $quote => $rate) {
-                $cacheKey = self::CACHE_PREFIX."{$base}_{$quote}";
+                $cacheKey = self::CACHE_PREFIX . "{$base}_{$quote}";
                 Cache::put($cacheKey, (float) $rate, self::CACHE_TTL);
 
                 // Persist to DB for historical reference and offline fallback
                 ForexRate::updateOrCreate(
                     ['base_currency' => $base, 'quote_currency' => $quote],
                     [
-                        'rate' => $rate,
-                        'source' => 'exchangerate-api',
+                        'rate'       => $rate,
+                        'source'     => 'exchangerate-api',
                         'fetched_at' => now(),
                     ]
                 );
@@ -120,7 +117,6 @@ class ForexService
             return $rates;
         } catch (\Throwable $e) {
             Log::warning('Forex rate refresh failed, using DB fallback', ['error' => $e->getMessage()]);
-
             return $this->ratesFromDb($base);
         }
     }
@@ -133,27 +129,27 @@ class ForexService
      * Stamp an invoice with the current exchange rate and functional total.
      * Call this when an invoice is created or issued.
      *
-     * @param  string  $functionalCurrency  e.g. 'KES'
+     * @param  Invoice  $invoice
+     * @param  string   $functionalCurrency  e.g. 'KES'
      */
     public function stampInvoice(Invoice $invoice, string $functionalCurrency = 'KES'): void
     {
         if ($invoice->currency === $functionalCurrency) {
             $invoice->update([
-                'exchange_rate' => 1.0,
-                'functional_currency' => $functionalCurrency,
-                'functional_total' => $invoice->total,
+                'exchange_rate'      => 1.0,
+                'functional_currency'=> $functionalCurrency,
+                'functional_total'   => $invoice->total,
             ]);
-
             return;
         }
 
-        $rate = $this->rate($invoice->currency, $functionalCurrency);
+        $rate           = $this->rate($invoice->currency, $functionalCurrency);
         $functionalTotal = round((float) $invoice->total * $rate, 4);
 
         $invoice->update([
-            'exchange_rate' => $rate,
-            'functional_currency' => $functionalCurrency,
-            'functional_total' => $functionalTotal,
+            'exchange_rate'      => $rate,
+            'functional_currency'=> $functionalCurrency,
+            'functional_total'   => $functionalTotal,
         ]);
     }
 
@@ -162,6 +158,9 @@ class ForexService
      *
      * If the invoice was invoiced at rate R1 but payment arrives at rate R2,
      * the difference is a realised forex gain (R2 > R1) or loss (R2 < R1).
+     *
+     * @param  Payment  $payment
+     * @param  string   $functionalCurrency
      */
     public function recordPaymentForex(Payment $payment, string $functionalCurrency = 'KES'): void
     {
@@ -171,12 +170,12 @@ class ForexService
         }
 
         // Rate at time of payment
-        $paymentRate = $this->rate($invoice->currency, $functionalCurrency);
+        $paymentRate     = $this->rate($invoice->currency, $functionalCurrency);
         $functionalAmount = round((float) $payment->amount * $paymentRate, 4);
 
         $payment->update([
-            'exchange_rate' => $paymentRate,
-            'functional_amount' => $functionalAmount,
+            'exchange_rate'    => $paymentRate,
+            'functional_amount'=> $functionalAmount,
         ]);
 
         // Realised gain/loss = (payment rate - invoice rate) × payment amount
@@ -191,6 +190,7 @@ class ForexService
      * Build a multi-currency summary for the dashboard.
      * Converts all outstanding invoice totals to the functional currency.
      *
+     * @param  string   $functionalCurrency
      * @return array{total_kes: float, by_currency: array}
      */
     public function buildMultiCurrencySummary(string $functionalCurrency = 'KES'): array
@@ -201,26 +201,26 @@ class ForexService
             ->get();
 
         $totalFunctional = 0;
-        $byCurrency = [];
+        $byCurrency      = [];
 
         foreach ($invoices as $row) {
-            $rate = $this->rate($row->currency, $functionalCurrency);
-            $converted = round((float) $row->total * $rate, 2);
+            $rate         = $this->rate($row->currency, $functionalCurrency);
+            $converted    = round((float) $row->total * $rate, 2);
             $totalFunctional += $converted;
 
             $byCurrency[] = [
-                'currency' => $row->currency,
-                'total' => (float) $row->total,
-                'rate' => $rate,
-                'converted' => $converted,
+                'currency'   => $row->currency,
+                'total'      => (float) $row->total,
+                'rate'       => $rate,
+                'converted'  => $converted,
                 'functional' => $functionalCurrency,
             ];
         }
 
         return [
             'functional_currency' => $functionalCurrency,
-            'total' => round($totalFunctional, 2),
-            'by_currency' => $byCurrency,
+            'total'               => round($totalFunctional, 2),
+            'by_currency'         => $byCurrency,
         ];
     }
 
@@ -233,7 +233,7 @@ class ForexService
         // Try ExchangeRate-API
         try {
             $response = Http::timeout(10)->get(
-                'https://v6.exchangerate-api.com/v6/'.config('services.exchangerate_api.key')."/pair/{$from}/{$to}"
+                "https://v6.exchangerate-api.com/v6/" . config('services.exchangerate_api.key') . "/pair/{$from}/{$to}"
             );
 
             if ($response->ok()) {
@@ -244,7 +244,6 @@ class ForexService
                         ['base_currency' => $from, 'quote_currency' => $to],
                         ['rate' => $rate, 'source' => 'exchangerate-api', 'fetched_at' => now()]
                     );
-
                     return $rate;
                 }
             }
@@ -269,14 +268,13 @@ class ForexService
 
         // Cross-rate via USD if direct pair missing
         $fromUsd = ForexRate::where('base_currency', 'USD')->where('quote_currency', $from)->latest('fetched_at')->value('rate');
-        $toUsd = ForexRate::where('base_currency', 'USD')->where('quote_currency', $to)->latest('fetched_at')->value('rate');
+        $toUsd   = ForexRate::where('base_currency', 'USD')->where('quote_currency', $to)->latest('fetched_at')->value('rate');
 
         if ($fromUsd && $toUsd) {
             return round((float) $toUsd / (float) $fromUsd, 8);
         }
 
         Log::error("No forex rate available for {$from}/{$to}");
-
         return 1.0; // last resort: treat as parity
     }
 
@@ -286,7 +284,7 @@ class ForexService
             ->latest('fetched_at')
             ->get()
             ->pluck('rate', 'quote_currency')
-            ->map(fn ($r) => (float) $r)
+            ->map(fn($r) => (float) $r)
             ->toArray();
     }
 }

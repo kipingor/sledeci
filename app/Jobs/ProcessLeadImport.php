@@ -10,7 +10,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class ProcessLeadImport implements ShouldQueue
@@ -18,7 +17,6 @@ class ProcessLeadImport implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $timeout = 3600; // 1 hour
-
     public $tries = 3;
 
     /**
@@ -41,7 +39,7 @@ class ProcessLeadImport implements ShouldQueue
             $worksheet = $spreadsheet->getActiveSheet();
 
             $highestColumn = $worksheet->getHighestColumn();
-            $highestColumnIndex = Coordinate::columnIndexFromString($highestColumn);
+            $highestColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn);
             $highestRow = $worksheet->getHighestRow();
 
             $fieldMapping = $this->importJob->field_mapping;
@@ -62,7 +60,7 @@ class ProcessLeadImport implements ShouldQueue
                 // Validate row
                 $validation = $importService->validateRow($rowData, $fieldMapping);
 
-                if (! $validation['valid']) {
+                if (!$validation['valid']) {
                     $failed++;
                     $errors[] = [
                         'row' => $row,

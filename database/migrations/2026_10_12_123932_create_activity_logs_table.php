@@ -25,10 +25,10 @@ return new class extends Migration
             // Polymorphic relationship indexes
             $table->index(['subject_type', 'subject_id'], 'idx_activity_subject');
             $table->index(['causer_type', 'causer_id'], 'idx_activity_causer');
-
+                              
             // Recent activity queries
             $table->index('created_at', 'idx_activity_created_at');
-
+            
             // User activity: WHERE causer_type = ? AND causer_id = ? ORDER BY created_at DESC
             $table->index(['causer_type', 'causer_id', 'created_at'], 'idx_activity_causer_date');
         });

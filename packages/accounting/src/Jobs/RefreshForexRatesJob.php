@@ -2,13 +2,13 @@
 
 namespace Sledeci\Accounting\Jobs;
 
+use Sledeci\Accounting\Services\Forex\ForexService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use Sledeci\Accounting\Services\Forex\ForexService;
 
 /**
  * RefreshForexRatesJob
@@ -23,17 +23,16 @@ class RefreshForexRatesJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $tries = 2;
-
+    public int $tries   = 2;
     public int $backoff = 300; // 5 min retry
 
     public function handle(ForexService $forex): void
     {
         $functional = config('company.functional_currency', 'KES');
-        $rates = $forex->refreshRates($functional);
+        $rates      = $forex->refreshRates($functional);
 
         Log::info('Forex rates refreshed via scheduled job', [
-            'base' => $functional,
+            'base'  => $functional,
             'count' => count($rates),
         ]);
     }

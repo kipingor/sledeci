@@ -5,7 +5,6 @@ use App\Http\Middleware\EnsureRegistrationEnabled;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\LogUserActivity;
-use App\Http\Middleware\VerifyWebhookToken;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -30,17 +29,16 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
 
         // Telco/Mailgun callbacks are server-to-server POSTs without a CSRF token; they are
-        // authenticated by VerifyWebhookToken / the Mailgun signature instead.
+        // authenticated by the kenya-payments VerifyWebhookToken middleware / the Mailgun signature instead.
         $middleware->preventRequestForgery(except: ['webhooks/*']);
 
         // Cookie/session based auth for the first-party SPA calling /api/* (auth:sanctum).
         $middleware->statefulApi();
 
         $middleware->alias([
-            'module.access' => EnforceModuleAccess::class,
-            'webhook.token' => VerifyWebhookToken::class,
-            'role' => RoleMiddleware::class,
-            'permission' => PermissionMiddleware::class,
+            'module.access'      => EnforceModuleAccess::class,
+            'role'               => RoleMiddleware::class,
+            'permission'         => PermissionMiddleware::class,
             'role_or_permission' => RoleOrPermissionMiddleware::class,
         ]);
 

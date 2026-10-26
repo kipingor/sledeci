@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vite-plus/test';
+import { describe, it, expect } from 'vitest';
 import { DataTable, type Column } from '../data-table';
 
 interface Row { id: number; name: string; email: string }

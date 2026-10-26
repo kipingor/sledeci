@@ -7,6 +7,7 @@ use App\Services\Lead\LeadService;
 
 class CreateLeadAction
 {
+    
     public function __construct(
         protected LeadService $leadService
     ) {}

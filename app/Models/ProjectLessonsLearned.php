@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Database\Factories\ProjectLessonsLearnedFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProjectLessonsLearned extends Model
 {
-    /** @use HasFactory<ProjectLessonsLearnedFactory> */
+    /** @use HasFactory<\Database\Factories\ProjectLessonsLearnedFactory> */
     use HasFactory;
 
     public const CATEGORIES = [

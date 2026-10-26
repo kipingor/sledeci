@@ -6,8 +6,8 @@ use App\Enums\LeadStatus;
 use App\Models\Lead;
 use App\Models\PipelineStage;
 use App\Models\User;
-use App\Services\Lead\LeadStatusService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class LeadStatusTransitionTest extends TestCase
@@ -15,7 +15,6 @@ class LeadStatusTransitionTest extends TestCase
     use RefreshDatabase;
 
     protected User $user;
-
     protected PipelineStage $stage;
 
     protected function setUp(): void
@@ -384,7 +383,7 @@ class LeadStatusTransitionTest extends TestCase
         ]);
 
         // Timestamps are maintained by the status service (not by a raw model update)
-        app(LeadStatusService::class)->transition($lead, LeadStatus::CONTACTED);
+        app(\App\Services\Lead\LeadStatusService::class)->transition($lead, LeadStatus::CONTACTED);
 
         $this->assertNotNull($lead->fresh()->contacted_at);
     }

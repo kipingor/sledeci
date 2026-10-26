@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Enums\LeadStatus;
-use App\Exceptions\InvalidStatusTransitionException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Lead\StoreLeadRequest;
-use App\Http\Requests\Lead\TransitionLeadStatusRequest;
 use App\Http\Requests\Lead\UpdateLeadRequest;
+use App\Http\Requests\Lead\TransitionLeadStatusRequest;
 use App\Models\Lead;
 use App\Services\Lead\LeadService;
 use App\Services\Lead\LeadStatusService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -21,7 +18,8 @@ class LeadController extends Controller
     public function __construct(
         protected LeadService $leadService,
         protected LeadStatusService $leadStatusService
-    ) {}
+    ) {
+    }
 
     /**
      * Get paginated list of leads with filters
@@ -29,6 +27,7 @@ class LeadController extends Controller
     public function index(Request $request): JsonResponse
     {
         $this->authorize('viewAny', Lead::class);
+
 
         $filters = $request->only(['owner_id', 'pipeline_stage_id', 'status', 'type', 'search']);
         $leads = $this->leadService->list(
@@ -38,7 +37,7 @@ class LeadController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $leads,
+            'data' => $leads
         ]);
     }
 
@@ -71,7 +70,7 @@ class LeadController extends Controller
             'meta' => [
                 'available_transitions' => $this->leadStatusService->getAvailableTransitions($lead),
                 'status_history' => $this->leadStatusService->getStatusHistory($lead),
-            ],
+            ]
         ]);
     }
 
@@ -119,7 +118,7 @@ class LeadController extends Controller
                 'by_stage' => $this->leadService->getStageCounts(),
                 'new_this_week' => $newThisWeek->count(),
                 'new_this_month' => $newThisMonth->count(),
-            ],
+            ]
         ]);
     }
 
@@ -129,7 +128,7 @@ class LeadController extends Controller
     public function restore(int $id): JsonResponse
     {
         $lead = Lead::withTrashed()->findOrFail($id);
-
+        
         $this->authorize('restore', $lead);
 
         $this->leadService->restore($lead);
@@ -219,10 +218,10 @@ class LeadController extends Controller
     {
         // Authorization is handled in the request class
         $validated = $request->validated();
-        $newStatus = LeadStatus::from($validated['status']);
+        $newStatus = \App\Enums\LeadStatus::from($validated['status']);
 
         try {
-            if ($newStatus === LeadStatus::LOST && isset($validated['reason'])) {
+            if ($newStatus === \App\Enums\LeadStatus::LOST && isset($validated['reason'])) {
                 $lead = $this->leadStatusService->markAsLost($lead, $validated['reason']);
             } else {
                 $lead = $this->leadStatusService->transition($lead, $newStatus);
@@ -233,7 +232,7 @@ class LeadController extends Controller
                 'message' => "Lead status updated to {$newStatus->label()}",
                 'data' => $lead->load(['owner', 'pipelineStage']),
             ]);
-        } catch (InvalidStatusTransitionException $e) {
+        } catch (\App\Exceptions\InvalidStatusTransitionException $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),
@@ -259,11 +258,11 @@ class LeadController extends Controller
     /**
      * Toggle starred status for a lead
      */
-    public function toggleStar(Lead $lead): RedirectResponse
+    public function toggleStar(Lead $lead): \Illuminate\Http\RedirectResponse
     {
         $this->authorize('update', $lead);
 
-        $lead->update(['is_starred' => ! $lead->is_starred]);
+        $lead->update(['is_starred' => !$lead->is_starred]);
 
         return redirect()->back()->with('success', $lead->is_starred ? 'Lead starred' : 'Lead unstarred');
     }
@@ -303,7 +302,7 @@ class LeadController extends Controller
         ]);
 
         $leads = Lead::whereIn('id', $request->lead_ids)->get();
-
+        
         // Check authorization for each lead
         foreach ($leads as $lead) {
             $this->authorize('delete', $lead);
@@ -332,7 +331,7 @@ class LeadController extends Controller
         ]);
 
         $leads = Lead::whereIn('id', $request->lead_ids)->get();
-
+        
         // Check authorization for each lead
         foreach ($leads as $lead) {
             $this->authorize('update', $lead);
@@ -340,7 +339,7 @@ class LeadController extends Controller
 
         $count = Lead::whereIn('id', $request->lead_ids)
             ->update([
-                'status' => LeadStatus::ARCHIVED,
+                'status' => \App\Enums\LeadStatus::ARCHIVED,
                 'archived_at' => now(),
             ]);
 
@@ -362,18 +361,18 @@ class LeadController extends Controller
         $request->validate([
             'lead_ids' => 'required|array',
             'lead_ids.*' => 'required|integer|exists:leads,id',
-            'status' => ['required', Rule::enum(LeadStatus::class)],
+            'status' => ['required', Rule::enum(\App\Enums\LeadStatus::class)],
         ]);
 
         $leads = Lead::whereIn('id', $request->lead_ids)->get();
-
+        
         // Check authorization for each lead
         foreach ($leads as $lead) {
             $this->authorize('update', $lead);
         }
 
-        $newStatus = LeadStatus::from($request->status);
-
+        $newStatus = \App\Enums\LeadStatus::from($request->status);
+        
         foreach ($leads as $lead) {
             $this->leadStatusService->transition($lead, $newStatus);
         }
@@ -401,7 +400,7 @@ class LeadController extends Controller
         ]);
 
         $leads = Lead::whereIn('id', $request->lead_ids)->get();
-
+        
         // Check authorization for each lead
         foreach ($leads as $lead) {
             $this->authorize('update', $lead);

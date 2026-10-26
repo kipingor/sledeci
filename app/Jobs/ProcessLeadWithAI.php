@@ -54,7 +54,6 @@ class ProcessLeadWithAI implements ShouldQueue
                 Log::warning('No content to process', [
                     'lead_id' => $this->lead->id,
                 ]);
-
                 return;
             }
 

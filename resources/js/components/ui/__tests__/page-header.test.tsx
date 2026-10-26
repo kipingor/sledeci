@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vite-plus/test';
+import { describe, it, expect, vi } from 'vitest';
 import { PageHeader } from '../page-header';
 
 describe('PageHeader', () => {

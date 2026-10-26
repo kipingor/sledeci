@@ -2,13 +2,14 @@
 
 namespace Sledeci\Accounting\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Sledeci\Accounting\Models\Expense;
+use Sledeci\Core\Contracts\PendingFollowUps;
+use Sledeci\Core\Http\Controller;
 use Sledeci\Accounting\Models\Invoice;
 use Sledeci\Accounting\Models\Payment;
-use Sledeci\Clients\Models\ClientFollowUp;
-use Sledeci\Core\Http\Controller;
+use Sledeci\Accounting\Models\Expense;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class AccountingController extends Controller
 {
@@ -20,10 +21,10 @@ class AccountingController extends Controller
             ->update(['status' => 'overdue']);
 
         $summary = [
-            'total_billed' => Invoice::whereNotIn('status', ['draft', 'cancelled'])->sum('total'),
+            'total_billed'    => Invoice::whereNotIn('status', ['draft', 'cancelled'])->sum('total'),
             'total_collected' => Payment::sum('amount'),
-            'total_overdue' => Invoice::where('status', 'overdue')->sum('total'),
-            'total_expenses' => Expense::sum('amount'),
+            'total_overdue'   => Invoice::where('status', 'overdue')->sum('total'),
+            'total_expenses'  => Expense::sum('amount'),
         ];
 
         // Monthly revenue for last 6 months
@@ -50,11 +51,8 @@ class AccountingController extends Controller
             ->limit(5)
             ->get();
 
-        $pendingFollowUps = ClientFollowUp::with('client:id,name,email', 'project:id,name')
-            ->whereNull('completed_at')
-            ->orderBy('scheduled_at')
-            ->limit(5)
-            ->get();
+        // Client follow-ups come from the clients package through a contract (empty if not installed).
+        $pendingFollowUps = app(PendingFollowUps::class)->pending(5);
 
         $invoicesByStatus = Invoice::selectRaw('status, COUNT(*) as count, SUM(total) as total')
             ->groupBy('status')

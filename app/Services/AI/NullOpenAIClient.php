@@ -9,7 +9,6 @@ class NullOpenAIClient implements AiClientInterface
     public function chat($messages, array $options = []): string
     {
         Log::warning('OpenAI not configured - returning dummy response');
-
         return 'AI features are not available. Please configure AI_API_KEY.';
     }
 

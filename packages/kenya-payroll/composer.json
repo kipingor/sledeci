@@ -1,0 +1,24 @@
+{
+    "name": "sledeci/kenya-payroll",
+    "description": "Kenyan payroll for the Sledeci suite: employees, payroll runs with PAYE, SHIF, NSSF, Housing Levy and HELB, payslips and P9 export.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "sledeci/core": "^0.1 || @dev",
+        "inertiajs/inertia-laravel": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sledeci\\KenyaPayroll\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Sledeci\\KenyaPayroll\\KenyaPayrollServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable"
+}

@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Employee;
+use Sledeci\KenyaPayroll\Models\Employee;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /** @extends Factory<Employee> */
@@ -13,12 +13,12 @@ class EmployeeFactory extends Factory
     public function definition(): array
     {
         return [
-            'employee_number' => 'EMP-'.fake()->unique()->numerify('#####'),
-            'first_name' => fake()->firstName(),
-            'last_name' => fake()->lastName(),
-            'hire_date' => fake()->dateTimeBetween('-5 years', '-1 month')->format('Y-m-d'),
-            'basic_salary' => fake()->numberBetween(30_000, 150_000),
-            'active' => true,
+            'employee_number' => 'EMP-' . fake()->unique()->numerify('#####'),
+            'first_name'      => fake()->firstName(),
+            'last_name'       => fake()->lastName(),
+            'hire_date'       => fake()->dateTimeBetween('-5 years', '-1 month')->format('Y-m-d'),
+            'basic_salary'    => fake()->numberBetween(30_000, 150_000),
+            'active'          => true,
         ];
     }
 }

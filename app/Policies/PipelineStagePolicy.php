@@ -50,7 +50,7 @@ class PipelineStagePolicy
     {
         // Only admins can delete pipeline stages
         // Also check if stage has any leads
-        if (! $user->hasRole('admin')) {
+        if (!$user->hasRole('admin')) {
             return false;
         }
 

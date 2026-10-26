@@ -2,11 +2,12 @@
 
 namespace Tests\Feature\Services;
 
-use App\Enums\LeadStatus;
+use Tests\TestCase;
 use App\Models\Lead;
 use App\Models\User;
+use App\Services\Lead\LeadService;
+use App\Enums\LeadStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class LeadServiceTest extends TestCase
 {
@@ -47,7 +48,7 @@ class LeadServiceTest extends TestCase
         $lead = Lead::factory()->create();
 
         $lead->update([
-            'title' => 'Updated',
+            'title' => 'Updated'
         ]);
 
         $lead->refresh();
@@ -61,12 +62,12 @@ class LeadServiceTest extends TestCase
         $lead = Lead::factory()->create([
             'created_by' => $user->id,
             'owner_id' => $user->id,
-            'status' => LeadStatus::NEW,
+            'status' => leadStatus::NEW,
         ]);
 
         $lead->update([
             'status' => LeadStatus::QUALIFIED->value,
-            'qualified_at' => now(),
+            'qualified_at' => now()
         ]);
 
         $this->assertNotNull($lead->fresh()->qualified_at);

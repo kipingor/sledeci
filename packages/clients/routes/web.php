@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use Sledeci\Clients\Http\Controllers\ClientController;
 use Sledeci\Clients\Http\Controllers\ClientFollowUpController;
 use Sledeci\Clients\Http\Controllers\ClientReportController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------

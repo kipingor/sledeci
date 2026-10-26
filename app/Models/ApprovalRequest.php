@@ -20,8 +20,8 @@ class ApprovalRequest extends Model
 
     protected $casts = [
         'reviewed_at' => 'datetime',
-        'expires_at' => 'datetime',
-        'metadata' => 'array',
+        'expires_at'  => 'datetime',
+        'metadata'    => 'array',
     ];
 
     // ── Relationships ──────────────────────────────────────────────────────────

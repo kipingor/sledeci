@@ -5,7 +5,6 @@ namespace Sledeci\Accounting\Models;
 use App\Models\Project;
 use App\Models\User;
 use App\Traits\ExpenseOcrAddendum;
-use Database\Factories\ExpenseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,7 +24,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Expense extends Model
 {
-    use ExpenseOcrAddendum, HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, ExpenseOcrAddendum;
 
     protected $fillable = [
         'project_id',
@@ -47,8 +46,8 @@ class Expense extends Model
     // FIX: was missing entirely — 'lines' => 'array' is required so Eloquent
     // auto-encodes on save and auto-decodes on fetch, matching the json column type.
     protected $casts = [
-        'lines' => 'array',
-        'amount' => 'decimal:2',
+        'lines'       => 'array',
+        'amount'      => 'decimal:2',
         'incurred_at' => 'date',
         'receipt_pending_upload' => 'boolean',
     ];
@@ -86,8 +85,8 @@ class Expense extends Model
     /**
      * Factories stay in database/factories (Database\\Factories), outside this package.
      */
-    protected static function newFactory(): ExpenseFactory
+    protected static function newFactory(): \Database\Factories\ExpenseFactory
     {
-        return ExpenseFactory::new();
+        return \Database\Factories\ExpenseFactory::new();
     }
 }

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\Lead;
 use App\Models\Proposal;
+use App\Models\Lead;
 use App\Services\Proposal\ProposalGenerationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

@@ -60,15 +60,15 @@ class Project extends Model
     ];
 
     protected $casts = [
-        'metadata' => 'array',
-        'success_criteria' => 'array',
-        'assumptions' => 'array',
-        'constraints' => 'array',
-        'budget' => 'decimal:2',
-        'cost_baseline' => 'decimal:2',
-        'start_date' => 'date',
-        'end_date' => 'date',
-        'completed_at' => 'datetime',
+        'metadata'        => 'array',
+        'success_criteria'=> 'array',
+        'assumptions'     => 'array',
+        'constraints'     => 'array',
+        'budget'          => 'decimal:2',
+        'cost_baseline'   => 'decimal:2',
+        'start_date'      => 'date',
+        'end_date'        => 'date',
+        'completed_at'    => 'datetime',
     ];
 
     // ── Core relations ────────────────────────────────────────────────────────
@@ -173,7 +173,7 @@ class Project extends Model
             return null;
         }
 
-        $total = max(1, $this->start_date->diffInDays($this->end_date));
+        $total   = max(1, $this->start_date->diffInDays($this->end_date));
         $elapsed = min($total, max(0, $this->start_date->diffInDays(now())));
 
         return round($this->bac * ($elapsed / $total), 2);

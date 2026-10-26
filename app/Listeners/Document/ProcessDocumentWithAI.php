@@ -5,6 +5,7 @@ namespace App\Listeners\Document;
 use App\Events\LeadDocumentUploaded;
 use App\Jobs\ProcessLeadDocument;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
 
 class ProcessDocumentWithAI implements ShouldQueue
 {

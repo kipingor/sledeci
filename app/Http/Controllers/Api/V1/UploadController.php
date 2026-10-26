@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Enums\LeadDocumentStatus;
 use App\Http\Controllers\Controller;
-use App\Jobs\ProcessLeadDocument;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\JsonResponse;
 use App\Models\Lead;
 use App\Models\LeadDocument;
 use App\Services\DocumentParserService;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use App\Jobs\ProcessLeadDocument;
 
 class UploadController extends Controller
 {
@@ -46,10 +46,10 @@ class UploadController extends Controller
             try {
 
                 $disk = Storage::disk('private');
-                $absolutePath = method_exists($disk, 'path') ? $disk->path($path) : storage_path('app/'.$path);
-                $parser = new DocumentParserService;
+                $absolutePath = method_exists($disk, 'path') ? $disk->path($path) : storage_path('app/' . $path);
+                $parser = new DocumentParserService();
                 $text = $parser->extractText($absolutePath, $file->getClientMimeType());
-                if (! empty($text)) {
+                if (!empty($text)) {
                     $doc->extracted_text = ['text' => $text];
                     $doc->save();
                 }
@@ -65,10 +65,9 @@ class UploadController extends Controller
             }
         } catch (\Throwable $e) {
             report($e);
-
             return response()->json([
                 'ok' => false,
-                'message' => 'Failed to upload document',
+                'message' => 'Failed to upload document'
             ], 500);
         }
 

@@ -1,3 +1,3 @@
-import { test } from 'vite-plus/test';
+import { test } from 'vitest';
 
 test.skip('placeholder - no tests yet', () => {});

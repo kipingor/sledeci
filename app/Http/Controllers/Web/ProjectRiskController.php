@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\ProjectRisk;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * PMBOK §11 — Project Risk Management
@@ -20,22 +22,22 @@ class ProjectRiskController extends Controller
         $this->authorize('update', $project);
 
         $data = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'category' => ['required', Rule::in(ProjectRisk::CATEGORIES)],
-            'probability' => ['required', 'integer', 'min:1', 'max:5'],
-            'impact' => ['required', 'integer', 'min:1', 'max:5'],
-            'response_type' => ['nullable', Rule::in(ProjectRisk::RESPONSE_TYPES)],
-            'response_plan' => ['nullable', 'string'],
-            'contingency_plan' => ['nullable', 'string'],
-            'trigger' => ['nullable', 'string'],
+            'title'                => ['required', 'string', 'max:255'],
+            'description'          => ['nullable', 'string'],
+            'category'             => ['required', Rule::in(ProjectRisk::CATEGORIES)],
+            'probability'          => ['required', 'integer', 'min:1', 'max:5'],
+            'impact'               => ['required', 'integer', 'min:1', 'max:5'],
+            'response_type'        => ['nullable', Rule::in(ProjectRisk::RESPONSE_TYPES)],
+            'response_plan'        => ['nullable', 'string'],
+            'contingency_plan'     => ['nullable', 'string'],
+            'trigger'              => ['nullable', 'string'],
             'residual_probability' => ['nullable', 'integer', 'min:1', 'max:5'],
-            'residual_impact' => ['nullable', 'integer', 'min:1', 'max:5'],
-            'owner_id' => ['nullable', 'exists:users,id'],
-            'status' => ['required', Rule::in(ProjectRisk::STATUSES)],
-            'identified_date' => ['nullable', 'date'],
-            'review_date' => ['nullable', 'date'],
-            'notes' => ['nullable', 'string'],
+            'residual_impact'      => ['nullable', 'integer', 'min:1', 'max:5'],
+            'owner_id'             => ['nullable', 'exists:users,id'],
+            'status'               => ['required', Rule::in(ProjectRisk::STATUSES)],
+            'identified_date'      => ['nullable', 'date'],
+            'review_date'          => ['nullable', 'date'],
+            'notes'                => ['nullable', 'string'],
         ]);
 
         $data['project_id'] = $project->id;
@@ -52,22 +54,22 @@ class ProjectRiskController extends Controller
         abort_if($risk->project_id !== $project->id, 404);
 
         $data = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'category' => ['required', Rule::in(ProjectRisk::CATEGORIES)],
-            'probability' => ['required', 'integer', 'min:1', 'max:5'],
-            'impact' => ['required', 'integer', 'min:1', 'max:5'],
-            'response_type' => ['nullable', Rule::in(ProjectRisk::RESPONSE_TYPES)],
-            'response_plan' => ['nullable', 'string'],
-            'contingency_plan' => ['nullable', 'string'],
-            'trigger' => ['nullable', 'string'],
+            'title'                => ['required', 'string', 'max:255'],
+            'description'          => ['nullable', 'string'],
+            'category'             => ['required', Rule::in(ProjectRisk::CATEGORIES)],
+            'probability'          => ['required', 'integer', 'min:1', 'max:5'],
+            'impact'               => ['required', 'integer', 'min:1', 'max:5'],
+            'response_type'        => ['nullable', Rule::in(ProjectRisk::RESPONSE_TYPES)],
+            'response_plan'        => ['nullable', 'string'],
+            'contingency_plan'     => ['nullable', 'string'],
+            'trigger'              => ['nullable', 'string'],
             'residual_probability' => ['nullable', 'integer', 'min:1', 'max:5'],
-            'residual_impact' => ['nullable', 'integer', 'min:1', 'max:5'],
-            'owner_id' => ['nullable', 'exists:users,id'],
-            'status' => ['required', Rule::in(ProjectRisk::STATUSES)],
-            'identified_date' => ['nullable', 'date'],
-            'review_date' => ['nullable', 'date'],
-            'notes' => ['nullable', 'string'],
+            'residual_impact'      => ['nullable', 'integer', 'min:1', 'max:5'],
+            'owner_id'             => ['nullable', 'exists:users,id'],
+            'status'               => ['required', Rule::in(ProjectRisk::STATUSES)],
+            'identified_date'      => ['nullable', 'date'],
+            'review_date'          => ['nullable', 'date'],
+            'notes'                => ['nullable', 'string'],
         ]);
 
         $risk->update($data);
@@ -95,22 +97,22 @@ class ProjectRiskController extends Controller
         abort_if($risk->project_id !== $project->id, 404);
 
         $request->validate([
-            'issue_title' => ['required', 'string', 'max:255'],
+            'issue_title'       => ['required', 'string', 'max:255'],
             'issue_description' => ['nullable', 'string'],
         ]);
 
         // Create the corresponding issue
         $issue = $project->issues()->create([
-            'risk_id' => $risk->id,
-            'raised_by' => Auth::id(),
-            'owner_id' => $risk->owner_id,
-            'title' => $request->issue_title,
+            'risk_id'     => $risk->id,
+            'raised_by'   => Auth::id(),
+            'owner_id'    => $risk->owner_id,
+            'title'       => $request->issue_title,
             'description' => $request->issue_description ?? $risk->description,
-            'category' => $risk->category,
-            'severity' => match (true) {
+            'category'    => $risk->category,
+            'severity'    => match (true) {
                 $risk->impact >= 4 => 'high',
                 $risk->impact >= 3 => 'medium',
-                default => 'low',
+                default            => 'low',
             },
             'raised_date' => now(),
         ]);

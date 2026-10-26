@@ -2,16 +2,16 @@
 
 namespace Tests\Feature\Policies;
 
-use App\Models\Employee;
+use Sledeci\KenyaPayroll\Models\Employee;
 use App\Models\ImportJob;
-use App\Models\PayrollRun;
+use Sledeci\Accounting\Models\Invoice;
+use Sledeci\Accounting\Models\JournalEntry;
+use Sledeci\Accounting\Models\Payment;
+use Sledeci\KenyaPayroll\Models\PayrollRun;
 use App\Models\User;
 use App\Models\Workflow;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Sledeci\Accounting\Models\Invoice;
-use Sledeci\Accounting\Models\JournalEntry;
-use Sledeci\Accounting\Models\Payment;
 use Tests\TestCase;
 
 /**

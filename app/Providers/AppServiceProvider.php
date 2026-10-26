@@ -30,9 +30,9 @@ class AppServiceProvider extends ServiceProvider
         // app (and the test-suite) still boots when no API key is configured.
         $this->app->bind(AiClientInterface::class, function (): AiClientInterface {
             return match (true) {
-                filled(config('services.openai.api_key')) => new OpenAIClient,
-                filled(config('services.anthropic.api_key')) => new ClaudeAIClient,
-                default => new NullOpenAIClient,
+                filled(config('services.openai.api_key'))    => new OpenAIClient(),
+                filled(config('services.anthropic.api_key')) => new ClaudeAIClient(),
+                default                                      => new NullOpenAIClient(),
             };
         });
     }

@@ -28,6 +28,8 @@ abstract class Controller extends BaseController
 
     /**
      * Determine if the authenticated user lacks a given ability.
+     *
+     * @param  mixed  $arguments
      */
     public function cannot(string $ability, mixed $arguments = []): bool
     {

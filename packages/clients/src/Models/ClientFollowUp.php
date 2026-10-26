@@ -29,17 +29,14 @@ class ClientFollowUp extends Model
     {
         return $this->belongsTo(User::class, 'client_id');
     }
-
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
     }
-
     public function invoice(): BelongsTo
     {
         return $this->belongsTo(config('clients.invoice_model'));
     }
-
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');

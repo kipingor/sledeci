@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Models\Task;
 use App\Models\TimeLog;
 use App\Models\User;
+use App\Models\Task;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TimeLogFactory extends Factory

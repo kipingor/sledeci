@@ -40,10 +40,10 @@ class JournalEntryLine extends Model
     ];
 
     protected $casts = [
-        'amount' => 'decimal:4',
+        'amount'         => 'decimal:4',
         'foreign_amount' => 'decimal:4',
-        'exchange_rate' => 'decimal:10',
-        'tax_amount' => 'decimal:4',
+        'exchange_rate'  => 'decimal:10',
+        'tax_amount'     => 'decimal:4',
     ];
 
     // ── Relations ──────────────────────────────────────────────────────────────
@@ -79,7 +79,6 @@ class JournalEntryLine extends Model
     {
         return $this->type === 'debit';
     }
-
     public function isCredit(): bool
     {
         return $this->type === 'credit';

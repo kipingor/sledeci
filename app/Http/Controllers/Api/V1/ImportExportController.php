@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Enums\LeadStatus;
-use App\Exports\LeadsExport;
 use App\Http\Controllers\Controller;
-use App\Jobs\ProcessLeadImport;
 use App\Models\ImportJob;
 use App\Services\Import\LeadImportService;
-use Illuminate\Http\JsonResponse;
+use App\Jobs\ProcessLeadImport;
+use App\Exports\LeadsExport;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Auth;
 
 class ImportExportController extends Controller
 {
@@ -32,7 +31,7 @@ class ImportExportController extends Controller
 
         try {
             $file = $request->file('file');
-            $fileName = Str::uuid().'.'.$file->getClientOriginalExtension();
+            $fileName = Str::uuid() . '.' . $file->getClientOriginalExtension();
             $filePath = $file->storeAs('imports', $fileName, 'local');
 
             // Parse file
@@ -118,7 +117,7 @@ class ImportExportController extends Controller
     public function listImports(Request $request): JsonResponse
     {
         $perPage = $request->input('per_page', 20);
-
+        
         $imports = ImportJob::where('user_id', Auth::id())
             ->where('type', 'lead')
             ->latest()
@@ -176,8 +175,8 @@ class ImportExportController extends Controller
         try {
             $filters = $request->input('filters', []);
             $format = $request->input('format', 'xlsx');
-
-            $fileName = 'leads_export_'.now()->format('Y-m-d_His').'.'.$format;
+            
+            $fileName = 'leads_export_' . now()->format('Y-m-d_His') . '.' . $format;
 
             return Excel::download(
                 new LeadsExport($filters),
@@ -208,10 +207,10 @@ class ImportExportController extends Controller
             'data' => [
                 'template' => $template,
                 'fields' => $this->importService->getAvailableFields(),
-                'statuses' => array_map(fn ($s) => [
+                'statuses' => array_map(fn($s) => [
                     'value' => $s->value,
                     'label' => $s->label(),
-                ], LeadStatus::cases()),
+                ], \App\Enums\LeadStatus::cases()),
             ],
         ]);
     }

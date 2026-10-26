@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\Conversation;
 use App\Models\User;
+use App\Models\Conversation;
 
 class ConversationPolicy
 {

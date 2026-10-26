@@ -20,8 +20,8 @@ trait Cacheable
     public static function clearCache(string $pattern): void
     {
         $modelName = class_basename(static::class);
-        $pattern = $pattern ?? strtolower($modelName).'_*';
-
+        $pattern = $pattern ?? strtolower($modelName) . '_*';
+        
         // Clear all matching cache keys
         Cache::flush(); // Or implement pattern-based cache clearing
     }

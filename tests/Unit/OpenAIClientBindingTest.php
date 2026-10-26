@@ -2,11 +2,10 @@
 
 namespace Tests\Unit;
 
+use PHPUnit\Framework\TestCase;
 use App\Services\AI\OpenAIClient;
 use App\Services\AI\OpenAIClientGuzzle;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Http;
-use PHPUnit\Framework\TestCase;
 
 class OpenAIClientBindingTest extends TestCase
 {
@@ -30,7 +29,7 @@ class OpenAIClientBindingTest extends TestCase
         $this->assertInstanceOf(
             OpenAIClientGuzzle::class,
             $resolved,
-            'The service container should resolve OpenAIClientGuzzle when OpenAIClient is requested.'
+            "The service container should resolve OpenAIClientGuzzle when OpenAIClient is requested."
         );
     }
 
@@ -38,13 +37,13 @@ class OpenAIClientBindingTest extends TestCase
     public function it_can_generate_a_mocked_response()
     {
         // Fake HTTP response
-        Http::fake([
-            '*' => Http::response([
+        \Illuminate\Support\Facades\Http::fake([
+            '*' => \Illuminate\Support\Facades\Http::response([
                 'choices' => [
                     [
-                        'message' => ['content' => 'Mocked AI response'],
-                    ],
-                ],
+                        'message' => ['content' => 'Mocked AI response']
+                    ]
+                ]
             ], 200),
         ]);
 

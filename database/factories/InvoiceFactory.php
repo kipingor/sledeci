@@ -2,10 +2,12 @@
 
 namespace Database\Factories;
 
+use Sledeci\Accounting\Models\Invoice;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Sledeci\Accounting\Models\Invoice;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 /**
  * BUG FIX — Invoice line items used the key 'total' for the per-line amount,
@@ -24,50 +26,50 @@ class InvoiceFactory extends Factory
     public function definition(): array
     {
         $issueDate = $this->faker->dateTimeBetween('-3 months', 'now');
-        $dueDate = (clone $issueDate)->modify('+'.rand(7, 45).' days');
+        $dueDate   = (clone $issueDate)->modify('+' . rand(7, 45) . ' days');
 
         $statuses = ['draft', 'issued', 'paid', 'overdue', 'cancelled'];
 
-        $project = Project::inRandomOrder()->first();
+        $project  = Project::inRandomOrder()->first();
         $clientId = $project?->client_id ?? User::inRandomOrder()->first()?->id ?? User::factory()->create()->id;
 
         // Build line items — key MUST be 'amount', not 'total'
         $lineCount = rand(1, 5);
-        $lines = [];
-        $subtotal = 0;
+        $lines     = [];
+        $subtotal  = 0;
 
         for ($i = 0; $i < $lineCount; $i++) {
-            $quantity = rand(1, 10);
+            $quantity  = rand(1, 10);
             $unitPrice = $this->faker->randomFloat(2, 50, 3000);
-            $lineAmt = round($quantity * $unitPrice, 2);
+            $lineAmt   = round($quantity * $unitPrice, 2);
 
             $lines[] = [
                 'description' => ucfirst($this->faker->words(rand(2, 4), true)),
-                'quantity' => $quantity,
-                'unit_price' => $unitPrice,
-                'amount' => $lineAmt,   // FIX: was 'total' — frontend expects 'amount'
+                'quantity'    => $quantity,
+                'unit_price'  => $unitPrice,
+                'amount'      => $lineAmt,   // FIX: was 'total' — frontend expects 'amount'
             ];
 
             $subtotal += $lineAmt;
         }
 
         $taxRate = rand(0, 16);   // 0–16% VAT
-        $tax = round($subtotal * $taxRate / 100, 2);
-        $total = round($subtotal + $tax, 2);
+        $tax     = round($subtotal * $taxRate / 100, 2);
+        $total   = round($subtotal + $tax, 2);
 
         return [
             'project_id' => $project?->id,
-            'client_id' => $clientId,
+            'client_id'  => $clientId,
             'issue_date' => $issueDate,
-            'due_date' => $dueDate,
-            'subtotal' => round($subtotal, 2),
-            'tax' => $tax,
-            'total' => $total,
-            'currency' => 'USD',
-            'status' => $this->faker->randomElement($statuses),
-            'lines' => $lines,   // Eloquent 'array' cast handles json_encode
-            'notes' => $this->faker->optional(0.6)->sentence(),
-            'sent_at' => null,
+            'due_date'   => $dueDate,
+            'subtotal'   => round($subtotal, 2),
+            'tax'        => $tax,
+            'total'      => $total,
+            'currency'   => 'USD',
+            'status'     => $this->faker->randomElement($statuses),
+            'lines'      => $lines,   // Eloquent 'array' cast handles json_encode
+            'notes'      => $this->faker->optional(0.6)->sentence(),
+            'sent_at'    => null,
         ];
     }
 
@@ -81,7 +83,7 @@ class InvoiceFactory extends Factory
     public function issued(): static
     {
         return $this->state(fn () => [
-            'status' => 'issued',
+            'status'  => 'issued',
             'sent_at' => now()->subDays(rand(1, 14)),
         ]);
     }
@@ -89,7 +91,7 @@ class InvoiceFactory extends Factory
     public function paid(): static
     {
         return $this->state(fn () => [
-            'status' => 'paid',
+            'status'  => 'paid',
             'sent_at' => now()->subDays(rand(15, 45)),
         ]);
     }
@@ -98,12 +100,11 @@ class InvoiceFactory extends Factory
     {
         return $this->state(function () {
             $issueDate = now()->subDays(rand(45, 90));
-
             return [
-                'status' => 'overdue',
+                'status'     => 'overdue',
                 'issue_date' => $issueDate,
-                'due_date' => (clone $issueDate)->addDays(rand(7, 30)),
-                'sent_at' => $issueDate->addDays(1),
+                'due_date'   => (clone $issueDate)->addDays(rand(7, 30)),
+                'sent_at'    => $issueDate->addDays(1),
             ];
         });
     }

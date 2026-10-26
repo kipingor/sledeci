@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProjectTemplate;
+use App\Models\ProjectTemplateTask;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -115,7 +116,7 @@ class ProjectTemplateController extends Controller
         ]);
 
         // If setting as default, unset other defaults
-        if (($validated['is_default'] ?? false) && ! $template->is_default) {
+        if (($validated['is_default'] ?? false) && !$template->is_default) {
             ProjectTemplate::where('is_default', true)->update(['is_default' => false]);
         }
 
@@ -131,7 +132,7 @@ class ProjectTemplateController extends Controller
         if (isset($validated['tasks'])) {
             // Delete existing tasks
             $template->tasks()->delete();
-
+            
             // Create new tasks
             foreach ($validated['tasks'] as $taskData) {
                 $template->tasks()->create($taskData);
@@ -166,7 +167,7 @@ class ProjectTemplateController extends Controller
     public function duplicate(ProjectTemplate $template): JsonResponse
     {
         $newTemplate = $template->replicate();
-        $newTemplate->name = $template->name.' (Copy)';
+        $newTemplate->name = $template->name . ' (Copy)';
         $newTemplate->is_default = false;
         $newTemplate->created_by = Auth::id();
         $newTemplate->save();

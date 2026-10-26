@@ -5,7 +5,6 @@ namespace Sledeci\Accounting\Models;
 use App\Models\MessageLog;
 use App\Models\Project;
 use App\Models\User;
-use Database\Factories\PaymentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -69,11 +68,11 @@ class Payment extends Model
     ];
 
     protected $casts = [
-        'amount' => 'decimal:2',
-        'exchange_rate' => 'decimal:10',
-        'functional_amount' => 'decimal:4',
-        'mobile_money_payload' => 'array',
-        'paid_at' => 'datetime',
+        'amount'       => 'decimal:2',
+        'exchange_rate'=> 'decimal:10',
+        'functional_amount'     => 'decimal:4',
+        'mobile_money_payload'  => 'array',
+        'paid_at'      => 'datetime',
     ];
 
     // ── Helpers ────────────────────────────────────────────────────────────────
@@ -96,15 +95,15 @@ class Payment extends Model
     public function channelLabel(): string
     {
         return match ($this->channel) {
-            'mpesa' => 'M-Pesa',
+            'mpesa'        => 'M-Pesa',
             'airtel_money' => 'Airtel Money',
-            'mtn_momo' => 'MTN MoMo',
-            'bank' => 'Bank Transfer',
-            'cash' => 'Cash',
-            'card' => 'Card',
-            'cheque' => 'Cheque',
-            'crypto' => 'Crypto',
-            default => ucfirst($this->channel ?? $this->method),
+            'mtn_momo'     => 'MTN MoMo',
+            'bank'         => 'Bank Transfer',
+            'cash'         => 'Cash',
+            'card'         => 'Card',
+            'cheque'       => 'Cheque',
+            'crypto'       => 'Crypto',
+            default        => ucfirst($this->channel ?? $this->method),
         };
     }
 
@@ -144,8 +143,8 @@ class Payment extends Model
     /**
      * Factories stay in database/factories (Database\\Factories), outside this package.
      */
-    protected static function newFactory(): PaymentFactory
+    protected static function newFactory(): \Database\Factories\PaymentFactory
     {
-        return PaymentFactory::new();
+        return \Database\Factories\PaymentFactory::new();
     }
 }

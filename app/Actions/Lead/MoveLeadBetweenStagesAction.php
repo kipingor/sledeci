@@ -2,9 +2,9 @@
 
 namespace App\Actions\Lead;
 
-use App\Events\LeadMoved;
 use App\Models\Lead;
 use App\Services\Lead\LeadService;
+use App\Events\LeadMoved;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
@@ -22,7 +22,7 @@ class MoveLeadBetweenStagesAction
         try {
             event(new LeadMoved($updatedLead, $oldStageId, $newStageId));
         } catch (Throwable $e) {
-            Log::error('Failed to dispatch LeadMovedBetweenStages event: '.$e->getMessage());
+            Log::error('Failed to dispatch LeadMovedBetweenStages event: ' . $e->getMessage());
         }
 
         return $updatedLead;

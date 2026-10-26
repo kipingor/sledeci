@@ -3,17 +3,17 @@
 namespace App\Listeners\Lead;
 
 use App\Events\LeadCreated;
-use App\Events\LeadDeleted;
 use App\Events\LeadUpdated;
+use App\Events\LeadDeleted;
 use App\Models\Activity;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Log Lead Activity Listener
- *
+ * 
  * Automatically logs all lead activities to the activity log.
  * Implements ShouldQueue for async processing.
  */
@@ -64,7 +64,7 @@ class LogLeadActivity implements ShouldQueue
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
-
+            
             // Don't throw - activity logging shouldn't break the flow
         }
     }
@@ -78,22 +78,22 @@ class LogLeadActivity implements ShouldQueue
             // Determine what changed
             $changes = [];
             $originalData = $event->originalData ?? [];
-
+            
             if (isset($originalData['status']) && $originalData['status'] !== $event->lead->status) {
                 $changes[] = "Status: {$originalData['status']} → {$event->lead->status}";
             }
-
+            
             if (isset($originalData['title']) && $originalData['title'] !== $event->lead->title) {
                 $changes[] = "Title: {$originalData['title']} → {$event->lead->title}";
             }
-
+            
             if (isset($originalData['owner_id']) && $originalData['owner_id'] !== $event->lead->owner_id) {
-                $changes[] = 'Owner changed';
+                $changes[] = "Owner changed";
             }
 
-            $description = empty($changes)
+            $description = empty($changes) 
                 ? "Lead '{$event->lead->title}' was updated"
-                : "Lead '{$event->lead->title}' was updated: ".implode(', ', $changes);
+                : "Lead '{$event->lead->title}' was updated: " . implode(', ', $changes);
 
             Activity::create([
                 'type' => 'lead_updated',

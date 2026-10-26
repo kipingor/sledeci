@@ -2,9 +2,9 @@
 
 namespace App\Services\AI;
 
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class ClaudeAIClient implements AiClientInterface
 {
@@ -30,9 +30,9 @@ class ClaudeAIClient implements AiClientInterface
         [$system, $normalised] = $this->normaliseMessages($messages);
 
         $payload = [
-            'model' => $options['model'] ?? $this->defaultModel,
+            'model'      => $options['model'] ?? $this->defaultModel,
             'max_tokens' => $options['max_tokens'] ?? 1024,
-            'messages' => $normalised,
+            'messages'   => $normalised,
         ];
 
         if ($system) {
@@ -62,11 +62,11 @@ class ClaudeAIClient implements AiClientInterface
 
         } catch (\Exception $e) {
             Log::error('Claude chat request failed', [
-                'error' => $e->getMessage(),
+                'error'    => $e->getMessage(),
                 'messages' => $messages,
             ]);
 
-            throw new \Exception('Failed to get response from Claude: '.$e->getMessage());
+            throw new \Exception('Failed to get response from Claude: ' . $e->getMessage());
         }
     }
 
@@ -77,10 +77,10 @@ class ClaudeAIClient implements AiClientInterface
         [$system, $normalised] = $this->normaliseMessages($messages);
 
         $payload = [
-            'model' => $options['model'] ?? $this->defaultModel,
+            'model'      => $options['model'] ?? $this->defaultModel,
             'max_tokens' => $options['max_tokens'] ?? 1024,
-            'messages' => $normalised,
-            'stream' => true,
+            'messages'   => $normalised,
+            'stream'     => true,
         ];
 
         if ($system) {
@@ -91,11 +91,11 @@ class ClaudeAIClient implements AiClientInterface
             $response = Http::timeout($this->timeout)
                 ->withHeaders($this->headers())
                 ->withOptions(['stream' => true])
-                ->post($this->baseUrl.'/messages', $payload);
+                ->post($this->baseUrl . '/messages', $payload);
 
             $body = $response->getBody();
 
-            while (! $body->eof()) {
+            while (!$body->eof()) {
                 $line = trim($body->read(1024));
 
                 if (str_starts_with($line, 'data: ')) {
@@ -141,15 +141,15 @@ class ClaudeAIClient implements AiClientInterface
     {
         try {
             $result = $this->chat([
-                ['role' => 'user', 'content' => "Is the following content safe and appropriate? Reply with JSON only: {\"flagged\": true|false, \"reason\": \"...\"}.\n\nContent: ".$content],
+                ['role' => 'user', 'content' => "Is the following content safe and appropriate? Reply with JSON only: {\"flagged\": true|false, \"reason\": \"...\"}.\n\nContent: " . $content],
             ], ['max_tokens' => 100, 'temperature' => 0]);
 
             $json = json_decode($result, true);
 
             return [
-                'flagged' => $json['flagged'] ?? false,
+                'flagged'    => $json['flagged'] ?? false,
                 'categories' => [],
-                'reason' => $json['reason'] ?? '',
+                'reason'     => $json['reason'] ?? '',
             ];
         } catch (\Exception $e) {
             return ['flagged' => false, 'categories' => [], 'reason' => ''];
@@ -174,16 +174,16 @@ class ClaudeAIClient implements AiClientInterface
 
         // Convert OpenAI function schema → Claude tool schema
         $tools = array_map(fn ($fn) => [
-            'name' => $fn['name'],
-            'description' => $fn['description'] ?? '',
+            'name'         => $fn['name'],
+            'description'  => $fn['description'] ?? '',
             'input_schema' => $fn['parameters'] ?? ['type' => 'object', 'properties' => []],
         ], $functions);
 
         $payload = [
-            'model' => $options['model'] ?? $this->defaultModel,
+            'model'      => $options['model'] ?? $this->defaultModel,
             'max_tokens' => $options['max_tokens'] ?? 1024,
-            'messages' => $normalised,
-            'tools' => $tools,
+            'messages'   => $normalised,
+            'tools'      => $tools,
         ];
 
         if ($system) {
@@ -198,14 +198,13 @@ class ClaudeAIClient implements AiClientInterface
             // Build an OpenAI-compatible return shape
             if ($stopReason === 'tool_use') {
                 $toolBlock = collect($response['content'])->firstWhere('type', 'tool_use');
-
                 return [
                     'finish_reason' => 'function_call',
-                    'message' => [
-                        'role' => 'assistant',
-                        'content' => null,
+                    'message'       => [
+                        'role'          => 'assistant',
+                        'content'       => null,
                         'function_call' => [
-                            'name' => $toolBlock['name'],
+                            'name'      => $toolBlock['name'],
                             'arguments' => json_encode($toolBlock['input']),
                         ],
                     ],
@@ -213,18 +212,17 @@ class ClaudeAIClient implements AiClientInterface
             }
 
             $textBlock = collect($response['content'])->firstWhere('type', 'text');
-
             return [
                 'finish_reason' => 'stop',
-                'message' => [
-                    'role' => 'assistant',
+                'message'       => [
+                    'role'    => 'assistant',
                     'content' => $textBlock['text'] ?? '',
                 ],
             ];
 
         } catch (\Exception $e) {
             Log::error('Claude function/tool calling failed', ['error' => $e->getMessage()]);
-            throw new \Exception('Failed to process tool calling: '.$e->getMessage());
+            throw new \Exception('Failed to process tool calling: ' . $e->getMessage());
         }
     }
 
@@ -248,14 +246,12 @@ class ClaudeAIClient implements AiClientInterface
     public function setDefaultModel(string $model): self
     {
         $this->defaultModel = $model;
-
         return $this;
     }
 
     public function setTimeout(int $timeout): self
     {
         $this->timeout = $timeout;
-
         return $this;
     }
 
@@ -281,9 +277,9 @@ class ClaudeAIClient implements AiClientInterface
     protected function headers(): array
     {
         return [
-            'x-api-key' => $this->apiKey,
+            'x-api-key'         => $this->apiKey,
             'anthropic-version' => $this->apiVersion,
-            'content-type' => 'application/json',
+            'content-type'      => 'application/json',
         ];
     }
 
@@ -295,11 +291,11 @@ class ClaudeAIClient implements AiClientInterface
 
         $response = Http::timeout($this->timeout)
             ->withHeaders($this->headers())
-            ->send($method, $this->baseUrl.$endpoint, ['json' => $data]);
+            ->send($method, $this->baseUrl . $endpoint, ['json' => $data]);
 
-        if (! $response->successful()) {
+        if (!$response->successful()) {
             $error = $response->json('error.message') ?? $response->body();
-            throw new \Exception('Claude API error: '.$error);
+            throw new \Exception('Claude API error: ' . $error);
         }
 
         return $response->json();
@@ -309,7 +305,7 @@ class ClaudeAIClient implements AiClientInterface
      * Split a messages array into a system prompt string + user/assistant turns.
      * Claude requires the system prompt as a top-level field, not inside messages[].
      *
-     * @param  string|array  $messages
+     * @param string|array $messages
      * @return array{0: string|null, 1: array}
      */
     protected function normaliseMessages($messages): array
@@ -318,13 +314,13 @@ class ClaudeAIClient implements AiClientInterface
             return [null, [['role' => 'user', 'content' => $messages]]];
         }
 
-        $system = null;
+        $system   = null;
         $filtered = [];
 
         foreach ($messages as $msg) {
             if (($msg['role'] ?? '') === 'system') {
                 // Concatenate multiple system messages
-                $system = ($system ? $system."\n\n" : '').$msg['content'];
+                $system = ($system ? $system . "\n\n" : '') . $msg['content'];
             } else {
                 $filtered[] = $msg;
             }

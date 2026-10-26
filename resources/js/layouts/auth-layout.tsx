@@ -1,5 +1,4 @@
 import AuthLayoutTemplate from '@/layouts/auth/auth-simple-layout';
-import { useFlashToast } from '@/hooks/use-flash-toast';
 
 export default function AuthLayout({
     title = '',
@@ -10,8 +9,6 @@ export default function AuthLayout({
     description?: string;
     children: React.ReactNode;
 }) {
-    useFlashToast();
-
     return (
         <AuthLayoutTemplate title={title} description={description}>
             {children}

@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Enums\ActivityType;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
+use App\Enums\ActivityType;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * FIXES applied:
@@ -38,11 +39,13 @@ class ActivityController extends Controller
             ->when($request->filled('lead_id'), fn ($q) => $q->where('lead_id', $request->lead_id))
             ->when(
                 $request->filled('start_date') && $request->filled('end_date'),
-                fn ($q) => $q->whereBetween('created_at', [$request->start_date, $request->end_date])
+                fn ($q) =>
+                $q->whereBetween('created_at', [$request->start_date, $request->end_date])
             )
             ->when(
                 $request->filled('description_keyword'),
-                fn ($q) => $q->where('description', 'like', "%{$request->description_keyword}%")
+                fn ($q) =>
+                $q->where('description', 'like', "%{$request->description_keyword}%")
             )
             ->latest('created_at')
             ->paginate((int) $request->input('per_page', 20))
@@ -54,7 +57,7 @@ class ActivityController extends Controller
 
         return Inertia::render('activities/index', [
             'activities' => $activities,
-            'filters' => $request->only(['user_id', 'type', 'lead_id', 'start_date', 'end_date']),
+            'filters'    => $request->only(['user_id', 'type', 'lead_id', 'start_date', 'end_date']),
             'typeOptions' => collect(ActivityType::cases())->map(fn ($c) => $c->value)->toArray(),
         ]);
     }
@@ -83,13 +86,13 @@ class ActivityController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'lead_id' => ['required', 'exists:leads,id'],
-            'type' => ['required', 'string'],
-            'subject' => ['nullable', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
+            'lead_id'      => ['required', 'exists:leads,id'],
+            'type'         => ['required', 'string'],
+            'subject'      => ['nullable', 'string', 'max:255'],
+            'description'  => ['nullable', 'string'],
             'scheduled_at' => ['nullable', 'date'],
-            'outcome' => ['nullable', 'string', 'max:100'],
-            'duration' => ['nullable', 'string', 'max:50'],
+            'outcome'      => ['nullable', 'string', 'max:100'],
+            'duration'     => ['nullable', 'string', 'max:50'],
         ]);
 
         $data['user_id'] = Auth::id();
@@ -105,7 +108,7 @@ class ActivityController extends Controller
 
         // FIX: was view('activities.edit')
         return Inertia::render('activities/edit', [
-            'activity' => $activity,
+            'activity'    => $activity,
             'typeOptions' => collect(ActivityType::cases())->map(fn ($c) => $c->value)->toArray(),
         ]);
     }
@@ -115,12 +118,12 @@ class ActivityController extends Controller
         $activity = Activity::findOrFail($id);
 
         $data = $request->validate([
-            'type' => ['sometimes', 'string'],
-            'subject' => ['nullable', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
+            'type'         => ['sometimes', 'string'],
+            'subject'      => ['nullable', 'string', 'max:255'],
+            'description'  => ['nullable', 'string'],
             'scheduled_at' => ['nullable', 'date'],
-            'outcome' => ['nullable', 'string', 'max:100'],
-            'duration' => ['nullable', 'string', 'max:50'],
+            'outcome'      => ['nullable', 'string', 'max:100'],
+            'duration'     => ['nullable', 'string', 'max:50'],
             'completed_at' => ['nullable', 'date'],
         ]);
 
@@ -133,7 +136,6 @@ class ActivityController extends Controller
     public function destroy(int $id)
     {
         Activity::findOrFail($id)->delete();
-
         return redirect()->route('web.activities.index')->with('success', 'Activity deleted.');
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use App\Models\Workflow;
+use App\Models\User;
 use Sledeci\Core\Policies\ChecksModuleRoles;
 
 /**

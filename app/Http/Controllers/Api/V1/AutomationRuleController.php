@@ -117,7 +117,7 @@ class AutomationRuleController extends Controller
     {
         // TODO: Implement test execution
         // This would create a test log entry without actually executing the action
-
+        
         return response()->json([
             'success' => true,
             'message' => 'Test mode not yet implemented',

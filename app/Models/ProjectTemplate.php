@@ -111,7 +111,7 @@ class ProjectTemplate extends Model
             if ($model instanceof Lead && $modelType === 'lead') {
                 return $model->{$field} ?? $matches[0];
             }
-
+            
             if ($model instanceof Opportunity && $modelType === 'opportunity') {
                 return $model->{$field} ?? $matches[0];
             }

@@ -16,6 +16,9 @@ class DashboardController extends Controller
 
     /**
      * Get comprehensive dashboard metrics
+     * 
+     * @param Request $request
+     * @return JsonResponse
      */
     public function metrics(Request $request): JsonResponse
     {
@@ -34,6 +37,9 @@ class DashboardController extends Controller
 
     /**
      * Get activity metrics
+     * 
+     * @param Request $request
+     * @return JsonResponse
      */
     public function activities(Request $request): JsonResponse
     {
@@ -55,6 +61,9 @@ class DashboardController extends Controller
 
     /**
      * Get performance metrics
+     * 
+     * @param Request $request
+     * @return JsonResponse
      */
     public function performance(Request $request): JsonResponse
     {
@@ -70,6 +79,9 @@ class DashboardController extends Controller
 
     /**
      * Get recent activities
+     * 
+     * @param Request $request
+     * @return JsonResponse
      */
     public function recentActivities(Request $request): JsonResponse
     {
@@ -82,7 +94,7 @@ class DashboardController extends Controller
         $activities = $this->metricsService->getActivityMetrics(
             period: 'week'
         );
-
+        
         return response()->json([
             'success' => true,
             'data' => $activities,
@@ -91,6 +103,9 @@ class DashboardController extends Controller
 
     /**
      * Get top performing users
+     * 
+     * @param Request $request
+     * @return JsonResponse
      */
     public function topPerformers(Request $request): JsonResponse
     {
@@ -115,6 +130,9 @@ class DashboardController extends Controller
 
     /**
      * Get leads chart data
+     * 
+     * @param Request $request
+     * @return JsonResponse
      */
     public function leadsChart(Request $request): JsonResponse
     {
@@ -139,6 +157,9 @@ class DashboardController extends Controller
 
     /**
      * Get conversion funnel data
+     * 
+     * @param Request $request
+     * @return JsonResponse
      */
     public function conversionFunnel(Request $request): JsonResponse
     {
@@ -154,8 +175,11 @@ class DashboardController extends Controller
 
     /**
      * Clear dashboard cache
-     *
+     * 
      * Admin only endpoint to refresh dashboard data
+     * 
+     * @param Request $request
+     * @return JsonResponse
      */
     public function clearCache(Request $request): JsonResponse
     {

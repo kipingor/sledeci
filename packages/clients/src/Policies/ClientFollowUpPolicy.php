@@ -2,8 +2,8 @@
 
 namespace Sledeci\Clients\Policies;
 
-use App\Models\User;
 use Sledeci\Clients\Models\ClientFollowUp;
+use App\Models\User;
 use Sledeci\Core\Policies\ChecksModuleRoles;
 
 /**

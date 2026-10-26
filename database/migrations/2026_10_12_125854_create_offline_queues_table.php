@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('offline_queues', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
 
             // The action the client wants to perform
             $table->string('action')

@@ -24,7 +24,7 @@ return new class extends Migration
 
             $table->index(['project_id']);
             $table->index(['status']);
-        });
+        });        
     }
 
     /**

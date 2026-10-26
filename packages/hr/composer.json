@@ -1,0 +1,24 @@
+{
+    "name": "sledeci/hr",
+    "description": "Human resources for the Sledeci suite: staff directory and leave management.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "sledeci/core": "^0.1 || @dev",
+        "inertiajs/inertia-laravel": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sledeci\\Hr\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Sledeci\\Hr\\HrServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable"
+}

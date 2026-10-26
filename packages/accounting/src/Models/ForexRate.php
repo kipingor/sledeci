@@ -12,9 +12,9 @@ class ForexRate extends Model
     ];
 
     protected $casts = [
-        'rate' => 'decimal:8',
-        'rate_buy' => 'decimal:8',
-        'rate_sell' => 'decimal:8',
+        'rate'       => 'decimal:8',
+        'rate_buy'   => 'decimal:8',
+        'rate_sell'  => 'decimal:8',
         'fetched_at' => 'datetime',
     ];
 

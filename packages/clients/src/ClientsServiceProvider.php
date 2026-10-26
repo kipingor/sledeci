@@ -6,6 +6,8 @@ use Sledeci\Clients\Models\ClientFollowUp;
 use Sledeci\Clients\Models\ClientReport;
 use Sledeci\Clients\Policies\ClientFollowUpPolicy;
 use Sledeci\Clients\Policies\ClientReportPolicy;
+use Sledeci\Clients\Services\EloquentPendingFollowUps;
+use Sledeci\Core\Contracts\PendingFollowUps;
 use Sledeci\Core\Modules\Module;
 use Sledeci\Core\Support\ModuleServiceProvider;
 
@@ -16,6 +18,9 @@ class ClientsServiceProvider extends ModuleServiceProvider
         parent::register();
 
         $this->mergeConfigFrom($this->packagePath('config/clients.php'), 'clients');
+
+        // The accounting overview shows pending follow-ups through this contract.
+        $this->app->bind(PendingFollowUps::class, EloquentPendingFollowUps::class);
     }
 
     protected function module(): Module

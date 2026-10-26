@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\PipelineStage;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\PipelineStage;
 
 class PipelineStageSeeder extends Seeder
 {
@@ -21,7 +22,8 @@ class PipelineStageSeeder extends Seeder
             ['key' => 'closed_lost', 'name' => 'Closed Lost', 'order' => 5, 'color' => '#ef4444'],
         ];
         $pipelineStages = collect($defaultStages)->map(
-            fn ($s) => PipelineStage::firstOrCreate(['key' => $s['key']], $s)
+            fn ($s) =>
+            PipelineStage::firstOrCreate(['key' => $s['key']], $s)
         );
     }
 }

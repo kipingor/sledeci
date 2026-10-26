@@ -80,7 +80,7 @@ enum ActivityType: string
     public static function all(): array
     {
         return array_map(
-            fn ($case) => [
+            fn($case) => [
                 'value' => $case->value,
                 'label' => $case->label(),
                 'icon' => $case->icon(),

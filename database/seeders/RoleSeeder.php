@@ -2,10 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Permission;
+use App\Models\User;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RoleSeeder extends Seeder
 {
@@ -36,21 +37,21 @@ class RoleSeeder extends Seeder
             'project manager',
             'auditor',
             'sales',
-            'field agent',
+            'field agent'
         ];
 
         foreach ($roleNames as $name) {
             Role::firstOrCreate(['name' => $name]);
         }
 
-        $this->command->info('✓ Roles created: '.implode(', ', array_values($roleNames)));
+        $this->command->info('✓ Roles created: ' . implode(', ', array_values($roleNames)));
 
         // ── Permissions ────────────────────────────────────────────────────────
         $permissions = [
             'view leads',    'create leads',    'edit leads',    'delete leads',    'move leads',
             'view opportunities', 'create opportunities', 'edit opportunities', 'delete opportunities',
             'view projects', 'create projects', 'edit projects', 'delete projects',
-            'view pipelines', 'create pipelines', 'edit pipelines', 'delete pipelines',
+            'view pipelines','create pipelines','edit pipelines','delete pipelines',
             'manage users',  'view reports', 'manage settings', 'manage roles', 'manage permissions',
             'view financials', 'create financials', 'manage financials', 'delete financials',
             'view journal entries', 'create journal entries', 'manage journal entries', 'delete journal entries',
@@ -69,7 +70,7 @@ class RoleSeeder extends Seeder
             Permission::firstOrCreate(['name' => $perm]);
         }
 
-        $this->command->info('✓ Permissions created: '.implode(', ', array_values($permissions)));
+        $this->command->info('✓ Permissions created: ' . implode(', ', array_values($permissions)));
 
         // ── Role → Permission mapping ──────────────────────────────────────────
 

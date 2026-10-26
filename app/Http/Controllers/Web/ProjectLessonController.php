@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\ProjectLesson;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * PMBOK §4.4 / §4.7 — Lessons Learned Register
@@ -19,15 +19,15 @@ class ProjectLessonController extends Controller
         $this->authorize('update', $project);
 
         $data = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'situation' => ['required', 'string'],
-            'impact' => ['required', 'string'],
+            'title'          => ['required', 'string', 'max:255'],
+            'situation'      => ['required', 'string'],
+            'impact'         => ['required', 'string'],
             'recommendation' => ['required', 'string'],
-            'category' => ['required', Rule::in(ProjectLesson::CATEGORIES)],
-            'type' => ['required', Rule::in(ProjectLesson::TYPES)],
+            'category'       => ['required', Rule::in(ProjectLesson::CATEGORIES)],
+            'type'           => ['required', Rule::in(ProjectLesson::TYPES)],
             'phase_captured' => ['nullable', Rule::in(ProjectLesson::PHASES)],
-            'tags' => ['nullable', 'array'],
-            'tags.*' => ['string', 'max:50'],
+            'tags'           => ['nullable', 'array'],
+            'tags.*'         => ['string', 'max:50'],
         ]);
 
         $data['project_id'] = $project->id;
@@ -44,15 +44,15 @@ class ProjectLessonController extends Controller
         abort_if($lesson->project_id !== $project->id, 404);
 
         $data = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'situation' => ['required', 'string'],
-            'impact' => ['required', 'string'],
+            'title'          => ['required', 'string', 'max:255'],
+            'situation'      => ['required', 'string'],
+            'impact'         => ['required', 'string'],
             'recommendation' => ['required', 'string'],
-            'category' => ['required', Rule::in(ProjectLesson::CATEGORIES)],
-            'type' => ['required', Rule::in(ProjectLesson::TYPES)],
+            'category'       => ['required', Rule::in(ProjectLesson::CATEGORIES)],
+            'type'           => ['required', Rule::in(ProjectLesson::TYPES)],
             'phase_captured' => ['nullable', Rule::in(ProjectLesson::PHASES)],
-            'tags' => ['nullable', 'array'],
-            'tags.*' => ['string', 'max:50'],
+            'tags'           => ['nullable', 'array'],
+            'tags.*'         => ['string', 'max:50'],
         ]);
 
         $lesson->update($data);

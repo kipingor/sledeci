@@ -45,6 +45,10 @@
             "Sledeci\\Core\\": "packages/core/src/",
             "Sledeci\\Clients\\": "packages/clients/src/",
             "Sledeci\\Accounting\\": "packages/accounting/src/",
+            "Sledeci\\KenyaTax\\": "packages/kenya-tax/src/",
+            "Sledeci\\KenyaPayments\\": "packages/kenya-payments/src/",
+            "Sledeci\\Hr\\": "packages/hr/src/",
+            "Sledeci\\KenyaPayroll\\": "packages/kenya-payroll/src/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }

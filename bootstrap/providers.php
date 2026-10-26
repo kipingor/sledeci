@@ -6,6 +6,10 @@ use App\Providers\FortifyServiceProvider;
 use Sledeci\Accounting\AccountingServiceProvider;
 use Sledeci\Clients\ClientsServiceProvider;
 use Sledeci\Core\CoreServiceProvider;
+use Sledeci\Hr\HrServiceProvider;
+use Sledeci\KenyaPayments\KenyaPaymentsServiceProvider;
+use Sledeci\KenyaPayroll\KenyaPayrollServiceProvider;
+use Sledeci\KenyaTax\KenyaTaxServiceProvider;
 
 return [
     AppServiceProvider::class,
@@ -18,4 +22,8 @@ return [
     CoreServiceProvider::class,
     ClientsServiceProvider::class,
     AccountingServiceProvider::class,
+    KenyaTaxServiceProvider::class,
+    KenyaPaymentsServiceProvider::class,
+    HrServiceProvider::class,
+    KenyaPayrollServiceProvider::class,
 ];

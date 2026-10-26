@@ -10,15 +10,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * Stakeholder Register entry — PMBOK §13.
  *
- * @property int $id
- * @property int $project_id
- * @property int|null $user_id
- * @property string $name
- * @property string $influence low|medium|high  (power axis)
- * @property string $interest low|medium|high
- * @property string $current_engagement unaware|resistant|neutral|supportive|leading
- * @property string $desired_engagement unaware|resistant|neutral|supportive|leading
- * @property bool $is_active
+ * @property int         $id
+ * @property int         $project_id
+ * @property int|null    $user_id
+ * @property string      $name
+ * @property string      $influence           low|medium|high  (power axis)
+ * @property string      $interest            low|medium|high
+ * @property string      $current_engagement  unaware|resistant|neutral|supportive|leading
+ * @property string      $desired_engagement  unaware|resistant|neutral|supportive|leading
+ * @property bool        $is_active
  */
 class ProjectStakeholder extends Model
 {

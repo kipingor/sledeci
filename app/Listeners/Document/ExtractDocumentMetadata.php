@@ -3,6 +3,7 @@
 namespace App\Listeners\Document;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
 
 class ExtractDocumentMetadata implements ShouldQueue
 {

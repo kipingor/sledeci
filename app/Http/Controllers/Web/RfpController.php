@@ -21,14 +21,10 @@ class RfpController extends Controller
     {
         $query = Rfp::where('owner_id', Auth::id());
 
-        if ($type = $request->get('type')) {
-            $query->where('type', $type);
-        }
-        if ($status = $request->get('status')) {
-            $query->where('status', $status);
-        }
+        if ($type   = $request->get('type'))   $query->where('type', $type);
+        if ($status = $request->get('status')) $query->where('status', $status);
         if ($search = $request->get('search')) {
-            $query->where(fn ($q) => $q
+            $query->where(fn($q) => $q
                 ->where('title', 'like', "%{$search}%")
                 ->orWhere('reference_number', 'like', "%{$search}%")
             );
@@ -54,41 +50,41 @@ class RfpController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'type' => 'required|in:rfp,rfq',
-            'title' => 'required|string|max:255',
-            'reference_number' => 'nullable|string|max:100',
-            'description' => 'nullable|string',
-            'scope_of_work' => 'nullable|string',
-            'issue_date' => 'nullable|date',
+            'type'                => 'required|in:rfp,rfq',
+            'title'               => 'required|string|max:255',
+            'reference_number'    => 'nullable|string|max:100',
+            'description'         => 'nullable|string',
+            'scope_of_work'       => 'nullable|string',
+            'issue_date'          => 'nullable|date',
             'submission_deadline' => 'nullable|date',
-            'budget' => 'nullable|numeric|min:0',
-            'currency' => 'nullable|string|size:3',
-            'requirements' => 'nullable|array',
+            'budget'              => 'nullable|numeric|min:0',
+            'currency'            => 'nullable|string|size:3',
+            'requirements'        => 'nullable|array',
             'evaluation_criteria' => 'nullable|array',
-            'notes' => 'nullable|string',
-            'document' => 'nullable|file|mimes:pdf,doc,docx|max:20480',
+            'notes'               => 'nullable|string',
+            'document'            => 'nullable|file|mimes:pdf,doc,docx|max:20480',
         ]);
 
         $docPath = null;
         $docName = null;
         if ($request->hasFile('document')) {
-            $file = $request->file('document');
-            $docPath = $file->store('rfps/'.Auth::id(), 'private');
+            $file    = $request->file('document');
+            $docPath = $file->store('rfps/' . Auth::id(), 'private');
             $docName = $file->getClientOriginalName();
         }
 
         $rfp = Rfp::create([
             ...$data,
-            'owner_id' => Auth::id(),
-            'currency' => $data['currency'] ?? CompanySetting::current()->default_currency,
-            'status' => 'draft',
+            'owner_id'        => Auth::id(),
+            'currency'        => $data['currency'] ?? CompanySetting::current()->default_currency,
+            'status'          => 'draft',
             'approval_status' => 'not_required',
-            'document_path' => $docPath,
-            'document_name' => $docName,
+            'document_path'   => $docPath,
+            'document_name'   => $docName,
         ]);
 
         return redirect()->route('web.rfps.show', $rfp)
-            ->with('success', ucfirst($data['type']).' created successfully.');
+            ->with('success', ucfirst($data['type']) . ' created successfully.');
     }
 
     // ── Show ───────────────────────────────────────────────────────────────────
@@ -98,14 +94,14 @@ class RfpController extends Controller
         $this->authorize('view', $rfp);
         $rfp->load(['submitter:id,name', 'approver:id,name']);
 
-        $pendingApproval = $rfp->approvalRequests()->where('status', 'pending')->first();
+        $pendingApproval    = $rfp->approvalRequests()->where('status', 'pending')->first();
         $makerCheckerActive = CompanySetting::current()->makerCheckerEnabledFor('rfp');
 
         return Inertia::render('rfps/show', [
-            'rfp' => $rfp,
-            'pendingApproval' => $pendingApproval,
+            'rfp'                => $rfp,
+            'pendingApproval'    => $pendingApproval,
             'makerCheckerActive' => $makerCheckerActive,
-            'canApprove' => $pendingApproval
+            'canApprove'         => $pendingApproval
                 ? $this->makerChecker->canApprove(Auth::user(), $pendingApproval)
                 : false,
         ]);
@@ -117,15 +113,15 @@ class RfpController extends Controller
     {
         $this->authorize('update', $rfp);
         $rfp->update($request->validate([
-            'title' => 'sometimes|required|string|max:255',
-            'description' => 'nullable|string',
-            'scope_of_work' => 'nullable|string',
+            'title'               => 'sometimes|required|string|max:255',
+            'description'         => 'nullable|string',
+            'scope_of_work'       => 'nullable|string',
             'submission_deadline' => 'nullable|date',
-            'budget' => 'nullable|numeric',
-            'currency' => 'nullable|string|size:3',
-            'requirements' => 'nullable|array',
+            'budget'              => 'nullable|numeric',
+            'currency'            => 'nullable|string|size:3',
+            'requirements'        => 'nullable|array',
             'evaluation_criteria' => 'nullable|array',
-            'notes' => 'nullable|string',
+            'notes'               => 'nullable|string',
         ]));
 
         return back()->with('success', 'Updated successfully.');
@@ -134,11 +130,8 @@ class RfpController extends Controller
     public function destroy(Rfp $rfp)
     {
         $this->authorize('delete', $rfp);
-        if ($rfp->document_path) {
-            Storage::disk('private')->delete($rfp->document_path);
-        }
+        if ($rfp->document_path) Storage::disk('private')->delete($rfp->document_path);
         $rfp->delete();
-
         return redirect()->route('web.rfps.index')->with('success', 'Deleted.');
     }
 
@@ -201,23 +194,20 @@ class RfpController extends Controller
         }
 
         $rfp->update(['status' => 'published', 'issue_date' => now()->toDateString()]);
-
-        return back()->with('success', ucfirst($rfp->type).' published successfully.');
+        return back()->with('success', ucfirst($rfp->type) . ' published successfully.');
     }
 
     public function close(Rfp $rfp)
     {
         $this->authorize('update', $rfp);
         $rfp->update(['status' => 'closed']);
-
-        return back()->with('success', ucfirst($rfp->type).' closed.');
+        return back()->with('success', ucfirst($rfp->type) . ' closed.');
     }
 
     public function award(Rfp $rfp)
     {
         $this->authorize('update', $rfp);
         $rfp->update(['status' => 'awarded', 'award_date' => now()->toDateString()]);
-
-        return back()->with('success', ucfirst($rfp->type).' marked as awarded.');
+        return back()->with('success', ucfirst($rfp->type) . ' marked as awarded.');
     }
 }

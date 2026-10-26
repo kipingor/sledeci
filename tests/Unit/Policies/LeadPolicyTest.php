@@ -2,11 +2,11 @@
 
 namespace Tests\Unit\Policies;
 
-use App\Models\Lead;
+use Tests\TestCase;
 use App\Models\User;
+use App\Models\Lead;
 use App\Policies\LeadPolicy;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class LeadPolicyTest extends TestCase
 {
@@ -17,7 +17,7 @@ class LeadPolicyTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->policy = new LeadPolicy;
+        $this->policy = new LeadPolicy();
     }
 
     public function test_owner_can_view_lead(): void

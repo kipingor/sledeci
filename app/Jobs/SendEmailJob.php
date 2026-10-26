@@ -6,11 +6,11 @@ use App\Models\Email;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Mail\Message;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Mail\Message;
 
 /**
  * SendEmailJob
@@ -48,7 +48,9 @@ class SendEmailJob implements ShouldQueue
      */
     public int $timeout = 30;
 
-    public function __construct(public readonly Email $email) {}
+    public function __construct(public readonly Email $email)
+    {
+    }
 
     public function handle(): void
     {
@@ -78,21 +80,21 @@ class SendEmailJob implements ShouldQueue
             });
 
             $this->email->update([
-                'status' => 'sent',
+                'status'  => 'sent',
                 'sent_at' => now(),
             ]);
 
             Log::info('Email sent', [
                 'email_id' => $this->email->id,
-                'to' => $this->email->to,
-                'subject' => $this->email->subject,
+                'to'       => $this->email->to,
+                'subject'  => $this->email->subject,
             ]);
 
         } catch (\Throwable $e) {
             Log::error('SendEmailJob failed', [
                 'email_id' => $this->email->id,
-                'error' => $e->getMessage(),
-                'attempt' => $this->attempts(),
+                'error'    => $e->getMessage(),
+                'attempt'  => $this->attempts(),
             ]);
 
             // Mark as failed on final attempt so the UI can surface it
@@ -110,7 +112,7 @@ class SendEmailJob implements ShouldQueue
 
         Log::error('SendEmailJob permanently failed', [
             'email_id' => $this->email->id,
-            'error' => $exception->getMessage(),
+            'error'    => $exception->getMessage(),
         ]);
     }
 

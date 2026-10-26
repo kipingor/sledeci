@@ -53,15 +53,15 @@ return [
     | These must exist in chart_of_accounts after seeding.
     */
     'defaults' => [
-        'revenue_account' => '6100',  // Service Revenue
-        'expense_account' => '8900',  // General & Administrative
-        'ar_account' => '1100',  // Accounts Receivable
-        'ap_account' => '3100',  // Accounts Payable
-        'bank_account' => '1020',  // Bank Account — Main
-        'vat_output' => '3400',  // VAT Payable (Output VAT)
-        'vat_input' => '1400',  // VAT Receivable (Input VAT)
-        'fx_gain' => '6400',  // Foreign Exchange Gain
-        'fx_loss' => '9200',  // Foreign Exchange Loss
+        'revenue_account'   => '6100',  // Service Revenue
+        'expense_account'   => '8900',  // General & Administrative
+        'ar_account'        => '1100',  // Accounts Receivable
+        'ap_account'        => '3100',  // Accounts Payable
+        'bank_account'      => '1020',  // Bank Account — Main
+        'vat_output'        => '3400',  // VAT Payable (Output VAT)
+        'vat_input'         => '1400',  // VAT Receivable (Input VAT)
+        'fx_gain'           => '6400',  // Foreign Exchange Gain
+        'fx_loss'           => '9200',  // Foreign Exchange Loss
         'retained_earnings' => '5200',  // Retained Earnings
     ],
 

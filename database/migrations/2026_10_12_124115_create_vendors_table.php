@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('vendors', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->enum('category', ['Construction', 'IT Services', 'Facility Management', 'Security', 'Transportation', 'Consulting', 'Equipment Supply', 'Electrical', 'General Contractor', 'Other'])->default('Other');
+            $table->enum('category', ['Construction','IT Services','Facility Management','Security','Transportation','Consulting','Equipment Supply','Electrical','General Contractor','Other'])->default('Other');
             $table->json('contact_info')->nullable(); // email, phone, address
             $table->json('metadata')->nullable(); // tax_pin, contact_referemce, notes
-            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->enum('status', ['active','inactive'])->default('active');
             $table->timestamps();
         });
     }

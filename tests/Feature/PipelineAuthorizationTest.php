@@ -2,12 +2,12 @@
 
 namespace Tests\Feature;
 
-use App\Enums\PipelineStage;
-use App\Models\Lead;
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
+use App\Models\User;
+use App\Models\Lead;
+use App\Enums\PipelineStage;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PipelineAuthorizationTest extends TestCase
 {

@@ -2,8 +2,8 @@
 
 namespace App\Services\Lead;
 
-use App\Models\Activity;
 use App\Models\Lead;
+use App\Models\Activity;
 use Illuminate\Support\Facades\Auth;
 
 class LeadActivityService
@@ -11,8 +11,10 @@ class LeadActivityService
     /**
      * Log a lead activity.
      *
-     * @param  string  $activityType
-     * @param  string|null  $notes
+     * @param Lead $lead
+     * @param string $activityType
+     * @param string|null $notes
+     * @return Activity
      */
     public function logActivity(Lead $lead, string $action, array $data = []): Activity
     {

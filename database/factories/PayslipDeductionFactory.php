@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\PayslipDeduction;
+use Sledeci\KenyaPayroll\Models\PayslipDeduction;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
@@ -15,9 +14,9 @@ class AuditLogController extends Controller
         $this->authorize('viewAny', AuditLog::class);
 
         $logs = AuditLog::with('user:id,name,avatar')
-            ->when($request->filled('event'), fn ($q) => $q->event($request->event))
+            ->when($request->filled('event'),   fn ($q) => $q->event($request->event))
             ->when($request->filled('user_id'), fn ($q) => $q->byUser($request->user_id))
-            ->when($request->filled('model'), fn ($q) => $q->where('auditable_type', 'like', "%{$request->model}%"))
+            ->when($request->filled('model'),   fn ($q) => $q->where('auditable_type', 'like', "%{$request->model}%"))
             ->latest()
             ->paginate(50)
             ->withQueryString();
@@ -25,8 +24,8 @@ class AuditLogController extends Controller
         $eventTypes = AuditLog::select('event')->distinct()->pluck('event')->sort()->values();
 
         return Inertia::render('audit-logs/index', [
-            'logs' => $logs,
-            'filters' => $request->only(['event', 'user_id', 'model']),
+            'logs'       => $logs,
+            'filters'    => $request->only(['event', 'user_id', 'model']),
             'eventTypes' => $eventTypes,
         ]);
     }

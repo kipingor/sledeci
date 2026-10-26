@@ -2,6 +2,7 @@
 
 namespace Sledeci\Accounting\Jobs;
 
+use Sledeci\Accounting\Models\Payment;
 use App\Services\MessagingService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -9,7 +10,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use Sledeci\Accounting\Models\Payment;
 
 /**
  * SendPaymentReceiptJob
@@ -24,7 +24,6 @@ class SendPaymentReceiptJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 3;
-
     public int $backoff = 60; // seconds between retries
 
     public function __construct(private Payment $payment) {}
@@ -34,14 +33,14 @@ class SendPaymentReceiptJob implements ShouldQueue
         try {
             $log = $messaging->sendPaymentReceipt($this->payment);
             Log::info('Payment receipt sent', [
-                'payment' => $this->payment->id,
-                'channel' => $log->channel,
-                'status' => $log->status,
+                'payment'  => $this->payment->id,
+                'channel'  => $log->channel,
+                'status'   => $log->status,
             ]);
         } catch (\Throwable $e) {
             Log::error('Payment receipt send failed', [
                 'payment' => $this->payment->id,
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ]);
             $this->fail($e);
         }

@@ -2,15 +2,15 @@
 
 namespace Sledeci\Clients\Http\Controllers;
 
-use App\Models\Project;
-use App\Models\User;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
-use Sledeci\Clients\Models\ClientReport;
 use Sledeci\Core\Contracts\ClientFinancialSummary;
 use Sledeci\Core\Http\Controller;
+use Sledeci\Clients\Models\ClientReport;
+use App\Models\User;
+use App\Models\Project;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class ClientReportController extends Controller
 {
@@ -25,11 +25,11 @@ class ClientReportController extends Controller
             $query->where('status', $status);
         }
 
-        $reports = $query->orderByDesc('period_start')->paginate(20)->withQueryString();
-        $clients = User::select('id', 'name', 'email')
+        $reports  = $query->orderByDesc('period_start')->paginate(20)->withQueryString();
+        $clients  = User::select('id', 'name', 'email')
             ->where('is_client', true)
             ->whereHas('invoices')
-            ->orWhere(fn ($q) => $q->where('is_client', true)->whereHas('projects'))
+            ->orWhere(fn($q) => $q->where('is_client', true)->whereHas('projects'))
             ->orderBy('name')->get();
         $projects = Project::select('id', 'name', 'client_id')->orderBy('name')->get();
 
@@ -65,14 +65,14 @@ class ClientReportController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'client_id' => 'required|exists:users,id',
-            'project_id' => 'nullable|exists:projects,id',
-            'report_type' => 'required|in:project,general',
-            'title' => 'required|string|max:255',
-            'period_type' => 'required|in:weekly,monthly,quarterly,custom',
+            'client_id'    => 'required|exists:users,id',
+            'project_id'   => 'nullable|exists:projects,id',
+            'report_type'  => 'required|in:project,general',
+            'title'        => 'required|string|max:255',
+            'period_type'  => 'required|in:weekly,monthly,quarterly,custom',
             'period_start' => 'required|date',
-            'period_end' => 'required|date|after_or_equal:period_start',
-            'content' => 'required|string',
+            'period_end'   => 'required|date|after_or_equal:period_start',
+            'content'      => 'required|string',
         ]);
 
         $metrics = ($data['report_type'] === 'project')
@@ -81,24 +81,24 @@ class ClientReportController extends Controller
                 $data['project_id'] ? (int) $data['project_id'] : null,
                 $data['period_start'],
                 $data['period_end'],
-            )
+              )
             : $this->buildGeneralMetrics(
                 (int) $data['client_id'],
                 $data['period_start'],
                 $data['period_end'],
-            );
+              );
 
         $report = ClientReport::create([
-            'client_id' => $data['client_id'],
-            'project_id' => $data['project_id'] ?? null,
-            'title' => $data['title'],
-            'period_type' => $data['period_type'],
+            'client_id'    => $data['client_id'],
+            'project_id'   => $data['project_id'] ?? null,
+            'title'        => $data['title'],
+            'period_type'  => $data['period_type'],
             'period_start' => $data['period_start'],
-            'period_end' => $data['period_end'],
-            'content' => $data['content'],
-            'created_by' => Auth::id(),
-            'status' => 'draft',
-            'metrics' => $metrics,
+            'period_end'   => $data['period_end'],
+            'content'      => $data['content'],
+            'created_by'   => Auth::id(),
+            'status'       => 'draft',
+            'metrics'      => $metrics,
         ]);
 
         return redirect()->route('web.client-reports.show', $report)
@@ -108,21 +108,18 @@ class ClientReportController extends Controller
     public function show(ClientReport $clientReport)
     {
         $clientReport->load('client:id,name,email', 'project:id,name', 'creator:id,name');
-
         return Inertia::render('accounting/client-report-show', ['report' => $clientReport]);
     }
 
     public function send(ClientReport $clientReport)
     {
         $clientReport->update(['status' => 'sent', 'sent_at' => now()]);
-
         return back()->with('success', 'Report marked as sent.');
     }
 
     public function destroy(ClientReport $clientReport)
     {
         $clientReport->delete();
-
         return back()->with('success', 'Report deleted.');
     }
 
@@ -135,18 +132,18 @@ class ClientReportController extends Controller
     public function metrics(Request $request): JsonResponse
     {
         $request->validate([
-            'client_id' => 'required|exists:users,id',
+            'client_id'  => 'required|exists:users,id',
             'project_id' => 'nullable|exists:projects,id',
-            'from' => 'nullable|date',
-            'to' => 'nullable|date',
-            'type' => 'nullable|in:project,general',
+            'from'       => 'nullable|date',
+            'to'         => 'nullable|date',
+            'type'       => 'nullable|in:project,general',
         ]);
 
-        $clientId = (int) $request->input('client_id');
+        $clientId  = (int) $request->input('client_id');
         $projectId = $request->input('project_id') ? (int) $request->input('project_id') : null;
-        $from = $request->input('from');
-        $to = $request->input('to');
-        $type = $request->input('type', 'project');
+        $from      = $request->input('from');
+        $to        = $request->input('to');
+        $type      = $request->input('type', 'project');
 
         $metrics = ($type === 'project')
             ? $this->buildProjectMetrics($clientId, $projectId, $from, $to)
@@ -175,48 +172,49 @@ class ClientReportController extends Controller
             ->map(function ($p) use ($now) {
                 $tasks = $p->tasks;
 
-                $doneTasks = $tasks->where('status', 'done');
+                $doneTasks    = $tasks->where('status', 'done');
 
                 // Delayed = in progress/review AND past due date
                 $delayedTasks = $tasks->whereIn('status', ['in_progress', 'review'])
-                    ->filter(fn ($t) => $t->endAt && $t->endAt->lt($now));
+                    ->filter(fn($t) => $t->endAt && $t->endAt->lt($now));
 
                 // Wins = done on or before due date
-                $wins = $doneTasks->filter(fn ($t) => $t->completed_at && $t->endAt && $t->completed_at->lte($t->endAt)
+                $wins = $doneTasks->filter(fn($t) =>
+                    $t->completed_at && $t->endAt && $t->completed_at->lte($t->endAt)
                 );
 
                 return [
-                    'id' => $p->id,
-                    'name' => $p->name,
-                    'status' => $p->status,
-                    'tasks_total' => $tasks->count(),
-                    'tasks_done' => $doneTasks->count(),
+                    'id'              => $p->id,
+                    'name'            => $p->name,
+                    'status'          => $p->status,
+                    'tasks_total'     => $tasks->count(),
+                    'tasks_done'      => $doneTasks->count(),
                     'hours_estimated' => (int) $tasks->sum('estimated_hours'),
-                    'hours_spent' => (int) $tasks->sum('spent_hours'),
-                    'completed_tasks' => $doneTasks->values()->map(fn ($t) => [
-                        'id' => $t->id,
-                        'title' => $t->title,
+                    'hours_spent'     => (int) $tasks->sum('spent_hours'),
+                    'completed_tasks' => $doneTasks->values()->map(fn($t) => [
+                        'id'           => $t->id,
+                        'title'        => $t->title,
                         'completed_at' => $t->completed_at?->toDateString(),
-                        'assignee' => $t->assignee?->name,
+                        'assignee'     => $t->assignee?->name,
                     ])->all(),
-                    'delayed_tasks' => $delayedTasks->values()->map(fn ($t) => [
-                        'id' => $t->id,
-                        'title' => $t->title,
-                        'due' => $t->endAt?->toDateString(),
+                    'delayed_tasks'   => $delayedTasks->values()->map(fn($t) => [
+                        'id'           => $t->id,
+                        'title'        => $t->title,
+                        'due'          => $t->endAt?->toDateString(),
                         'delay_reason' => $t->delay_reason ?? null,
-                        'mitigation' => $t->mitigation ?? null,
-                        'assignee' => $t->assignee?->name,
+                        'mitigation'   => $t->mitigation ?? null,
+                        'assignee'     => $t->assignee?->name,
                     ])->all(),
-                    'wins' => $wins->values()->map(fn ($t) => [
-                        'id' => $t->id,
-                        'title' => $t->title,
+                    'wins'            => $wins->values()->map(fn($t) => [
+                        'id'           => $t->id,
+                        'title'        => $t->title,
                         'completed_at' => $t->completed_at?->toDateString(),
-                        'assignee' => $t->assignee?->name,
+                        'assignee'     => $t->assignee?->name,
                     ])->all(),
-                    'upcoming_tasks' => $tasks->whereIn('status', ['todo', 'in_progress'])
-                        ->sortBy('endAt')->take(5)->values()->map(fn ($t) => [
-                            'title' => $t->title,
-                            'due' => $t->endAt?->toDateString(),
+                    'upcoming_tasks'  => $tasks->whereIn('status', ['todo', 'in_progress'])
+                        ->sortBy('endAt')->take(5)->values()->map(fn($t) => [
+                            'title'    => $t->title,
+                            'due'      => $t->endAt?->toDateString(),
                             'priority' => $t->priority,
                             'assignee' => $t->assignee?->name,
                         ])->all(),
@@ -224,14 +222,14 @@ class ClientReportController extends Controller
             });
 
         return [
-            'type' => 'project',
+            'type'           => 'project',
             'invoices_total' => $invoices->count(),
-            'invoices_paid' => $invoices->where('status', 'paid')->count(),
-            'billed' => (float) $invoices->whereNotIn('status', ['draft', 'cancelled'])->sum('total'),
-            'collected' => (float) $invoices->sum(fn ($i) => $i->payments->sum('amount')),
-            'outstanding' => (float) $invoices->where('status', 'overdue')->sum('total'),
-            'projects' => $projects->values()->all(),
-            'generated_at' => now()->toDateTimeString(),
+            'invoices_paid'  => $invoices->where('status', 'paid')->count(),
+            'billed'         => (float) $invoices->whereNotIn('status', ['draft', 'cancelled'])->sum('total'),
+            'collected'      => (float) $invoices->sum(fn($i) => $i->payments->sum('amount')),
+            'outstanding'    => (float) $invoices->where('status', 'overdue')->sum('total'),
+            'projects'       => $projects->values()->all(),
+            'generated_at'   => now()->toDateTimeString(),
         ];
     }
 
@@ -240,14 +238,14 @@ class ClientReportController extends Controller
         $invoices = app(ClientFinancialSummary::class)->invoices($clientId, null, $from, $to);
 
         return [
-            'type' => 'general',
+            'type'           => 'general',
             'invoices_total' => $invoices->count(),
-            'invoices_paid' => $invoices->where('status', 'paid')->count(),
-            'billed' => (float) $invoices->whereNotIn('status', ['draft', 'cancelled'])->sum('total'),
-            'collected' => (float) $invoices->sum(fn ($i) => $i->payments->sum('amount')),
-            'outstanding' => (float) $invoices->where('status', 'overdue')->sum('total'),
-            'projects' => [],
-            'generated_at' => now()->toDateTimeString(),
+            'invoices_paid'  => $invoices->where('status', 'paid')->count(),
+            'billed'         => (float) $invoices->whereNotIn('status', ['draft', 'cancelled'])->sum('total'),
+            'collected'      => (float) $invoices->sum(fn($i) => $i->payments->sum('amount')),
+            'outstanding'    => (float) $invoices->where('status', 'overdue')->sum('total'),
+            'projects'       => [],
+            'generated_at'   => now()->toDateTimeString(),
         ];
     }
 }

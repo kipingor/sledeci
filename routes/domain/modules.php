@@ -1,8 +1,6 @@
 <?php
 
-use App\Http\Controllers\Web\HRController;
 use App\Http\Controllers\Web\MilestoneController;
-use App\Http\Controllers\Web\PayrollController;
 use App\Http\Controllers\Web\ProjectController;
 use App\Http\Controllers\Web\ProjectStakeholderController;
 use App\Http\Controllers\Web\TenderController;
@@ -10,31 +8,8 @@ use App\Http\Controllers\Web\TimeLogController;
 use App\Http\Controllers\Web\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/payroll', [PayrollController::class, 'index'])->name('payroll.index');
-Route::get('/payroll/employees', [PayrollController::class, 'employees'])->name('payroll.employees');
-Route::get('/payroll/employees/create', [PayrollController::class, 'createEmployee'])->name('payroll.employees.create');
-Route::post('/payroll/employees', [PayrollController::class, 'storeEmployee'])->name('payroll.employees.store');
-Route::get('/payroll/employees/{employee}/edit', [PayrollController::class, 'editEmployee'])->name('payroll.employees.edit');
-Route::put('/payroll/employees/{employee}', [PayrollController::class, 'updateEmployee'])->name('payroll.employees.update');
-Route::post('/payroll/runs', [PayrollController::class, 'createRun'])->name('payroll.runs.store');
-Route::get('/payroll/runs/{payrollRun}', [PayrollController::class, 'showRun'])->name('payroll.run');
-Route::post('/payroll/runs/{payrollRun}/compute', [PayrollController::class, 'computeRun'])->name('payroll.runs.compute');
-Route::post('/payroll/runs/{payrollRun}/approve', [PayrollController::class, 'approveRun'])->name('payroll.runs.approve');
-Route::post('/payroll/runs/{payrollRun}/paid', [PayrollController::class, 'markRunPaid'])->name('payroll.runs.paid');
-Route::get('/payroll/payslips/{payslip}', [PayrollController::class, 'payslip'])->name('payroll.payslips.show');
-Route::get('/payroll/p9/{year}', [PayrollController::class, 'p9Export'])->name('payroll.p9');
-Route::post('/payroll/calculate', [PayrollController::class, 'calculate'])->name('payroll.calculate');
 
-Route::get('/hr', [HRController::class, 'index'])->name('hr.index');
-Route::get('/hr/staff', [HRController::class, 'staff'])->name('hr.staff.index');
-Route::get('/hr/staff/create', [HRController::class, 'create'])->name('hr.staff.create');
-Route::post('/hr/staff', [HRController::class, 'store'])->name('hr.staff.store');
-Route::get('/hr/staff/{id}', [HRController::class, 'show'])->name('hr.staff.show');
-Route::get('/hr/staff/{id}/edit', [HRController::class, 'edit'])->name('hr.staff.edit');
-Route::put('/hr/staff/{id}', [HRController::class, 'update'])->name('hr.staff.update');
-Route::get('/hr/leave', [HRController::class, 'leave'])->name('hr.leave.index');
-Route::post('/hr/leave/{leave}/approve', [HRController::class, 'approveLeave'])->name('hr.leave.approve');
-Route::post('/hr/leave/{leave}/reject', [HRController::class, 'rejectLeave'])->name('hr.leave.reject');
+
 
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
 Route::get('/users/create', [UserController::class, 'create'])->name('users.create');

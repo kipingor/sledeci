@@ -6,7 +6,9 @@ use App\Models\LeadDocument;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -18,7 +20,7 @@ class LeadDocumentProcessed implements ShouldBroadcast
      * Create a new event instance.
      */
     public function __construct(
-        public LeadDocument $document,
+        public LeadDocument $document, 
         public string $status
     ) {}
 
@@ -28,7 +30,7 @@ class LeadDocumentProcessed implements ShouldBroadcast
     public function broadcastOn(): Channel
     {
         // Broadcast on a private channel for the lead so only authorized users can receive it
-        return new PrivateChannel('leads.'.$this->document->lead_id);
+        return new PrivateChannel('leads.' . $this->document->lead_id);
     }
 
     public function broadcastWith(): array

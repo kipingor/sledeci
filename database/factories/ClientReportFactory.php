@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Sledeci\Clients\Models\ClientReport;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends Factory<ClientReport>

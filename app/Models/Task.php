@@ -33,11 +33,11 @@ class Task extends Model
     ];
 
     protected $casts = [
-        'startAt' => 'date',
-        'endAt' => 'date',
+        'startAt'      => 'date',
+        'endAt'        => 'date',
         'completed_at' => 'date',
-        'due_date' => 'date',
-        'metadata' => 'array',
+        'due_date'     => 'date',
+        'metadata'     => 'array',
     ];
 
     public function project()

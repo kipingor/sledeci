@@ -3,10 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\CompanySetting;
-use App\Models\Employee;
-use App\Models\PayrollRun;
+use Sledeci\KenyaPayroll\Models\Employee;
+use Sledeci\KenyaPayroll\Models\PayrollRun;
 use App\Models\User;
-use App\Services\Payroll\PayrollRunService;
+use Sledeci\KenyaPayroll\Services\PayrollRunService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;

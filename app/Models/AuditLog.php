@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -80,12 +80,11 @@ class AuditLog extends Model
     public function getChangeSummaryAttribute(): string
     {
         if (empty($this->new_values)) {
-            return ucfirst($this->event).' '.class_basename($this->auditable_type);
+            return ucfirst($this->event) . ' ' . class_basename($this->auditable_type);
         }
 
         $changed = array_keys($this->new_values);
-
-        return ucfirst($this->event).' — changed: '.implode(', ', $changed);
+        return ucfirst($this->event) . ' — changed: ' . implode(', ', $changed);
     }
 
     /**
@@ -100,13 +99,13 @@ class AuditLog extends Model
     ): self {
         return static::create([
             'auditable_type' => get_class($auditable),
-            'auditable_id' => $auditable->getKey(),
-            'user_id' => $userId ?? Auth::id(),
-            'event' => $event,
-            'old_values' => $oldValues,
-            'new_values' => $newValues,
-            'ip_address' => request()->ip(),
-            'user_agent' => request()->userAgent(),
+            'auditable_id'   => $auditable->getKey(),
+            'user_id'        => $userId ?? Auth::id(),
+            'event'          => $event,
+            'old_values'     => $oldValues,
+            'new_values'     => $newValues,
+            'ip_address'     => request()->ip(),
+            'user_agent'     => request()->userAgent(),
         ]);
     }
 }

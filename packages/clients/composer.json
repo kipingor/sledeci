@@ -1,15 +1,13 @@
 {
     "name": "sledeci/clients",
-    "description": "Client management for the Sledeci suite: client profiles, follow-ups and client reports.",
+    "description": "Client management for the Sledeci suite: client profiles, follow-ups and client reports (shows invoices and balances from the accounting package).",
     "type": "library",
     "license": "MIT",
     "require": {
         "php": "^8.4",
         "sledeci/core": "^0.1 || @dev",
-        "inertiajs/inertia-laravel": "^3.0"
-    },
-    "suggest": {
-        "sledeci/accounting": "Shows invoices, payments and balances on client profiles and reports."
+        "inertiajs/inertia-laravel": "^3.0",
+        "sledeci/accounting": "^0.1 || @dev"
     },
     "autoload": {
         "psr-4": {

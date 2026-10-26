@@ -22,7 +22,7 @@ return new class extends Migration
             $table->decimal('hourly_rate', 10, 2)->nullable();
             $table->decimal('monthly_salary', 12, 2)->nullable();
             $table->json('skills')->nullable();
-            $table->string('avatar')->nullable();
+            $table->string('avatar')->nullable();                        
             $table->boolean('is_client')->default(false);
             $table->boolean('is_contractor')->default(false);
             $table->boolean('is_available')->default(true);
@@ -49,7 +49,7 @@ return new class extends Migration
 
             // For authentication queries
             $table->index('email_verified_at', 'idx_users_email_verified');
-
+            
             // For active user queries
             $table->index('created_at', 'idx_users_created_at');
             $table->index('updated_at', 'idx_users_updated_at');

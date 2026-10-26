@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { vi, describe, it, expect, beforeEach } from 'vite-plus/test';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 
 const { postMock } = vi.hoisted(() => ({ postMock: vi.fn() }));
 
