@@ -1,5 +1,6 @@
 packages:
   - '.'
+  - welfare-circle
 
 publicHoistPattern:
   - '@inertiajs/core'

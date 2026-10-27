@@ -1,12 +1,22 @@
 import React from 'react';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import LeadDocumentUploader from '@/pages/leads/lead-document-uploader';
-import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import {
+    vi,
+    describe,
+    it,
+    expect,
+    beforeEach,
+    afterEach,
+} from 'vite-plus/test';
 
 class FakeXHR {
     public upload: any = {};
     public status = 200;
-    public responseText = JSON.stringify({ ok: true, document: { id: 123, filename: 'sample.txt' } });
+    public responseText = JSON.stringify({
+        ok: true,
+        document: { id: 123, filename: 'sample.txt' },
+    });
     public onload: any = null;
     public onerror: any = null;
     private _headers: Record<string, string> = {};
@@ -18,8 +28,16 @@ class FakeXHR {
     send(_form: any) {
         // simulate progress
         if (this.upload && this.upload.onprogress) {
-            this.upload.onprogress({ lengthComputable: true, loaded: 50, total: 100 });
-            this.upload.onprogress({ lengthComputable: true, loaded: 100, total: 100 });
+            this.upload.onprogress({
+                lengthComputable: true,
+                loaded: 50,
+                total: 100,
+            });
+            this.upload.onprogress({
+                lengthComputable: true,
+                loaded: 100,
+                total: 100,
+            });
         }
 
         // simulate async response
@@ -47,17 +65,30 @@ describe('LeadDocumentUploader', () => {
         const onUploadComplete = vi.fn();
         const onUploadStart = vi.fn();
 
-        render(<LeadDocumentUploader onUploadComplete={onUploadComplete} onUploadStart={onUploadStart} leadId={1} />);
+        render(
+            <LeadDocumentUploader
+                onUploadComplete={onUploadComplete}
+                onUploadStart={onUploadStart}
+                leadId={1}
+            />,
+        );
 
         const button = screen.getByRole('button', { name: /upload document/i });
         fireEvent.click(button);
 
-        const fileInput = document.querySelector('input[type=file]') as HTMLInputElement;
+        const fileInput = document.querySelector(
+            'input[type=file]',
+        ) as HTMLInputElement;
         const file = new File(['hello'], 'sample.txt', { type: 'text/plain' });
 
         fireEvent.change(fileInput, { target: { files: [file] } });
 
         await waitFor(() => expect(onUploadStart).toHaveBeenCalled());
-        await waitFor(() => expect(onUploadComplete).toHaveBeenCalledWith(123, { id: 123, filename: 'sample.txt' }));
+        await waitFor(() =>
+            expect(onUploadComplete).toHaveBeenCalledWith(123, {
+                id: 123,
+                filename: 'sample.txt',
+            }),
+        );
     });
 });

@@ -6,10 +6,17 @@
  *  - Mock Service Worker (MSW) for API mocking
  */
 import { render, act, waitFor } from '@testing-library/react';
-import { beforeAll, afterEach, afterAll, describe, it, expect } from 'vitest';
+import {
+    beforeAll,
+    afterEach,
+    afterAll,
+    describe,
+    it,
+    expect,
+} from 'vite-plus/test';
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
-import { vi } from 'vitest';
+import { vi } from 'vite-plus/test';
 import React from 'react';
 
 // Mock the Echo client used by the hook so tests don't try to open websocket connections.
@@ -75,13 +82,14 @@ const server = setupServer(
 
     // handler for moving a lead (used by optimistic update test)
     http.put('/api/v1/leads/:id/move', async ({ request, params }) => {
-        const body = await request.json() as {
+        const body = (await request.json()) as {
             lead_id?: number;
             to_stage_key?: string;
             toStageKey?: string;
             to_stage?: string;
         };
-        const toStage = body?.to_stage_key ?? body?.toStageKey ?? body?.to_stage;
+        const toStage =
+            body?.to_stage_key ?? body?.toStageKey ?? body?.to_stage;
         const id = Number(params.id ?? body?.lead_id ?? 1);
         return HttpResponse.json({
             updated_lead: {
@@ -90,7 +98,7 @@ const server = setupServer(
                 pipeline_stage_key: toStage || 'contacted',
             },
         });
-    })
+    }),
 );
 
 // ------------------------------
@@ -110,7 +118,10 @@ describe('usePipeline hook', () => {
         // Provide initial data to avoid network timing flakiness in CI/local runs
         const Wrapper = React.forwardRef(function Wrapper(_props, ref) {
             // Fix type incompatibility by casting mockStages to 'any'
-            const hook = usePipeline({ stages: mockStages as any, leadsByStage: mockLeadsByStage });
+            const hook = usePipeline({
+                stages: mockStages as any,
+                leadsByStage: mockLeadsByStage,
+            });
             React.useImperativeHandle(ref, () => hook, [hook]);
             return null;
         });
@@ -127,7 +138,7 @@ describe('usePipeline hook', () => {
         server.use(
             http.get('/api/v1/pipelines', () => {
                 return new HttpResponse('Server error', { status: 500 });
-            })
+            }),
         );
 
         const ref: any = React.createRef();
@@ -147,7 +158,10 @@ describe('usePipeline hook', () => {
         const ref: any = React.createRef();
         const Wrapper = React.forwardRef(function Wrapper(_props, ref) {
             // Fix type incompatibility by casting mockStages to 'any'
-            const hook = usePipeline({ stages: mockStages as any, leadsByStage: mockLeadsByStage });
+            const hook = usePipeline({
+                stages: mockStages as any,
+                leadsByStage: mockLeadsByStage,
+            });
             React.useImperativeHandle(ref, () => hook, [hook]);
             return null;
         });
@@ -159,7 +173,18 @@ describe('usePipeline hook', () => {
         expect(ref.current.itemsByStage.contacted).toHaveLength(0);
 
         // Mock the API PUT for this test to return the updated lead
-        const putSpy = vi.spyOn(api, 'put').mockResolvedValue({ data: { success: true, data: { id: 1, name: 'John Doe', pipeline_stage_key: 'contacted' } } });
+        const putSpy = vi
+            .spyOn(api, 'put')
+            .mockResolvedValue({
+                data: {
+                    success: true,
+                    data: {
+                        id: 1,
+                        name: 'John Doe',
+                        pipeline_stage_key: 'contacted',
+                    },
+                },
+            });
 
         await act(async () => {
             await ref.current.moveLead({ leadId: 1, toStageKey: 'contacted' });
@@ -168,16 +193,23 @@ describe('usePipeline hook', () => {
         putSpy.mockRestore();
 
         expect(ref.current.itemsByStage.new).toHaveLength(1);
-        expect(ref.current.itemsByStage.contacted[0].pipeline_stage_key).toBe('contacted');
+        expect(ref.current.itemsByStage.contacted[0].pipeline_stage_key).toBe(
+            'contacted',
+        );
     });
 
     it('rolls back if API move fails', async () => {
         // Make the API PUT fail to simulate server error
-        const putSpy = vi.spyOn(api, 'put').mockRejectedValue(new Error('Move failed'));
+        const putSpy = vi
+            .spyOn(api, 'put')
+            .mockRejectedValue(new Error('Move failed'));
 
         const ref: any = React.createRef();
         const Wrapper = React.forwardRef(function Wrapper(_props, ref) {
-            const hook = usePipeline({ stages: mockStages as any, leadsByStage: mockLeadsByStage });
+            const hook = usePipeline({
+                stages: mockStages as any,
+                leadsByStage: mockLeadsByStage,
+            });
             React.useImperativeHandle(ref, () => hook, [hook]);
             return null;
         });
@@ -186,7 +218,10 @@ describe('usePipeline hook', () => {
 
         await act(async () => {
             try {
-                await ref.current.moveLead({ leadId: 1, toStageKey: 'qualified' });
+                await ref.current.moveLead({
+                    leadId: 1,
+                    toStageKey: 'qualified',
+                });
             } catch {
                 // Expected failure
             }
@@ -195,6 +230,8 @@ describe('usePipeline hook', () => {
         putSpy.mockRestore();
 
         // After rollback, lead should remain in "new"
-        expect(ref.current.itemsByStage.new.find((lead: Lead) => lead.id === 1)).toBeTruthy();
+        expect(
+            ref.current.itemsByStage.new.find((lead: Lead) => lead.id === 1),
+        ).toBeTruthy();
     });
 });

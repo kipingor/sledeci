@@ -1,28 +1,47 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { vi, describe, it, expect, beforeEach } from 'vite-plus/test';
 
 const { putMock } = vi.hoisted(() => ({ putMock: vi.fn() }));
 
 vi.mock('@inertiajs/react', () => ({
     Head: () => null,
     Link: (p: any) => p.children ?? null,
-    usePage: () => ({ url: '/', props: { auth: { user: { id: 1, name: 'Test User' } } }, component: 'Test' }),
-    router: { put: putMock, post: vi.fn(), visit: vi.fn(), get: vi.fn(), delete: vi.fn() },
+    usePage: () => ({
+        url: '/',
+        props: { auth: { user: { id: 1, name: 'Test User' } } },
+        component: 'Test',
+    }),
+    router: {
+        put: putMock,
+        post: vi.fn(),
+        visit: vi.fn(),
+        get: vi.fn(),
+        delete: vi.fn(),
+    },
 }));
-vi.mock('@/layouts/app-layout', () => ({ default: ({ children }: any) => <div>{children}</div> }));
+vi.mock('@/layouts/app-layout', () => ({
+    default: ({ children }: any) => <div>{children}</div>,
+}));
 vi.mock('@/components/forms/lead-form', () => ({
     LeadForm: ({ initialData, onSubmit }: any) => (
         <div>
             <span data-testid="title">{initialData?.title}</span>
-            <button onClick={() => onSubmit({ title: 'Updated title' })}>Save</button>
+            <button onClick={() => onSubmit({ title: 'Updated title' })}>
+                Save
+            </button>
         </div>
     ),
 }));
 
 import LeadEdit from '@/pages/leads/edit';
 
-const lead = { id: 42, title: 'Existing lead', type: 'conversation' as const, pipeline_stage_id: 1 };
+const lead = {
+    id: 42,
+    title: 'Existing lead',
+    type: 'conversation' as const,
+    pipeline_stage_id: 1,
+};
 
 describe('LeadEdit page', () => {
     beforeEach(() => putMock.mockClear());
@@ -36,6 +55,8 @@ describe('LeadEdit page', () => {
 
         expect(putMock).toHaveBeenCalledTimes(1);
         expect(putMock.mock.calls[0][0]).toBe('/leads/42');
-        expect(putMock.mock.calls[0][1]).toMatchObject({ title: 'Updated title' });
+        expect(putMock.mock.calls[0][1]).toMatchObject({
+            title: 'Updated title',
+        });
     });
 });
