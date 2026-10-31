@@ -13,6 +13,12 @@ use Sledeci\Hr\Policies\HrLeaveRequestPolicy;
  */
 class HrServiceProvider extends ModuleServiceProvider
 {
+    public function register(): void
+    {
+        parent::register();
+        $this->mergeConfigFrom($this->packagePath('config/hr.php'), 'hr');
+    }
+
     protected function module(): Module
     {
         return new Module(

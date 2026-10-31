@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Web\Accounting;
 
 use App\Http\Controllers\Controller;
-use App\Models\AccountingPeriod;
-use App\Models\ExchangeRate;
-use App\Models\JournalEntry;
+use Sledeci\Accounting\Models\AccountingPeriod;
+use Sledeci\Accounting\Models\ExchangeRate;
+use Sledeci\Accounting\Models\JournalEntry;
 use App\Services\Accounting\FinancialStatementService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;

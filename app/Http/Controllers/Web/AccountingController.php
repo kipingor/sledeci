@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\ClientFollowUp;
-use App\Models\Expense;
-use App\Models\Invoice;
-use App\Models\Payment;
+use Sledeci\Clients\Models\ClientFollowUp;
+use Sledeci\Accounting\Models\Expense;
+use Sledeci\Accounting\Models\Invoice;
+use Sledeci\Accounting\Models\Payment;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 

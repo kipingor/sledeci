@@ -2,8 +2,8 @@
 
 namespace App\Services\Financing;
 
-use App\Models\Invoice;
-use App\Models\Payment;
+use Sledeci\Accounting\Models\Invoice;
+use Sledeci\Accounting\Models\Payment;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 

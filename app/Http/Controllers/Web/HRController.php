@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\HrLeaveRequest;
-use App\Models\StaffProfile;
+use Sledeci\Hr\Models\HrLeaveRequest;
+use Sledeci\Hr\Models\StaffProfile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

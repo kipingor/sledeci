@@ -2,7 +2,6 @@
 
 namespace Sledeci\KenyaTax\Services;
 
-use App\Models\CompanySetting;
 use Sledeci\Accounting\Models\Invoice;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -23,12 +22,14 @@ class EtimsService
     private const SANDBOX_URL    = 'https://etims-sbx.kra.go.ke/etims-api';
     private const PRODUCTION_URL = 'https://etims.kra.go.ke/etims-api';
 
-    private CompanySetting $settings;
+    /** @var object */
+    private $settings;
     private string $baseUrl;
 
     public function __construct()
     {
-        $this->settings = CompanySetting::current();
+        $model = config('kenya-tax.company_setting_model');
+        $this->settings = $model::current();
         $this->baseUrl  = $this->settings->etims_environment === 'production'
             ? self::PRODUCTION_URL
             : self::SANDBOX_URL;

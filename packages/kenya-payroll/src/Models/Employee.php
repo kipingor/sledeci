@@ -2,7 +2,6 @@
 
 namespace Sledeci\KenyaPayroll\Models;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -37,7 +36,7 @@ class Employee extends Model
         'metadata'          => 'array',
     ];
 
-    public function user(): BelongsTo     { return $this->belongsTo(User::class); }
+    public function user(): BelongsTo     { return $this->belongsTo(config('kenya-payroll.user_model')); }
     public function payslips(): HasMany   { return $this->hasMany(Payslip::class); }
 
     public function fullName(): string

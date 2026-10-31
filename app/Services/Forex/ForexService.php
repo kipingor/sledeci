@@ -2,9 +2,9 @@
 
 namespace App\Services\Forex;
 
-use App\Models\ForexRate;
-use App\Models\Invoice;
-use App\Models\Payment;
+use Sledeci\Accounting\Models\ForexRate;
+use Sledeci\Accounting\Models\Invoice;
+use Sledeci\Accounting\Models\Payment;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;

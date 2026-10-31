@@ -1,13 +1,7 @@
 <?php
 
 return [
-    /*
-    |--------------------------------------------------------------------------
-    | Invoice model
-    |--------------------------------------------------------------------------
-    | Follow-ups can point at an invoice. Clients depends on the accounting package
-    | (invoice relations, totals, reports), so this defaults to its Invoice model; the
-    | accounting provider also sets it at boot. Override only to use a different billing model.
-    */
-    'invoice_model' => 'Sledeci\Accounting\Models\Invoice',
+    'user_model'    => env('SLEDECI_USER_MODEL', \App\Models\User::class),
+    'project_model' => env('SLEDECI_PROJECT_MODEL', \App\Models\Project::class),
+    'invoice_model' => env('SLEDECI_INVOICE_MODEL', \Sledeci\Accounting\Models\Invoice::class),
 ];

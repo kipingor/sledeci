@@ -2,7 +2,6 @@
 
 namespace Sledeci\Hr\Models;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -52,7 +51,7 @@ class HrLeaveRequest extends Model
      */
     public function approver(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'approved_by');
+        return $this->belongsTo(config('hr.user_model'), 'approved_by');
     }
 
     // ── Scopes ────────────────────────────────────────────────────────────────

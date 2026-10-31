@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\Invoice;
-use App\Models\Payment;
+use Sledeci\Accounting\Models\Invoice;
+use Sledeci\Accounting\Models\Payment;
 use App\Services\Forex\ForexService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

@@ -2,9 +2,6 @@
 
 namespace Sledeci\Accounting\Models;
 
-use App\Models\Project;
-use App\Models\User;
-use App\Traits\ExpenseOcrAddendum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,7 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Expense extends Model
 {
-    use HasFactory, SoftDeletes, ExpenseOcrAddendum;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'project_id',
@@ -56,12 +53,12 @@ class Expense extends Model
 
     public function project(): BelongsTo
     {
-        return $this->belongsTo(Project::class, 'project_id');
+        return $this->belongsTo(config('accounting.project_model'), 'project_id');
     }
 
     public function enteredBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'entered_by');
+        return $this->belongsTo(config('accounting.user_model'), 'entered_by');
     }
 
     // Keep old relation name for backwards compatibility

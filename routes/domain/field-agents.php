@@ -20,3 +20,4 @@ Route::prefix('field-agents')->name('field-agents.')->group(function () {
     Route::patch('/{fieldAgent}', [FieldAgentController::class, 'update'])->name('update');
 });
 Route::get('my-visits', [FieldAgentController::class, 'myDashboard'])->name('field-agents.my-dashboard');
+Route::get('field-agents/my-dashboard', [FieldAgentController::class, 'myDashboard'])->name('field-agents.my-dashboard-alias');

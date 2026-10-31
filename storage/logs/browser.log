@@ -1,0 +1,218 @@
+[2026-10-29 08:09:14] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:09:14.105Z"} 
+[2026-10-29 08:09:16] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:09:15.921Z"} 
+[2026-10-29 08:16:26] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:16:26.199Z"} 
+[2026-10-29 08:16:28] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:16:28.351Z"} 
+[2026-10-29 08:16:50] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:16:49.578Z"} 
+[2026-10-29 08:16:50] local.ERROR: Unhandled Promise Rejection Error Page not found: ./pages/welcome.tsx resolvePageComponent@http://127.0.0.1:5173/node_modules/.vite/deps/laravel-vite-plugin_inertia-helpers.js?v=04aa190c:8:8
+resolveInertiaPage@http://127.0.0.1:5173/resources/js/lib/inertia-config.ts:7:65
+resolveComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:23003:60
+createInertiaApp@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:23038:38
+@http://127.0.0.1:5173/resources/js/app.tsx:5:6 {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:16:49.927Z"} 
+[2026-10-29 08:19:57] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:19:54.646Z"} 
+[2026-10-29 08:19:58] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:19:57.960Z"} 
+[2026-10-29 08:19:59] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:19:57.960Z"} 
+[2026-10-29 08:20:03] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:20:02.396Z"} 
+[2026-10-29 08:20:03] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:20:02.933Z"} 
+[2026-10-29 08:20:09] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:20:08.976Z"} 
+[2026-10-29 08:20:10] local.ERROR: Unhandled Promise Rejection Error Page not found: ./pages/welcome.tsx resolvePageComponent@http://127.0.0.1:5173/node_modules/.vite/deps/laravel-vite-plugin_inertia-helpers.js?v=04aa190c:8:8
+resolveInertiaPage@http://127.0.0.1:5173/resources/js/lib/inertia-config.ts:7:65
+resolveComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:23003:60
+createInertiaApp@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:23038:38
+@http://127.0.0.1:5173/resources/js/app.tsx:5:6 {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:20:09.118Z"} 
+[2026-10-29 08:22:41] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:22:40.251Z"} 
+[2026-10-29 08:22:41] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:22:40.676Z"} 
+[2026-10-29 08:22:52] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:22:49.671Z"} 
+[2026-10-29 08:22:52] local.ERROR: Unhandled Promise Rejection Error Page not found: ./pages/welcome.tsx resolvePageComponent@http://127.0.0.1:5173/node_modules/.vite/deps/laravel-vite-plugin_inertia-helpers.js?v=04aa190c:8:8
+resolveInertiaPage@http://127.0.0.1:5173/resources/js/lib/inertia-config.ts:7:65
+resolveComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:23003:60
+createInertiaApp@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:23038:38
+@http://127.0.0.1:5173/resources/js/app.tsx:5:6 {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:22:49.785Z"} 
+[2026-10-29 08:23:59] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:23:58.649Z"} 
+[2026-10-29 08:24:00] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:23:59.137Z"} 
+[2026-10-29 08:24:06] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:24:05.087Z"} 
+[2026-10-29 08:24:06] local.ERROR: Unhandled Promise Rejection TypeError can't access property "default", module is undefined createInertiaApp/resolveComponent/<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:23004:3
+promise callback*resolveComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:23003:82
+createInertiaApp@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:23038:38
+@http://127.0.0.1:5173/resources/js/app.tsx:5:6 {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:24:05.369Z"} 
+[2026-10-29 08:26:23] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:26:18.029Z"} 
+[2026-10-29 08:26:26] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:26:22.730Z"} 
+[2026-10-29 08:26:41] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:26:40.340Z"} 
+[2026-10-29 08:28:01] local.ERROR: Unhandled Promise Rejection TypeError error loading dynamically imported module: http://127.0.0.1:5173/resources/js/components/dashboard/date-range-filter.tsx null {"url":"http://localhost:8000/login","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:28:01.009Z"} 
+[2026-10-29 08:51:35] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:51:33.669Z"} 
+[2026-10-29 08:51:35] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:51:34.093Z"} 
+[2026-10-29 08:51:57] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:51:51.130Z"} 
+[2026-10-29 08:54:26] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:54:23.766Z"} 
+[2026-10-29 08:54:29] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:54:26.357Z"} 
+[2026-10-29 08:54:42] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T08:54:39.480Z"} 
+[2026-10-29 09:02:36] local.ERROR: Unhandled Promise Rejection Error Page not found: ./pages/field-agents/create.tsx resolvePageComponent@http://127.0.0.1:5173/node_modules/.vite/deps/laravel-vite-plugin_inertia-helpers.js?v=04aa190c:8:8
+resolveInertiaPage@http://127.0.0.1:5173/resources/js/lib/inertia-config.ts?t=1793263831688:7:65
+resolveComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:23003:60
+resolve@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3645:31
+set@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3512:15
+setPage@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:4855:15
+async*process@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:4750:14
+async*handle/<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:4727:32
+processNext@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3741:36
+process@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3730:35
+add@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3727:15
+handle@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:4727:17
+send/<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:5096:25
+promise callback*send@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:5094:52
+async*send@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:5168:11
+sendRequest@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:5370:70
+visit@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:5386:8
+onClick@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:24035:11
+executeDispatch@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16912:13
+runWithFiberInDEV@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:7950:123
+processDispatchQueue@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16938:27
+require_react_dom_client_development</dispatchEventForPluginEventSystem/<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:17207:25
+batchedUpdates$1@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:9151:12
+dispatchEventForPluginEventSystem@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:17011:20
+dispatchEvent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:19519:62
+dispatchDiscreteEvent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:19501:56
+EventListener.handleEvent*addTrappedEventListener@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16983:222
+listenToNativeEvent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16955:27
+require_react_dom_client_development</listenToAllSupportedEvents/<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16961:85
+listenToAllSupportedEvents@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16960:21
+require_react_dom_client_development</exports.hydrateRoot@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:22843:30
+createInertiaApp/reactApp<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:23064:78
+promise callback*createInertiaApp@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:23038:134
+@http://127.0.0.1:5173/resources/js/app.tsx:5:6 {"url":"http://localhost:8000/field-agents","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T09:02:35.902Z"} 
+[2026-10-29 09:03:58] local.ERROR: Unhandled Promise Rejection Error Page not found: ./pages/field-agents/territory-report.tsx resolvePageComponent@http://127.0.0.1:5173/node_modules/.vite/deps/laravel-vite-plugin_inertia-helpers.js?v=04aa190c:8:8
+resolveInertiaPage@http://127.0.0.1:5173/resources/js/lib/inertia-config.ts?t=1793263831688:7:65
+resolveComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:23003:60
+resolve@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3645:31
+set@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3512:15
+setPage@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:4855:15
+async*process@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:4750:14
+async*handle/<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:4727:32
+processNext@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3741:36
+process@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3730:35
+add@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3727:15
+handle@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:4727:17
+use/<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3075:20
+promise callback*use@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3068:30
+sendRequest@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:5367:24
+visit@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:5386:8
+onClick@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:24035:11
+onClick@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:24049:18
+executeDispatch@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16912:13
+runWithFiberInDEV@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:7950:123
+processDispatchQueue@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16938:27
+require_react_dom_client_development</dispatchEventForPluginEventSystem/<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:17207:25
+batchedUpdates$1@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:9151:12
+dispatchEventForPluginEventSystem@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:17011:20
+dispatchEvent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:19519:62
+dispatchDiscreteEvent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:19501:56
+EventListener.handleEvent*addTrappedEventListener@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16983:222
+listenToNativeEvent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16955:27
+require_react_dom_client_development</listenToAllSupportedEvents/<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16961:85
+listenToAllSupportedEvents@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16960:21
+require_react_dom_client_development</exports.hydrateRoot@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:22843:30
+createInertiaApp/reactApp<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:23064:78
+promise callback*createInertiaApp@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:23038:134
+@http://127.0.0.1:5173/resources/js/app.tsx:5:6 {"url":"http://localhost:8000/field-agents","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T09:03:57.681Z"} 
+[2026-10-29 09:06:32] local.ERROR: Unhandled Promise Rejection Error Page not found: ./pages/payroll/employees.tsx resolvePageComponent@http://127.0.0.1:5173/node_modules/.vite/deps/laravel-vite-plugin_inertia-helpers.js?v=04aa190c:8:8
+resolveInertiaPage@http://127.0.0.1:5173/resources/js/lib/inertia-config.ts?t=1793263831688:7:65
+resolveComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:23003:60
+resolve@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3645:31
+set@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3512:15
+setPage@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:4855:15
+async*process@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:4750:14
+async*handle/<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:4727:32
+processNext@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3741:36
+process@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3730:35
+add@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3727:15
+handle@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:4727:17
+use/<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3075:20
+promise callback*use@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3068:30
+sendRequest@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:5367:24
+visit@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:5386:8
+onClick@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:24035:11
+onClick@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:24049:18
+executeDispatch@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16912:13
+runWithFiberInDEV@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:7950:123
+processDispatchQueue@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16938:27
+require_react_dom_client_development</dispatchEventForPluginEventSystem/<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:17207:25
+batchedUpdates$1@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:9151:12
+dispatchEventForPluginEventSystem@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:17011:20
+dispatchEvent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:19519:62
+dispatchDiscreteEvent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:19501:56
+EventListener.handleEvent*addTrappedEventListener@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16983:222
+listenToNativeEvent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16955:27
+require_react_dom_client_development</listenToAllSupportedEvents/<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16961:85
+listenToAllSupportedEvents@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16960:21
+require_react_dom_client_development</exports.hydrateRoot@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:22843:30
+createInertiaApp/reactApp<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:23064:78
+promise callback*createInertiaApp@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:23038:134
+@http://127.0.0.1:5173/resources/js/app.tsx:5:6 {"url":"http://localhost:8000/payroll/runs/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T09:06:31.853Z"} 
+[2026-10-29 09:06:40] local.ERROR: Unhandled Promise Rejection Error Page not found: ./pages/payroll/employees.tsx resolvePageComponent@http://127.0.0.1:5173/node_modules/.vite/deps/laravel-vite-plugin_inertia-helpers.js?v=04aa190c:8:8
+resolveInertiaPage@http://127.0.0.1:5173/resources/js/lib/inertia-config.ts?t=1793263831688:7:65
+resolveComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:23003:60
+resolve@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3645:31
+set@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3512:15
+setPage@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:4855:15
+async*process@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:4750:14
+async*handle/<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:4727:32
+processNext@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3741:36
+process@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3730:35
+add@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3727:15
+handle@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:4727:17
+use/<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3075:20
+promise callback*use@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:3068:30
+sendRequest@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:5367:24
+visit@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:5386:8
+onClick@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:24035:11
+onClick@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:24049:18
+executeDispatch@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16912:13
+runWithFiberInDEV@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:7950:123
+processDispatchQueue@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16938:27
+require_react_dom_client_development</dispatchEventForPluginEventSystem/<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:17207:25
+batchedUpdates$1@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:9151:12
+dispatchEventForPluginEventSystem@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:17011:20
+dispatchEvent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:19519:62
+dispatchDiscreteEvent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:19501:56
+EventListener.handleEvent*addTrappedEventListener@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16983:222
+listenToNativeEvent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16955:27
+require_react_dom_client_development</listenToAllSupportedEvents/<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16961:85
+listenToAllSupportedEvents@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:16960:21
+require_react_dom_client_development</exports.hydrateRoot@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:22843:30
+createInertiaApp/reactApp<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:23064:78
+promise callback*createInertiaApp@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=fe549732:23038:134
+@http://127.0.0.1:5173/resources/js/app.tsx:5:6 {"url":"http://localhost:8000/payroll/runs/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T09:06:40.185Z"} 
+[2026-10-29 10:07:44] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/inventory","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:07:43.725Z"} 
+[2026-10-29 10:07:45] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/inventory","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:07:43.725Z"} 
+[2026-10-29 10:08:00] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/inventory","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:07:58.608Z"} 
+[2026-10-29 10:08:01] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/inventory","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:08:00.062Z"} 
+[2026-10-29 10:08:17] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/inventory","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:08:15.853Z"} 
+[2026-10-29 10:08:19] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/inventory","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:08:17.529Z"} 
+[2026-10-29 10:08:27] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/inventory","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:08:25.320Z"} 
+[2026-10-29 10:08:29] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/inventory","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:08:27.525Z"} 
+[2026-10-29 10:08:33] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/inventory","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:08:32.591Z"} 
+[2026-10-29 10:08:35] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/inventory","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:08:33.840Z"} 
+[2026-10-29 10:09:10] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:09:09.033Z"} 
+[2026-10-29 10:09:11] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:09:10.542Z"} 
+[2026-10-29 10:17:06] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:17:04.233Z"} 
+[2026-10-29 10:17:09] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:17:05.541Z"} 
+[2026-10-29 10:17:45] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:17:43.795Z"} 
+[2026-10-29 10:17:47] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:17:46.429Z"} 
+[2026-10-29 10:17:54] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:17:52.697Z"} 
+[2026-10-29 10:17:55] local.ERROR: TypeError: can't access property "index", (intermediate value).accountingPeriods is undefined http://127.0.0.1:5173/resources/js/components/app-sidebar.tsx?t=1793269037892 233 5 TypeError can't access property "index", (intermediate value).accountingPeriods is undefined @http://127.0.0.1:5173/resources/js/components/app-sidebar.tsx?t=1793269037892:233:5 {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:17:52.810Z"} 
+[2026-10-29 10:17:55] local.ERROR: TypeError: can't access property "index", (intermediate value).accountingPeriods is undefined http://127.0.0.1:5173/resources/js/components/app-sidebar.tsx?t=1793269037892 233 5 TypeError can't access property "index", (intermediate value).accountingPeriods is undefined @http://127.0.0.1:5173/resources/js/components/app-sidebar.tsx?t=1793269037892:233:5 {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:17:52.810Z"} 
+[2026-10-29 10:17:55] local.ERROR: TypeError: can't access property "index", (intermediate value).accountingPeriods is undefined http://127.0.0.1:5173/resources/js/components/app-sidebar.tsx?t=1793269037892 233 5 TypeError can't access property "index", (intermediate value).accountingPeriods is undefined @http://127.0.0.1:5173/resources/js/components/app-sidebar.tsx?t=1793269037892:233:5 {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:17:52.818Z"} 
+[2026-10-29 10:17:55] local.ERROR: TypeError: can't access property "index", (intermediate value).accountingPeriods is undefined http://127.0.0.1:5173/resources/js/components/app-sidebar.tsx?t=1793269037892 233 5 TypeError can't access property "index", (intermediate value).accountingPeriods is undefined @http://127.0.0.1:5173/resources/js/components/app-sidebar.tsx?t=1793269037892:233:5 {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:17:52.818Z"} 
+[2026-10-29 10:26:59] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:26:54.558Z"} 
+[2026-10-29 10:27:16] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:26:59.391Z"} 
+[2026-10-29 10:27:38] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:27:32.508Z"} 
+[2026-10-29 10:28:36] local.ERROR: Unhandled Promise Rejection TypeError error loading dynamically imported module: http://127.0.0.1:5173/resources/js/routes/web/leads.ts?t=1793269609984 null {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:28:36.018Z"} 
+[2026-10-29 10:29:50] local.ERROR: Unhandled Promise Rejection TypeError error loading dynamically imported module: http://127.0.0.1:5173/resources/js/routes/web/leads.ts?t=1793269609984 null {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:29:49.687Z"} 
+[2026-10-29 10:30:20] local.ERROR: Unhandled Promise Rejection TypeError error loading dynamically imported module: http://127.0.0.1:5173/resources/js/routes/web/leads.ts?t=1793269609984 null {"url":"http://localhost:8000/contacts","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:30:18.626Z"} 
+[2026-10-29 10:31:53] local.ERROR: Unhandled Promise Rejection TypeError error loading dynamically imported module: http://127.0.0.1:5173/resources/js/routes/web/leads.ts?t=1793269609984 null {"url":"http://localhost:8000/contacts","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:31:52.676Z"} 
+[2026-10-29 10:32:42] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/contacts","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:32:40.531Z"} 
+[2026-10-29 10:32:45] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/contacts","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:32:43.007Z"} 
+[2026-10-29 10:33:02] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/contacts","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:32:59.519Z"} 
+[2026-10-29 10:33:26] local.ERROR: Unhandled Promise Rejection TypeError error loading dynamically imported module: http://127.0.0.1:5173/resources/js/routes/web/leads.ts?t=1793269609984 null {"url":"http://localhost:8000/contacts","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:33:22.934Z"} 
+[2026-10-29 10:33:39] local.ERROR: Unhandled Promise Rejection TypeError error loading dynamically imported module: http://127.0.0.1:5173/resources/js/routes/web/leads.ts?t=1793269609984 null {"url":"http://localhost:8000/clients","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:33:38.914Z"} 
+[2026-10-29 10:50:47] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:50:45.184Z"} 
+[2026-10-29 10:50:51] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:50:49.334Z"} 
+[2026-10-29 10:51:23] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-29T10:51:20.978Z"} 

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\ClientFollowUp;
-use App\Models\Invoice;
+use Sledeci\Clients\Models\ClientFollowUp;
+use Sledeci\Accounting\Models\Invoice;
 use App\Models\Lead;
 use App\Models\Opportunity;
 use App\Models\Project;

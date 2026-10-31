@@ -20,5 +20,13 @@
             ]
         }
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "version": "0.1.0",
+    "authors": [
+        {
+            "name": "Antony Kipingor",
+            "email": "kipingor@gmail.com"
+        }
+    ],
+    "homepage": "https://github.com/kipingor/sledeci/kenya-payroll"
 }

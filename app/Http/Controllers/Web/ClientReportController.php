@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\ClientReport;
-use App\Models\Invoice;
+use Sledeci\Clients\Models\ClientReport;
+use Sledeci\Accounting\Models\Invoice;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;

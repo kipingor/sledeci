@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Workflow;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 /**
  * Backend for the automation workflow builder component.
@@ -15,6 +17,34 @@ use Illuminate\Http\Request;
  */
 class WorkflowController extends Controller
 {
+    public function index(Request $request): Response
+    {
+        $this->authorize('viewAny', Workflow::class);
+
+        $workflows = Workflow::query()
+            ->when($request->user(), fn ($q) => $q->where('user_id', $request->user()->id))
+            ->latest()
+            ->get()
+            ->map(fn (Workflow $w) => [
+                'id' => $w->id,
+                'name' => $w->name,
+                'description' => $w->description,
+                'enabled' => $w->enabled,
+                'trigger' => [
+                    'type' => $w->trigger_type,
+                    'conditions' => $w->trigger_conditions ?? [],
+                ],
+                'actions' => $w->actions ?? [],
+                'created_at' => $w->created_at?->toIso8601String(),
+                'last_run' => $w->last_run_at?->toIso8601String(),
+                'run_count' => $w->run_count ?? 0,
+            ]);
+
+        return Inertia::render('workflows/index', [
+            'workflows' => $workflows,
+        ]);
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $this->authorize('create', Workflow::class);

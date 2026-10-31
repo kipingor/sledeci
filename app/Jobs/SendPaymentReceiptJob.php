@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\Payment;
+use Sledeci\Accounting\Models\Payment;
 use App\Services\MessagingService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

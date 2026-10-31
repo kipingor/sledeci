@@ -2,7 +2,6 @@
 
 namespace Sledeci\Accounting\Models;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -61,12 +60,12 @@ class JournalEntry extends Model
 
     public function createdBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(config('accounting.user_model'), 'created_by');
     }
 
     public function postedBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'posted_by');
+        return $this->belongsTo(config('accounting.user_model'), 'posted_by');
     }
 
     public function reversedEntry(): BelongsTo

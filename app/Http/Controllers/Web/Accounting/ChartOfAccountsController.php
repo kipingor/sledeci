@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Web\Accounting;
 
 use App\Http\Controllers\Controller;
-use App\Models\ChartOfAccount;
+use Sledeci\Accounting\Models\ChartOfAccount;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\Expense;
+use Sledeci\Accounting\Models\Expense;
 use App\Models\Project;
-use App\Services\Ocr\ReceiptOcrService;
+use Sledeci\Accounting\Services\Ocr\ReceiptOcrService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

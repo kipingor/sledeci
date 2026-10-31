@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\ClientFollowUp;
+use Sledeci\Clients\Models\ClientFollowUp;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;

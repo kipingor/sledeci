@@ -3,9 +3,9 @@
 namespace App\Services\Payroll;
 
 use App\Models\CompanySetting;
-use App\Models\Employee;
-use App\Models\PayrollRun;
-use App\Models\Payslip;
+use Sledeci\KenyaPayroll\Models\Employee;
+use Sledeci\KenyaPayroll\Models\PayrollRun;
+use Sledeci\KenyaPayroll\Models\Payslip;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;

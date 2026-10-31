@@ -2,7 +2,6 @@
 
 namespace Sledeci\Hr\Models;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -40,7 +39,7 @@ class StaffProfile extends Model
 
     public function user(): HasOne
     {
-        return $this->hasOne(User::class, 'staff_profile_id');
+        return $this->hasOne(config('hr.user_model'), 'staff_profile_id');
     }
 
     public function leaveRequests(): HasMany

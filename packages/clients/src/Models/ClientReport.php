@@ -2,8 +2,6 @@
 
 namespace Sledeci\Clients\Models;
 
-use App\Models\Project;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -30,14 +28,14 @@ class ClientReport extends Model
 
     public function client(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'client_id');
+        return $this->belongsTo(config('clients.user_model'), 'client_id');
     }
     public function project(): BelongsTo
     {
-        return $this->belongsTo(Project::class);
+        return $this->belongsTo(config('clients.project_model'));
     }
     public function creator(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(config('clients.user_model'), 'created_by');
     }
 }

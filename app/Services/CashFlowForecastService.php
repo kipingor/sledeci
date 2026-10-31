@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\Models\Expense;
-use App\Models\Invoice;
-use App\Models\Payment;
+use Sledeci\Accounting\Models\Expense;
+use Sledeci\Accounting\Models\Invoice;
+use Sledeci\Accounting\Models\Payment;
 use App\Models\PurchaseOrder;
 use App\Services\Forex\ForexService;
 

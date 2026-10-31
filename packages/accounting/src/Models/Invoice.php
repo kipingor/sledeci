@@ -2,8 +2,6 @@
 
 namespace Sledeci\Accounting\Models;
 
-use App\Models\Project;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,23 +9,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * BUG FIX: $fillable was missing the five accounting columns added by the
- * create_accounting_tables migration. PostingEngine::postInvoice() calls:
+ * Canonical Invoice model for the Accounting package.
  *
- *   $invoice->update([
- *       'journal_entry_id'   => $je->id,     ← silently dropped
- *       'posting_status'     => 'posted',     ← silently dropped
- *       'exchange_rate'      => $rate,        ← silently dropped
- *       'functional_currency'=> 'KES',        ← silently dropped
- *       'functional_total'   => $total,       ← silently dropped
- *   ]);
- *
- * Because Eloquent ignores mass-assigned fields not in $fillable, the invoice
- * was never marked as posted → postPending() would re-post the same invoices
- * on every run, creating duplicate journal entries.
- *
- * Also: Payment model used 'payment_method' but the migration column is 'method'.
- * That is fixed in the companion Payment.php file.
+ * Related host models (User, Project) are resolved from config/accounting.php
+ * so the package does not hard-depend on App\Models.
  */
 class Invoice extends Model
 {
@@ -49,7 +34,7 @@ class Invoice extends Model
         'lines',
         'notes',
 
-        // Accounting / posting fields (from create_accounting_tables migration)
+        // Accounting / posting fields
         'journal_entry_id',
         'posting_status',       // 'unposted' | 'posted' | 'reversed'
         'exchange_rate',
@@ -111,12 +96,12 @@ class Invoice extends Model
 
     public function client(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'client_id');
+        return $this->belongsTo(config('accounting.client_model'), 'client_id');
     }
 
     public function project(): BelongsTo
     {
-        return $this->belongsTo(Project::class);
+        return $this->belongsTo(config('accounting.project_model'));
     }
 
     public function payments(): HasMany
@@ -129,9 +114,8 @@ class Invoice extends Model
         return $this->belongsTo(JournalEntry::class);
     }
 
-
     /**
-     * Factories stay in database/factories (Database\\Factories), outside this package.
+     * Factories stay in the host application's database/factories.
      */
     protected static function newFactory(): \Database\Factories\InvoiceFactory
     {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Lead;
 use App\Services\AILeadService;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 
@@ -168,42 +169,36 @@ class AILeadController extends Controller
     public function getPipelineHealth(Request $request)
     {
         try {
-            $query = Lead::query();
+            $query = Lead::query()->with('activities');
 
-            if (!$request->user()->isAdmin()) {
+            if (! $request->user()->hasRole(['admin', 'manager', 'auditor'])) {
                 $query->where('owner_id', $request->user()->id);
             }
 
-            $leads = $query->get();
+            // Cap for responsiveness; full export can use batch-score later.
+            $leads = $query->latest('updated_at')->limit(500)->get();
 
+            $highQuality = 0;
+            $mediumQuality = 0;
+            $lowQuality = 0;
             $totalScore = 0;
-            $scoredLeads = 0;
 
             foreach ($leads as $lead) {
-                $score = $this->aiService->calculateLeadScore($lead);
-                $totalScore += $score['score'];
-                $scoredLeads++;
+                $score = (int) ($this->aiService->calculateLeadScore($lead)['score'] ?? 0);
+                $totalScore += $score;
+                if ($score >= 80) {
+                    $highQuality++;
+                } elseif ($score >= 60) {
+                    $mediumQuality++;
+                } else {
+                    $lowQuality++;
+                }
             }
 
+            $scoredLeads = $leads->count();
             $avgScore = $scoredLeads > 0 ? $totalScore / $scoredLeads : 0;
 
-            // Categorize leads by score
-            $highQuality = $leads->filter(function ($lead) {
-                $score = $this->aiService->calculateLeadScore($lead);
-                return $score['score'] >= 80;
-            })->count();
-
-            $mediumQuality = $leads->filter(function ($lead) {
-                $score = $this->aiService->calculateLeadScore($lead);
-                return $score['score'] >= 60 && $score['score'] < 80;
-            })->count();
-
-            $lowQuality = $leads->filter(function ($lead) {
-                $score = $this->aiService->calculateLeadScore($lead);
-                return $score['score'] < 60;
-            })->count();
-
-            return response()->json([
+            $payload = [
                 'average_score' => round($avgScore, 1),
                 'total_leads' => $scoredLeads,
                 'distribution' => [
@@ -211,23 +206,27 @@ class AILeadController extends Controller
                     'medium_quality' => $mediumQuality,
                     'low_quality' => $lowQuality,
                 ],
-                'health_status' => $this->getHealthStatus($avgScore),
-            ]);
-        } catch (\Exception $e) {
+                'health_status' => $this->getHealthStatus((float) $avgScore),
+            ];
+
+            if ($request->header('X-Inertia')) {
+                return Inertia::render('ai/pipeline-health', $payload);
+            }
+
+            return response()->json($payload);
+        } catch (\Throwable $e) {
             Log::error('Failed to calculate pipeline health', [
                 'error' => $e->getMessage(),
-                'user_id' => $request->user()->id,
+                'user_id' => $request->user()?->id,
             ]);
 
             return response()->json([
                 'error' => 'Failed to calculate pipeline health',
+                'message' => config('app.debug') ? $e->getMessage() : null,
             ], 500);
         }
     }
 
-    /**
-     * Get health status label
-     */
     private function getHealthStatus(float $avgScore): string
     {
         if ($avgScore >= 80) return 'excellent';

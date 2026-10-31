@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Web\Accounting;
 
 use App\Http\Controllers\Controller;
-use App\Models\AccountingPeriod;
-use App\Models\ChartOfAccount;
-use App\Models\Expense;
-use App\Models\Invoice;
-use App\Models\JournalEntry;
-use App\Models\JournalEntryLine;
-use App\Models\Payment;
+use Sledeci\Accounting\Models\AccountingPeriod;
+use Sledeci\Accounting\Models\ChartOfAccount;
+use Sledeci\Accounting\Models\Expense;
+use Sledeci\Accounting\Models\Invoice;
+use Sledeci\Accounting\Models\JournalEntry;
+use Sledeci\Accounting\Models\JournalEntryLine;
+use Sledeci\Accounting\Models\Payment;
 use App\Models\Project;
 use App\Services\Accounting\PostingEngine;
 use Carbon\Carbon;

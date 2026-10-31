@@ -12,6 +12,12 @@ use Sledeci\Core\Support\ModuleServiceProvider;
  */
 class KenyaTaxServiceProvider extends ModuleServiceProvider
 {
+    public function register(): void
+    {
+        parent::register();
+        $this->mergeConfigFrom($this->packagePath('config/kenya-tax.php'), 'kenya-tax');
+    }
+
     protected function module(): Module
     {
         return new Module(

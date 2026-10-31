@@ -2,7 +2,7 @@
 
 namespace App\Services\Accounting;
 
-use App\Models\ChartOfAccount;
+use Sledeci\Accounting\Models\ChartOfAccount;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;

@@ -148,4 +148,9 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
     {
         return $this->is_client ? 'Client' : ucfirst($this->role ?? 'user');
     }
+
+    public function isAdmin(): bool
+    {
+        return $this->hasRole(['admin', 'super-admin', 'manager']);
+    }
 }

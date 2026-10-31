@@ -2,8 +2,6 @@
 
 namespace Sledeci\Accounting\Models;
 
-use App\Models\Project;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -65,12 +63,12 @@ class JournalEntryLine extends Model
 
     public function project(): BelongsTo
     {
-        return $this->belongsTo(Project::class);
+        return $this->belongsTo(config('accounting.project_model'));
     }
 
     public function client(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'client_id');
+        return $this->belongsTo(config('accounting.user_model'), 'client_id');
     }
 
     // ── Helpers ────────────────────────────────────────────────────────────────

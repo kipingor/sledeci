@@ -3,9 +3,9 @@
 A modular Laravel 13.x application (Inertia + React frontend). This README covers the shortest path to get the app running locally and the recommended queue/session settings.
 
 Requirements
-- PHP >= 8.3
+- PHP >= 8.4
 - Composer
-- Node (npm or pnpm)
+- Node and pnpm
 - Database (MySQL/Postgres/SQLite)
 - Redis (recommended for queue)
 
@@ -41,8 +41,8 @@ php artisan queue:failed-table
 php artisan migrate
 
 # Node dependencies and dev server
-npm install
-npm run dev
+pnpm install --frozen-lockfile
+pnpm run dev
 
 # Optional: run queue worker for background jobs
 php artisan queue:work --queue=default --sleep=3 --tries=3
@@ -74,4 +74,3 @@ ExecStart=/usr/bin/php /path/to/artisan queue:work redis --sleep=3 --tries=3 --t
 [Install]
 WantedBy=multi-user.target
 ```
-

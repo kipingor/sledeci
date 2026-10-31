@@ -35,6 +35,8 @@ class AccountingServiceProvider extends ModuleServiceProvider
     {
         parent::register();
 
+        $this->mergeConfigFrom(__DIR__.'/../config/accounting.php', 'accounting');
+
         // Lets the Clients module show invoices and balances. bind() (not bindIf) so it
         // replaces core's empty fallback.
         $this->app->bind(ClientFinancialSummary::class, EloquentClientFinancialSummary::class);

@@ -1,8 +1,8 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/react-starter-kit",
+    "name": "sledeci/sledeci",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "Sledeci \u2013 modular CRM, accounting, HR, payroll and Kenya tax/payments suite built on Laravel + Inertia React.",
     "keywords": [
         "laravel",
         "framework"
@@ -124,10 +124,7 @@
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true,
-        "allow-plugins": {
-            "pestphp/pest-plugin": true,
-            "php-http/discovery": true
-        }
+        "allow-plugins": true
     },
     "minimum-stability": "stable",
     "prefer-stable": true

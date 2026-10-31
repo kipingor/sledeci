@@ -3,7 +3,6 @@
 namespace Sledeci\KenyaTax\Http\Controllers;
 
 use Sledeci\Core\Http\Controller;
-use App\Models\CompanySetting;
 use Sledeci\Accounting\Models\Invoice;
 use Sledeci\KenyaTax\Services\EtimsService;
 use Illuminate\Http\Request;
@@ -20,7 +19,7 @@ class EtimsController extends Controller
     {
         $this->authorize('submitToEtims', $invoice);
 
-        if (! CompanySetting::current()->etims_enabled) {
+        if (! config('kenya-tax.company_setting_model')::current()->etims_enabled) {
             return response()->json(['error' => 'eTIMS is not enabled.'], 422);
         }
 

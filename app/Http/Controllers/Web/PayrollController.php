@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\Employee;
-use App\Models\PayrollRun;
-use App\Models\Payslip;
+use Sledeci\KenyaPayroll\Models\Employee;
+use Sledeci\KenyaPayroll\Models\PayrollRun;
+use Sledeci\KenyaPayroll\Models\Payslip;
 use App\Services\Payroll\KenyaPayrollService;
 use App\Services\Payroll\PayrollRunService;
 use Illuminate\Http\Request;

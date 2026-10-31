@@ -212,9 +212,6 @@ importers:
       vite:
         specifier: 'catalog:'
         version: '@voidzero-dev/vite-plus-core@1.4.0(@types/node@22.20.5)(jiti@2.7.0)(typescript@5.9.3)'
-      ziggy-js:
-        specifier: ^2.6.5
-        version: 2.6.5
       zod:
         specifier: ^4.6.7
         version: 4.6.7
@@ -268,6 +265,27 @@ importers:
       lightningcss-win32-x64-msvc:
         specifier: ^1.29.1
         version: 1.33.0
+
+  packages/ui:
+    dependencies:
+      class-variance-authority:
+        specifier: '>=0.7.0'
+        version: 0.7.1
+      clsx:
+        specifier: '>=2.0.0'
+        version: 2.1.1
+      lucide-react:
+        specifier: '>=0.400.0'
+        version: 0.475.0(react@19.3.1)
+      react:
+        specifier: ^19.0.0
+        version: 19.3.1
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.3.1(react@19.3.1)
+      tailwind-merge:
+        specifier: '>=2.0.0'
+        version: 3.7.0
 
   welfare-circle:
     devDependencies:
@@ -3071,10 +3089,6 @@ packages:
   pusher-js@8.6.0:
     resolution: {integrity: sha512-wShJPfCS/kYkCBVzVW67wa9cnQIgHTszEK2XHNrFkOgGruuGw081aERAxfRjfdFU+WcIt8x6dvbwkTW4iZuQ8Q==}
 
-  qs-esm@7.0.3:
-    resolution: {integrity: sha512-8jbjCR0PPbqoQcv83C2K/zvVeytRPwPpt3WPDbq51qyLAxcWGtXVRjSe6GHtLCoVbg9+NEFkv7GyUxqjcDIJzw==}
-    engines: {node: '>=18'}
-
   react-aria@3.53.1:
     resolution: {integrity: sha512-dikisyOjJd3D2fFrIDWmVWzqiLz5B86GzZv1zxs7xI4dVc0JIz/1Wa52I20gYvVL2WXeFXlygYsle/QcOMhtcg==}
     peerDependencies:
@@ -3584,9 +3598,6 @@ packages:
   yuku-parser@0.19.0:
     resolution: {integrity: sha512-XrBh9ZiQK5mJVRxZBAvD6LwRyAYrK3MFtH3+onyuxFL5hFD44EC3QOmIC1FjTj6H2MMwq46/NAI+NZxLZPZgxg==}
     engines: {node: '>=14.18.0'}
-
-  ziggy-js@2.6.5:
-    resolution: {integrity: sha512-GVzO+DvvlMBLGU1Lvss/cw9t6ky8FvWdEVpXxKFqreoOf3jid/Zt5bTq8AUrQYRgySz2jQPuWGSpLw1V3YxfJA==}
 
   zod@4.6.7:
     resolution: {integrity: sha512-g8W2D2kU6a8untc053fX1uVBKzM7yqAxW/3zwk83+6RyF2+SKOuV+c0wBDhUwzV1PaGapmZH+rmcUzPf+3CGwg==}
@@ -6095,8 +6106,6 @@ snapshots:
     dependencies:
       tweetnacl: 1.0.3
 
-  qs-esm@7.0.3: {}
-
   react-aria@3.53.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
     dependencies:
       '@internationalized/date': 3.12.4
@@ -6730,10 +6739,6 @@ snapshots:
     dependencies:
       '@yuku-toolchain/types': 0.19.0
       yuku-core: 0.19.0
-
-  ziggy-js@2.6.5:
-    dependencies:
-      qs-esm: 7.0.3
 
   zod@4.6.7: {}
 

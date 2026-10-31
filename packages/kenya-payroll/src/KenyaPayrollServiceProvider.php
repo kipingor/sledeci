@@ -20,6 +20,12 @@ use Sledeci\KenyaPayroll\Policies\PayslipPolicy;
  */
 class KenyaPayrollServiceProvider extends ModuleServiceProvider
 {
+    public function register(): void
+    {
+        parent::register();
+        $this->mergeConfigFrom($this->packagePath('config/kenya-payroll.php'), 'kenya-payroll');
+    }
+
     protected function module(): Module
     {
         return new Module(

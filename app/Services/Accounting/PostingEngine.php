@@ -2,14 +2,14 @@
 
 namespace App\Services\Accounting;
 
-use App\Models\AccountingPeriod;
-use App\Models\ChartOfAccount;
-use App\Models\ExchangeRate;
-use App\Models\Expense;
-use App\Models\Invoice;
-use App\Models\JournalEntry;
-use App\Models\JournalEntryLine;
-use App\Models\Payment;
+use Sledeci\Accounting\Models\AccountingPeriod;
+use Sledeci\Accounting\Models\ChartOfAccount;
+use Sledeci\Accounting\Models\ExchangeRate;
+use Sledeci\Accounting\Models\Expense;
+use Sledeci\Accounting\Models\Invoice;
+use Sledeci\Accounting\Models\JournalEntry;
+use Sledeci\Accounting\Models\JournalEntryLine;
+use Sledeci\Accounting\Models\Payment;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

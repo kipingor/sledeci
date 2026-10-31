@@ -2,9 +2,6 @@
 
 namespace Sledeci\Accounting\Models;
 
-use App\Models\MessageLog;
-use App\Models\Project;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -116,12 +113,12 @@ class Payment extends Model
 
     public function project(): BelongsTo
     {
-        return $this->belongsTo(Project::class);
+        return $this->belongsTo(config('accounting.project_model'));
     }
 
     public function receivedBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'received_by');
+        return $this->belongsTo(config('accounting.user_model'), 'received_by');
     }
 
     public function bankAccount(): BelongsTo
@@ -136,7 +133,7 @@ class Payment extends Model
 
     public function messageLogs(): HasMany
     {
-        return $this->hasMany(MessageLog::class, 'messageable_id')
+        return $this->hasMany(\App\Models\MessageLog::class, 'messageable_id')
             ->where('messageable_type', self::class);
     }
 

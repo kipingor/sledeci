@@ -2,7 +2,6 @@
 
 namespace Sledeci\Accounting\Models;
 
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -39,7 +38,7 @@ class ExchangeRate extends Model
 
     public function enteredBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'entered_by');
+        return $this->belongsTo(config('accounting.user_model'), 'entered_by');
     }
 
     // ── Static helpers (used by PostingEngine) ────────────────────────────────

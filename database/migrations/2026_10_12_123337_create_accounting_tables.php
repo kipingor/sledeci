@@ -163,7 +163,7 @@ return new class extends Migration
             $table->string('functional_currency', 3)->default('KES');
 
             // Source document (polymorphic)
-            $table->string('source_type')->nullable(); // App\Models\Invoice, etc.
+            $table->string('source_type')->nullable(); // Sledeci\Accounting\Models\Invoice, etc.
             $table->unsignedBigInteger('source_id')->nullable();
 
             // For reversals: link back to original

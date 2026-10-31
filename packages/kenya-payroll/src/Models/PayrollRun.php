@@ -2,7 +2,6 @@
 
 namespace Sledeci\KenyaPayroll\Models;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -27,7 +26,7 @@ class PayrollRun extends Model
         'total_employer_nssf'=> 'decimal:2',
     ];
 
-    public function creator(): BelongsTo { return $this->belongsTo(User::class, 'created_by'); }
+    public function creator(): BelongsTo { return $this->belongsTo(config('kenya-payroll.user_model'), 'created_by'); }
     public function payslips(): HasMany  { return $this->hasMany(Payslip::class); }
 
     public function periodLabel(): string

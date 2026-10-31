@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('workflows')->name('workflows.')->group(function () {
+    Route::get('/', [WorkflowController::class, 'index'])->name('index');
     Route::post('/', [WorkflowController::class, 'store'])->name('store');
     Route::put('/{workflow}', [WorkflowController::class, 'update'])->name('update');
     Route::patch('/{workflow}/toggle', [WorkflowController::class, 'toggle'])->name('toggle');
