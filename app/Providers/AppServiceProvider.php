@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\AI\GeminiAIClient;
+
 use App\Models\Lead;
 use App\Models\LeadDocument;
 use App\Observers\LeadDocumentObserver;
@@ -29,7 +31,9 @@ class AppServiceProvider extends ServiceProvider
         // Pick the AI backend from configuration; fall back to a no-op client so the
         // app (and the test-suite) still boots when no API key is configured.
         $this->app->bind(AiClientInterface::class, function (): AiClientInterface {
+            // Priority: Gemini (free tier) → OpenAI → Anthropic → no-op
             return match (true) {
+                filled(config('services.gemini.api_key'))    => new GeminiAIClient(),
                 filled(config('services.openai.api_key'))    => new OpenAIClient(),
                 filled(config('services.anthropic.api_key')) => new ClaudeAIClient(),
                 default                                      => new NullOpenAIClient(),

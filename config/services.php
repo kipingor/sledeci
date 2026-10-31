@@ -40,6 +40,19 @@ return [
     | AI providers (bound in AppServiceProvider)
     |--------------------------------------------------------------------------
     */
+
+    /*
+    |--------------------------------------------------------------------------
+    | Google Gemini (primary free-tier AI)
+    |--------------------------------------------------------------------------
+    | Get a free API key: https://aistudio.google.com/apikey
+    | Default model: gemini-2.0-flash (fast, free-tier friendly)
+    */
+    'gemini' => [
+        'api_key' => env('GEMINI_API_KEY', env('GOOGLE_AI_API_KEY')),
+        'model'   => env('GEMINI_MODEL', 'gemini-2.0-flash'),
+    ],
+
     'openai' => [
         'api_key' => env('OPENAI_API_KEY'),
     ],
