@@ -18,6 +18,8 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { toast } from 'sonner';
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 interface ChecklistItem { id: string; category: string; label: string; done: boolean; notes?: string }
@@ -92,11 +94,19 @@ async function post(url: string, data: Record<string, unknown> = {}) {
     });
 
     if (!res.ok) {
-        const text = await res.text().catch(() => '');
-        throw new Error(`Request to ${url} failed (${res.status}): ${text.slice(0, 200)}`);
+        const error = await res.json().catch(() => ({}));
+        throw Object.assign(new Error(error.message ?? `Request failed (${res.status}).`), {
+            code: error.code,
+            status: res.status,
+        });
     }
 
     return res.json();
+}
+
+function isAiProviderTimeout(error: unknown): boolean {
+    return typeof error === 'object' && error !== null && 'code' in error
+        && error.code === 'ai_provider_timeout';
 }
 
 // ── Approval Panel Component ───────────────────────────────────────────────────
@@ -275,9 +285,12 @@ export default function TenderShow({ tender, pendingApproval, makerCheckerActive
     const [chat, setChat]     = useState(tender.agent_conversation ?? []);
     const [chatInput, setChatInput] = useState('');
     const [chatLoading, setChatLoading] = useState(false);
+    const [chatTakingLong, setChatTakingLong] = useState(false);
+    const [aiError, setAiError] = useState(false);
     const [docType, setDocType]   = useState(DOC_TYPES[0].value);
     const [docContext, setDocContext] = useState('');
     const [genLoading, setGenLoading] = useState(false);
+    const [genTakingLong, setGenTakingLong] = useState(false);
     const chatRef = useRef<HTMLDivElement>(null);
     const sc = STATUS[tender.status] ?? STATUS.reviewing;
 
@@ -288,10 +301,31 @@ export default function TenderShow({ tender, pendingApproval, makerCheckerActive
         const msg = chatInput;
         setChatInput('');
         setChatLoading(true);
+        setChatTakingLong(false);
+        const slowTimer = window.setTimeout(() => setChatTakingLong(true), 8000);
+        setAiError(false);
         setChat(p => [...p, { role: 'user', content: msg }]);
-        const r = await post(`/tenders/${tender.id}/chat`, { message: msg });
-        setChat(p => [...p, { role: 'assistant', content: r.response }]);
-        setChatLoading(false);
+        try {
+            const r = await post(`/tenders/${tender.id}/chat`, { message: msg });
+            setChat(p => [...p, { role: 'assistant', content: r.response }]);
+        } catch (error) {
+            const isTimeout = isAiProviderTimeout(error);
+            setAiError(isTimeout);
+            setChat(p => p.filter((message, index) => !(index === p.length - 1 && message.role === 'user' && message.content === msg)));
+            setChatInput(msg);
+
+            if (isTimeout) {
+                toast.error('AI service is taking longer than expected', {
+                    description: 'The application is still working. Please try again shortly.',
+                });
+            } else {
+                toast.error(error instanceof Error ? error.message : 'Could not send your AI request.');
+            }
+        } finally {
+            window.clearTimeout(slowTimer);
+            setChatLoading(false);
+            setChatTakingLong(false);
+        }
     }
 
     async function toggleCheck(idx: number, done: boolean) {
@@ -301,9 +335,28 @@ export default function TenderShow({ tender, pendingApproval, makerCheckerActive
 
     async function generateDoc() {
         setGenLoading(true);
-        const r = await post(`/tenders/${tender.id}/generate-document`, { type: docType, additional_context: docContext });
-        setGenLoading(false);
-        router.reload({ only: ['tender'] });
+        setGenTakingLong(false);
+        const slowTimer = window.setTimeout(() => setGenTakingLong(true), 8000);
+        setAiError(false);
+        try {
+            await post(`/tenders/${tender.id}/generate-document`, { type: docType, additional_context: docContext });
+            router.reload({ only: ['tender'] });
+        } catch (error) {
+            const isTimeout = isAiProviderTimeout(error);
+            setAiError(isTimeout);
+
+            if (isTimeout) {
+                toast.error('AI service is taking longer than expected', {
+                    description: 'The application is still working. Please try again shortly.',
+                });
+            } else {
+                toast.error(error instanceof Error ? error.message : 'Could not generate the document.');
+            }
+        } finally {
+            window.clearTimeout(slowTimer);
+            setGenLoading(false);
+            setGenTakingLong(false);
+        }
     }
 
     async function submitTender() {
@@ -589,7 +642,11 @@ export default function TenderShow({ tender, pendingApproval, makerCheckerActive
                             <Button size="sm" onClick={generateDoc} disabled={genLoading}
                                 className="bg-amber-500 hover:bg-amber-600 text-white gap-1.5">
                                 <Sparkles className="h-3.5 w-3.5" />
-                                {genLoading ? 'Generating…' : 'Generate'}
+                                {genLoading
+                                    ? genTakingLong
+                                        ? 'AI is taking longer than usual…'
+                                        : 'Generating…'
+                                    : 'Generate'}
                             </Button>
                         </div>
                         {docs.length === 0 ? (
@@ -616,6 +673,15 @@ export default function TenderShow({ tender, pendingApproval, makerCheckerActive
                 {/* ── Chat ── */}
                 {tab === 'chat' && (
                     <div className="bg-card border border-border rounded-xl overflow-hidden flex flex-col h-[500px]">
+                        {aiError && (
+                            <Alert variant="destructive" className="m-3">
+                                <AlertCircle className="h-4 w-4" />
+                                <AlertTitle>AI service is taking longer than expected</AlertTitle>
+                                <AlertDescription>
+                                    The application is still working, but the AI provider did not respond in time. Please try again shortly.
+                                </AlertDescription>
+                            </Alert>
+                        )}
                         <div ref={chatRef} className="flex-1 overflow-y-auto p-4 space-y-3">
                             {chat.length === 0 && (
                                 <p className="text-center text-sm text-muted-foreground mt-8">Ask anything about this tender…</p>
@@ -635,7 +701,7 @@ export default function TenderShow({ tender, pendingApproval, makerCheckerActive
                             {chatLoading && (
                                 <div className="flex justify-start">
                                     <div className="bg-muted rounded-2xl px-4 py-2.5 text-sm text-muted-foreground animate-pulse">
-                                        Thinking…
+                                        {chatTakingLong ? 'AI is taking longer than usual; the application is still working…' : 'Thinking…'}
                                     </div>
                                 </div>
                             )}

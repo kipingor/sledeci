@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Contact;
 use App\Models\ContactFollowUp;
 use App\Services\Contact\ContactAgentService;
+use App\Support\AiProviderTimeout;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -74,7 +76,13 @@ class ContactController extends Controller
         ]);
 
         // AI onboarding: extract context, draft email, schedule follow-ups
-        $this->agent->onboard($contact);
+        try {
+            $this->agent->onboard($contact);
+        } catch (ConnectionException $e) {
+            return redirect()
+                ->route('web.contacts.show', $contact)
+                ->with('error', AiProviderTimeout::MESSAGE);
+        }
 
         return redirect()
             ->route('web.contacts.show', $contact)
@@ -122,8 +130,14 @@ class ContactController extends Controller
     public function regenerateEmail(Request $request, Contact $contact)
     {
         $this->authorize('update', $contact);
-        $draft = $this->agent->regenerateEmail($contact, $request->input('tone', 'professional'));
-        return response()->json(['draft' => $draft]);
+
+        try {
+            $draft = $this->agent->regenerateEmail($contact, $request->input('tone', 'professional'));
+
+            return response()->json(['draft' => $draft]);
+        } catch (ConnectionException $e) {
+            return AiProviderTimeout::response($e, 'contact email drafting');
+        }
     }
 
     public function markInitialSent(Contact $contact)

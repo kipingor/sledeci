@@ -1,5 +1,6 @@
 import AppLayout from '@/layouts/app-layout';
 import { Head, useForm } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
 import { type BreadcrumbItem } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -84,6 +85,18 @@ export default function ContactCreate() {
         source: 'networking_event',
         talking_points: '', notes: '',
     });
+    const [aiTakingLong, setAiTakingLong] = useState(false);
+
+    useEffect(() => {
+        if (!processing) {
+            setAiTakingLong(false);
+            return;
+        }
+
+        const timer = window.setTimeout(() => setAiTakingLong(true), 8000);
+
+        return () => window.clearTimeout(timer);
+    }, [processing]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -250,7 +263,9 @@ export default function ContactCreate() {
                         {processing ? (
                             <>
                                 <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                                Generating follow-up plan…
+                                {aiTakingLong
+                                    ? 'AI is taking longer than usual…'
+                                    : 'Generating follow-up plan…'}
                             </>
                         ) : (
                             <>

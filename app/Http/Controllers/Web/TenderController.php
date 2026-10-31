@@ -9,6 +9,8 @@ use App\Models\CompanySetting;
 use App\Models\Tender;
 use App\Services\MakerCheckerService;
 use App\Services\Tender\TenderAgentService;
+use App\Support\AiProviderTimeout;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -261,16 +263,27 @@ class TenderController extends Controller
     {
         $this->authorize('update', $tender);
         $request->validate(['type' => 'required|string', 'additional_context' => 'nullable|string']);
-        $doc = $this->agent->generateDocument($tender, $request->input('type'), $request->input('additional_context'));
-        return response()->json(['success' => true, 'document' => $doc]);
+
+        try {
+            $doc = $this->agent->generateDocument($tender, $request->input('type'), $request->input('additional_context'));
+
+            return response()->json(['success' => true, 'document' => $doc]);
+        } catch (ConnectionException $e) {
+            return AiProviderTimeout::response($e, 'tender document generation');
+        }
     }
 
     public function chat(Request $request, Tender $tender)
     {
         $this->authorize('update', $tender);
         $request->validate(['message' => 'required|string|max:2000']);
-        $response = $this->agent->chat($tender, $request->input('message'));
-        return response()->json(['response' => $response]);
+        try {
+            $response = $this->agent->chat($tender, $request->input('message'));
+
+            return response()->json(['response' => $response]);
+        } catch (ConnectionException $e) {
+            return AiProviderTimeout::response($e, 'tender chat');
+        }
     }
 
     public function answerGap(Request $request, Tender $tender)

@@ -39,11 +39,13 @@ class ContactAgentService
 
             $this->persistFollowUps($contact);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Log::error('ContactAgentService::onboard failed', [
                 'contact_id' => $contact->id,
-                'error'      => $e->getMessage(),
+                'exception'  => $e::class,
             ]);
+
+            throw $e;
         }
 
         return $contact->refresh();

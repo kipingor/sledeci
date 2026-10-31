@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
+import { toast } from 'sonner';
 
 interface FollowUp {
     id: number; sequence: number; subject: string; body: string;
@@ -67,6 +68,7 @@ export default function ContactShow() {
     const [emailDraft,    setEmailDraft]    = useState(contact.ai_email_draft ?? '');
     const [tone,          setTone]          = useState('professional');
     const [regenLoading,  setRegenLoading]  = useState(false);
+    const [regenTakingLong, setRegenTakingLong] = useState(false);
     const [sendingId,     setSendingId]     = useState<number | null>(null);
     const [sendingInit,   setSendingInit]   = useState(false);
     const [converting,    setConverting]    = useState(false);
@@ -87,6 +89,8 @@ export default function ContactShow() {
     // ── API calls (all preserved from original) ────────────────────────────
     async function regenerateEmail() {
         setRegenLoading(true);
+        setRegenTakingLong(false);
+        const slowTimer = window.setTimeout(() => setRegenTakingLong(true), 8000);
         try {
             const res = await fetch(`/contacts/${contact.id}/regenerate-email`, {
                 method: 'POST',
@@ -94,8 +98,22 @@ export default function ContactShow() {
                 body: JSON.stringify({ tone }),
             });
             const data = await res.json();
+            if (!res.ok) {
+                if (data.code === 'ai_provider_timeout') {
+                    toast.error('AI service is taking longer than expected', { description: data.message });
+                } else {
+                    toast.error(data.message ?? 'Could not generate the email draft.');
+                }
+                return;
+            }
             if (data.draft) setEmailDraft(data.draft);
-        } finally { setRegenLoading(false); }
+        } catch {
+            toast.error('Could not reach the application. Check your connection and try again.');
+        } finally {
+            window.clearTimeout(slowTimer);
+            setRegenLoading(false);
+            setRegenTakingLong(false);
+        }
     }
 
     async function markInitialSent() {
@@ -279,6 +297,11 @@ export default function ContactShow() {
                                                 <RotateCcw className={cn('h-3 w-3', regenLoading && 'animate-spin')} />
                                                 Regenerate
                                             </Button>
+                                            {regenTakingLong && (
+                                                <span role="status" className="text-xs text-muted-foreground">
+                                                    AI is taking longer than usual; the application is still working.
+                                                </span>
+                                            )}
                                         </div>
                                         <div className="flex gap-2">
                                             {contact.email && (

@@ -64,8 +64,11 @@ class GeminiAIClient implements AiClientInterface
             $payload = $this->buildGenerateContentPayload($messages, $options);
 
             $response = Http::timeout($this->timeout)
-                ->withQueryParameters(['key' => $this->requireKey(), 'alt' => 'sse'])
-                ->withHeaders(['Content-Type' => 'application/json'])
+                ->withQueryParameters(['alt' => 'sse'])
+                ->withHeaders([
+                    'Content-Type' => 'application/json',
+                    'x-goog-api-key' => $this->requireKey(),
+                ])
                 ->post("{$this->baseUrl}/models/{$model}:streamGenerateContent", $payload);
 
             if (! $response->successful()) {
@@ -296,6 +299,7 @@ class GeminiAIClient implements AiClientInterface
 
             if ($role === 'system') {
                 $systemInstruction = is_string($content) ? $content : json_encode($content);
+
                 continue;
             }
 
@@ -382,7 +386,7 @@ class GeminiAIClient implements AiClientInterface
         $key = $this->requireKey();
 
         $request = Http::timeout($this->timeout)
-            ->withQueryParameters(['key' => $key])
+            ->withHeaders(['x-goog-api-key' => $key])
             ->acceptJson()
             ->asJson();
 

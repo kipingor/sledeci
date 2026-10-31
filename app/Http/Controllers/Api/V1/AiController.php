@@ -11,6 +11,8 @@ use App\Services\AI\AiClientInterface;
 use App\Services\AI\DocumentExtractionService;
 use App\Services\AI\EmailDraftingService;
 use App\Services\AI\LeadAnalysisService;
+use App\Support\AiProviderTimeout;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
 
 class AiController extends Controller
@@ -20,7 +22,11 @@ class AiController extends Controller
     {
         $payload = $request->validated();
 
-        $result = $leadAnalysisService->analyze($payload);
+        try {
+            $result = $leadAnalysisService->analyze($payload);
+        } catch (ConnectionException $e) {
+            return AiProviderTimeout::response($e, 'lead analysis');
+        }
 
         return response()->json(['ok' => true, 'data' => $result]);
     }
@@ -31,7 +37,11 @@ class AiController extends Controller
     {
         $payload = $request->validated();
 
-        $email = $emailService->draftEmail($payload['context'] ?? '', $payload['instructions'] ?? '');
+        try {
+            $email = $emailService->draftEmail($payload['context'] ?? '', $payload['instructions'] ?? '');
+        } catch (ConnectionException $e) {
+            return AiProviderTimeout::response($e, 'email drafting');
+        }
 
         return response()->json(['ok' => true, 'email' => $email]);
     }
@@ -60,7 +70,11 @@ class AiController extends Controller
             $prompt .= "Instructions:\n{$payload['instructions']}";
         }
 
-        $content = $client->chat($prompt, ['max_tokens' => 800, 'temperature' => 0.6]);
+        try {
+            $content = $client->chat($prompt, ['max_tokens' => 800, 'temperature' => 0.6]);
+        } catch (ConnectionException $e) {
+            return AiProviderTimeout::response($e, 'content generation');
+        }
 
         return response()->json(['ok' => true, 'content' => trim($content)]);
     }
@@ -104,7 +118,11 @@ class AiController extends Controller
         $prompt .= "Latest message from the client:\n{$payload['instructions']}\n\n";
         $prompt .= 'Reply with a helpful follow-up response, and if useful, one clarifying question to ask next.';
 
-        $response = trim($client->chat($prompt, ['max_tokens' => 500, 'temperature' => 0.3]));
+        try {
+            $response = trim($client->chat($prompt, ['max_tokens' => 500, 'temperature' => 0.3]));
+        } catch (ConnectionException $e) {
+            return AiProviderTimeout::response($e, 'lead follow-up generation');
+        }
 
         if ($lead) {
             LeadQuestion::create([
@@ -138,7 +156,11 @@ class AiController extends Controller
             return response()->json(['ok' => false, 'message' => 'Document not found.'], 404);
         }
 
-        $data = $extractor->extract($document);
+        try {
+            $data = $extractor->extract($document);
+        } catch (ConnectionException $e) {
+            return AiProviderTimeout::response($e, 'document extraction');
+        }
 
         return response()->json(['ok' => true, 'data' => $data]);
     }

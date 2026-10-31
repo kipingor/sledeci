@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Proposal;
 use App\Models\Lead;
 use App\Services\Proposal\ProposalGenerationService;
+use App\Support\AiProviderTimeout;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -60,16 +62,20 @@ class ProposalController extends Controller
 
         $this->authorize('create', [Proposal::class, $lead]);
 
-        $proposal = $this->proposalService->generate(
-            $lead,
-            [
-                'template' => $validated['template'] ?? 'standard',
-                'tone' => $validated['tone'] ?? 'professional',
-                'length' => $validated['length'] ?? 'standard',
-                'include_pricing' => $validated['include_pricing'] ?? true,
-                'custom_instructions' => $validated['custom_instructions'] ?? null,
-            ]
-        );
+        try {
+            $proposal = $this->proposalService->generate(
+                $lead,
+                [
+                    'template' => $validated['template'] ?? 'standard',
+                    'tone' => $validated['tone'] ?? 'professional',
+                    'length' => $validated['length'] ?? 'standard',
+                    'include_pricing' => $validated['include_pricing'] ?? true,
+                    'custom_instructions' => $validated['custom_instructions'] ?? null,
+                ]
+            );
+        } catch (ConnectionException $e) {
+            return AiProviderTimeout::response($e, 'proposal generation');
+        }
 
         return response()->json([
             'success' => true,
