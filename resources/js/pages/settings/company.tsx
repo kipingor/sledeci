@@ -2,7 +2,6 @@
  * settings/company.tsx
  * Company-wide settings: identity, KRA/eTIMS, maker-checker workflow
  */
-import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 import { Head, router, usePage } from '@inertiajs/react';
 import { type BreadcrumbItem } from '@/types';
@@ -141,9 +140,8 @@ export default function CompanySettings({ settings }: Props) {
     }
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <>
             <Head title="Company Settings" />
-            <SettingsLayout>
                 <div className="space-y-5">
                     <div className="flex items-center justify-between pb-4 border-b border-border">
                         <div>
@@ -407,7 +405,15 @@ export default function CompanySettings({ settings }: Props) {
                         </Button>
                     </div>
                 </div>
-            </SettingsLayout>
-        </AppLayout>
+        </>
     );
 }
+
+CompanySettings.layout = {
+    breadcrumbs: [
+        { 
+            title: 'Company Settings',
+            href: '/settings/company',
+        },
+    ],
+};

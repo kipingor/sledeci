@@ -17,6 +17,10 @@ class CompanySetting extends Model
         // Identity
         'company_name', 'company_email', 'company_phone',
         'company_address', 'company_city', 'company_country', 'company_logo_path',
+        'brand_primary', 'brand_secondary', 'brand_accent', 'theme_from_logo',
+        'ai_provider', 'ai_plan', 'ai_subscription_status',
+        'ai_stripe_customer_id', 'ai_stripe_subscription_id', 'ai_subscription_ends_at',
+        'ai_gemini_key', 'ai_openai_key', 'ai_anthropic_key',
 
         // Tax / KRA
         'kra_pin', 'kra_branch_name', 'kra_branch_id',
@@ -59,6 +63,12 @@ class CompanySetting extends Model
         'notify_on_approval_request'   => 'boolean',
         'notify_on_approval_decision'  => 'boolean',
         'notify_on_etims_failure'      => 'boolean',
+        'theme_from_logo'              => 'boolean',
+        'ai_subscription_ends_at'      => 'datetime',
+        // BYOK keys encrypted at rest
+        'ai_gemini_key'                => 'encrypted',
+        'ai_openai_key'                => 'encrypted',
+        'ai_anthropic_key'             => 'encrypted',
     ];
 
     private const CACHE_KEY = 'company_settings';
@@ -108,5 +118,41 @@ class CompanySetting extends Model
     {
         $this->increment('etims_last_invoice_sequence');
         return $this->etims_last_invoice_sequence;
+    }
+
+    public function logoUrl(): ?string
+    {
+        if (! $this->company_logo_path) {
+            return null;
+        }
+
+        return \Illuminate\Support\Facades\Storage::disk('public')->url($this->company_logo_path);
+    }
+
+    /** @return array{primary: ?string, secondary: ?string, accent: ?string, logo_url: ?string, theme_from_logo: bool} */
+    public function brandPalette(): array
+    {
+        return [
+            'primary' => $this->brand_primary ?: config('company.brand_color'),
+            'secondary' => $this->brand_secondary ?: config('company.brand_dark'),
+            'accent' => $this->brand_accent,
+            'logo_url' => $this->logoUrl(),
+            'theme_from_logo' => (bool) $this->theme_from_logo,
+        ];
+    }
+
+    public function hasActiveAiSubscription(): bool
+    {
+        if (($this->ai_plan ?? 'free') === 'free') {
+            return false;
+        }
+        if ($this->ai_subscription_status === 'active') {
+            return true;
+        }
+        if ($this->ai_subscription_ends_at && $this->ai_subscription_ends_at->isFuture()) {
+            return true;
+        }
+
+        return false;
     }
 }

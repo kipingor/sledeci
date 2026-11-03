@@ -16,17 +16,37 @@ class ProductController extends Controller
         $query = Product::with('supplier:id,name');
 
         if ($search = $request->get('search')) {
-            $query->where(fn($q) => $q->where('name', 'like', "%{$search}%")->orWhere('sku', 'like', "%{$search}%"));
+            $query->where(fn ($q) => $q
+                ->where('name', 'like', "%{$search}%")
+                ->orWhere('sku', 'like', "%{$search}%")
+                ->orWhere('barcode', 'like', "%{$search}%"));
         }
-        if ($cat = $request->get('category'))    $query->where('category', $cat);
-        if ($sup = $request->get('supplier_id')) $query->where('supplier_id', $sup);
-        if ($request->get('active') !== null)    $query->where('active', $request->boolean('active'));
+        if ($cat = $request->get('category')) {
+            $query->where('category', $cat);
+        }
+        if ($sup = $request->get('supplier_id')) {
+            $query->where('supplier_id', $sup);
+        }
+        if ($request->get('active') !== null) {
+            $query->where('active', $request->boolean('active'));
+        }
+
+        if ($request->get('stock_status') === 'low_stock') {
+            $query->lowStock();
+        } elseif ($request->get('stock_status') === 'out_of_stock') {
+            $query->outOfStock();
+        }
 
         $products   = $query->orderBy('name')->paginate(25)->withQueryString();
         $categories = Product::distinct()->pluck('category')->filter()->sort()->values();
         $suppliers  = Supplier::select('id', 'name')->where('active', true)->orderBy('name')->get();
 
-        return Inertia::render('products/index', compact('products', 'categories', 'suppliers'));
+        return Inertia::render('products/index', [
+            'products' => $products,
+            'categories' => $categories,
+            'suppliers' => $suppliers,
+            'filters' => $request->only(['search', 'category', 'stock_status']),
+        ]);
     }
 
     public function create()

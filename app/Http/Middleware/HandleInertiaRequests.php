@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\CompanySetting;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -48,6 +49,19 @@ class HandleInertiaRequests extends Middleware
                 'bulkResult' => fn () => $request->session()->get('bulkResult'),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'brand' => function () {
+                try {
+                    return CompanySetting::current()->brandPalette();
+                } catch (\Throwable) {
+                    return [
+                        'primary' => config('company.brand_color'),
+                        'secondary' => config('company.brand_dark'),
+                        'accent' => null,
+                        'logo_url' => null,
+                        'theme_from_logo' => true,
+                    ];
+                }
+            },
         ];
     }
 }

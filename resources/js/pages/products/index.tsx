@@ -20,7 +20,7 @@ interface Product {
 
 interface Props {
     products: { data: Product[]; links: any[]; current_page: number; last_page: number; total: number };
-    filters: { search?: string; category?: string; stock_status?: string };
+    filters?: { search?: string; category?: string; stock_status?: string };
     categories: string[];
 }
 
@@ -48,7 +48,7 @@ function stockStatus(product: Product): { label: string; pill: string; icon: Rea
     return { label: 'In Stock', pill: 'bg-emerald-50 text-emerald-700 ring-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-300', icon: Package };
 }
 
-export default function ProductsIndex({ products, filters, categories }: Props) {
+export default function ProductsIndex({ products, filters = {}, categories }: Props) {
     const [search, setSearch] = useState(filters.search ?? '');
     const [category, setCategory] = useState(filters.category ?? '');
     const [stockStatusFilter, setStockStatusFilter] = useState(filters.stock_status ?? '');

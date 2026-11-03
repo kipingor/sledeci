@@ -18,7 +18,6 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Contacts', href: '/contacts' },
     { title: 'Add Contact', href: '/contacts/create' },
 ];
-
 const SOURCES = [
     { value: 'networking_event', label: 'Networking Event' },
     { value: 'conference',       label: 'Conference / Summit' },
@@ -27,6 +26,21 @@ const SOURCES = [
     { value: 'social_media',     label: 'Social Media' },
     { value: 'other',            label: 'Other' },
 ];
+
+interface Contact {
+    id: number;
+    name: string;
+    email?: string | null;
+    phone?: string | null;
+    company?: string | null;
+    role?: string | null;
+    event_name?: string | null;
+    event_location?: string | null;
+    met_at?: string | null;
+    source?: string | null;
+    talking_points?: string | null;
+    notes?: string | null;
+}
 
 // ── Shared section card ───────────────────────────────────────────────────────
 function Section({ icon: Icon, title, description, children, highlight = false }: {
@@ -78,17 +92,25 @@ function Field({ label, required, error, children }: {
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────
-export default function ContactCreate() {
-    const { data, setData, post, processing, errors } = useForm({
-        name: '', email: '', phone: '', company: '', role: '',
-        event_name: '', event_location: '', met_at: '',
-        source: 'networking_event',
-        talking_points: '', notes: '',
+export default function ContactCreate({ contact }: { contact?: Contact }) {
+    const { data, setData, post, patch, processing, errors } = useForm({
+        name: contact?.name ?? '',
+        email: contact?.email ?? '',
+        phone: contact?.phone ?? '',
+        company: contact?.company ?? '',
+        role: contact?.role ?? '',
+        event_name: contact?.event_name ?? '',
+        event_location: contact?.event_location ?? '',
+        met_at: contact?.met_at?.slice(0, 10) ?? '',
+        source: contact?.source ?? 'networking_event',
+        talking_points: contact?.talking_points ?? '',
+        notes: contact?.notes ?? '',
     });
     const [aiTakingLong, setAiTakingLong] = useState(false);
+    const isEditing = Boolean(contact);
 
     useEffect(() => {
-        if (!processing) {
+        if (!processing || isEditing) {
             setAiTakingLong(false);
             return;
         }
@@ -96,11 +118,11 @@ export default function ContactCreate() {
         const timer = window.setTimeout(() => setAiTakingLong(true), 8000);
 
         return () => window.clearTimeout(timer);
-    }, [processing]);
+    }, [isEditing, processing]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Add Networking Contact" />
+            <Head title={isEditing ? `Edit ${contact?.name}` : 'Add Networking Contact'} />
 
             {/* ── Record header ── */}
             <div className="bg-card border-b border-border px-6 py-4">
@@ -115,7 +137,13 @@ export default function ContactCreate() {
                     <nav className="flex items-center gap-1.5 text-sm">
                         <a href="/contacts" className="text-muted-foreground hover:text-foreground transition-colors">Contacts</a>
                         <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/40" />
-                        <span className="font-semibold">Add Contact</span>
+                        {isEditing && (
+                            <>
+                                <a href={`/contacts/${contact?.id}`} className="text-muted-foreground hover:text-foreground transition-colors">{contact?.name}</a>
+                                <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/40" />
+                            </>
+                        )}
+                        <span className="font-semibold">{isEditing ? 'Edit Contact' : 'Add Contact'}</span>
                     </nav>
                 </div>
                 <div className="flex items-start gap-3 mt-3">
@@ -123,17 +151,26 @@ export default function ContactCreate() {
                         <User className="h-5 w-5 text-primary" />
                     </div>
                     <div>
-                        <h1 className="text-xl font-bold tracking-tight">Add Networking Contact</h1>
+                        <h1 className="text-xl font-bold tracking-tight">{isEditing ? `Edit ${contact?.name}` : 'Add Networking Contact'}</h1>
                         <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-0.5">
                             <Sparkles className="h-3.5 w-3.5 text-primary" />
-                            AI will draft a personalised email and schedule a 3-touch follow-up trail
+                            {isEditing
+                                ? 'Update this contact’s details and meeting notes'
+                                : 'AI will draft a personalised email and schedule a 3-touch follow-up trail'}
                         </p>
                     </div>
                 </div>
             </div>
 
             {/* ── Form ── */}
-            <form onSubmit={e => { e.preventDefault(); post('/contacts'); }}>
+            <form onSubmit={e => {
+                e.preventDefault();
+                if (contact) {
+                    patch(`/contacts/${contact.id}`);
+                } else {
+                    post('/contacts');
+                }
+            }}>
                 <div className="p-6 max-w-2xl space-y-5">
 
                     {/* Contact Details */}
@@ -258,19 +295,21 @@ export default function ContactCreate() {
                     <Button
                         type="submit"
                         disabled={processing}
-                        className="gap-2 min-w-[220px] bg-primary text-primary-foreground hover:bg-primary/90"
+                        className="gap-2 min-w-[180px] bg-primary text-primary-foreground hover:bg-primary/90"
                     >
                         {processing ? (
                             <>
                                 <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                                {aiTakingLong
-                                    ? 'AI is taking longer than usual…'
-                                    : 'Generating follow-up plan…'}
+                                {isEditing
+                                    ? 'Saving changes…'
+                                    : aiTakingLong
+                                        ? 'AI is taking longer than usual…'
+                                        : 'Generating follow-up plan…'}
                             </>
                         ) : (
                             <>
-                                <Sparkles className="h-3.5 w-3.5" />
-                                Save &amp; Generate Follow-up Plan
+                                {isEditing ? <Save className="h-3.5 w-3.5" /> : <Sparkles className="h-3.5 w-3.5" />}
+                                {isEditing ? 'Save Changes' : 'Save & Generate Follow-up Plan'}
                             </>
                         )}
                     </Button>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
 use App\Models\CompanySetting;
+use App\Services\Branding\LogoColorExtractor;
 use Sledeci\KenyaTax\Services\EtimsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -74,23 +75,37 @@ class CompanySettingsController extends Controller
         return back()->with('success', 'Company settings saved.');
     }
  
+    
     public function uploadLogo(Request $request)
     {
-        $request->validate(['logo' => 'required|image|mimes:png,jpg,jpeg,svg|max:2048']);
- 
+        $request->validate(['logo' => 'required|image|mimes:png,jpg,jpeg,webp|max:2048']);
+
         $settings = CompanySetting::current();
- 
-        // Delete old logo
+
         if ($settings->company_logo_path) {
             Storage::disk('public')->delete($settings->company_logo_path);
         }
- 
+
         $path = $request->file('logo')->store('logos', 'public');
-        $settings->update(['company_logo_path' => $path]);
- 
-        return back()->with('success', 'Logo updated.');
+        $absolute = Storage::disk('public')->path($path);
+
+        $updates = ['company_logo_path' => $path];
+
+        if ($settings->theme_from_logo !== false) {
+            $palette = app(LogoColorExtractor::class)->extract($absolute);
+            if ($palette) {
+                $updates['brand_primary'] = $palette['primary'];
+                $updates['brand_secondary'] = $palette['secondary'];
+                $updates['brand_accent'] = $palette['accent'];
+                $updates['theme_from_logo'] = true;
+            }
+        }
+
+        $settings->update($updates);
+
+        return back()->with('success', 'Logo updated. Theme colours were refreshed from the logo.');
     }
- 
+
     public function testEtims()
     {
         try {

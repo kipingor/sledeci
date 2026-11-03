@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 Route::resource('pipelines', PipelineController::class);
 Route::resource('opportunities', OpportunityController::class);
 
-Route::resource('contacts', ContactController::class)->only(['index', 'create', 'store', 'show', 'update', 'destroy']);
+Route::resource('contacts', ContactController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']);
 Route::post('contacts/{contact}/regenerate-email', [ContactController::class, 'regenerateEmail'])->name('contacts.regenerate-email');
 Route::post('contacts/{contact}/mark-initial-sent', [ContactController::class, 'markInitialSent'])->name('contacts.mark-initial-sent');
 Route::post('contacts/{contact}/convert-to-lead', [ContactController::class, 'convertToLead'])->name('contacts.convert-to-lead');

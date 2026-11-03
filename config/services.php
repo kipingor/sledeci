@@ -49,8 +49,8 @@ return [
     | Default model: gemini-2.0-flash (fast, free-tier friendly)
     */
     'gemini' => [
-        'api_key' => env('GEMINI_API_KEY', env('GOOGLE_AI_API_KEY')),
-        'model'   => env('GEMINI_MODEL', 'gemini-2.0-flash'),
+        'api_key' => env('GEMINI_API_KEY', env('GEMINI_API_KEY')),
+        'model'   => env('GEMINI_MODEL', 'gemini-3.0-flash'),
     ],
 
     'openai' => [
@@ -132,6 +132,13 @@ return [
     'linkedin' => [
         'access_token' => env('LINKEDIN_ACCESS_TOKEN'),
         'author_urn' => env('LINKEDIN_AUTHOR_URN'),
+    ],
+
+
+    'stripe' => [
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET'),
+        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
     ],
 
 ];

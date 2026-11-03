@@ -14,6 +14,7 @@ export const inertiaPageTitle = (title: string) =>
     title ? `${title} - ${appName}` : appName;
 
 export function getInertiaLayout(name: string) {
+    // Most authenticated pages render AppLayout themselves; these settings pages do not.
     switch (true) {
         case name === 'welcome' ||
             name.startsWith('site/') ||
@@ -21,9 +22,11 @@ export function getInertiaLayout(name: string) {
             return null;
         case name.startsWith('auth/'):
             return AuthLayout;
-        case name.startsWith('settings/'):
+        case name === 'settings/company' || name === 'settings/ai':
             return [AppLayout, SettingsLayout];
+        case name.startsWith('settings/'):
+            return null;
         default:
-            return AppLayout;
+            return null;
     }
 }

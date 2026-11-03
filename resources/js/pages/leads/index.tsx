@@ -151,9 +151,8 @@ export default function LeadsIndex({ leads, filters, users = [], pipelineStages 
     }));
 
     return (
-        <>
+        <AppLayout breadcrumbs={[{ title: 'Leads', href: '/leads' }]}>
             <Head title="Leads" />
-            <AppLayout breadcrumbs={[{ title: 'Leads', href: '/leads' }]}>
                 <div className="flex flex-col h-full">
 
                     {/* ── Record list header ── */}
@@ -566,7 +565,6 @@ export default function LeadsIndex({ leads, filters, users = [], pipelineStages 
 
                 <DeleteDialog />
                 <ActionDialog />
-            </AppLayout>
-        </>
+        </AppLayout>
     );
 }

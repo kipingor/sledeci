@@ -6,6 +6,7 @@ use App\Http\Controllers\Settings\SecurityController;
 use App\Http\Controllers\Settings\TwoFactorAuthenticationController;
 use App\Http\Controllers\Settings\SettingsController;
 use App\Http\Controllers\Settings\CompanySettingsController;
+use App\Http\Controllers\Settings\AiSettingsController;
 use App\Http\Controllers\Web\ApprovalController;
 use Sledeci\KenyaTax\Http\Controllers\EtimsController;
 use App\Http\Controllers\Web\RfpController;
@@ -59,6 +60,17 @@ Route::middleware('auth')->group(function () {
     Route::post('settings/company/logo', [CompanySettingsController::class, 'uploadLogo'])
         ->name('settings.company.logo')
         ->middleware('role:admin');
+
+    Route::get('settings/ai', [AiSettingsController::class, 'edit'])
+        ->name('settings.ai');
+    Route::patch('settings/ai', [AiSettingsController::class, 'update'])
+        ->name('settings.ai.update');
+    Route::post('settings/ai/subscribe', [AiSettingsController::class, 'subscribe'])
+        ->name('settings.ai.subscribe');
+    Route::post('settings/ai/cancel', [AiSettingsController::class, 'cancelSubscription'])
+        ->name('settings.ai.cancel');
+    Route::get('settings/ai/checkout/success', [AiSettingsController::class, 'checkoutSuccess'])
+        ->name('settings.ai.checkout-success');
     Route::get('settings/company/test-etims', [CompanySettingsController::class, 'testEtims'])
         ->name('settings.company.test-etims')
         ->middleware('role:admin');

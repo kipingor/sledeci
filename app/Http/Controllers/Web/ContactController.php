@@ -97,6 +97,13 @@ class ContactController extends Controller
         return Inertia::render('contacts/show', ['contact' => $contact]);
     }
 
+    public function edit(Contact $contact)
+    {
+        $this->authorize('update', $contact);
+
+        return Inertia::render('contacts/create', ['contact' => $contact]);
+    }
+
     public function update(Request $request, Contact $contact)
     {
         $this->authorize('update', $contact);
@@ -110,12 +117,13 @@ class ContactController extends Controller
             'event_name'     => 'nullable|string|max:255',
             'event_location' => 'nullable|string|max:255',
             'met_at'         => 'nullable|date',
+            'source'         => 'nullable|string',
             'talking_points' => 'nullable|string',
             'notes'          => 'nullable|string',
             'status'         => 'nullable|in:new,email_sent,following_up,responded,converted,dropped',
         ]));
 
-        return back()->with('success', 'Contact updated.');
+        return redirect()->route('web.contacts.show', $contact)->with('success', 'Contact updated.');
     }
 
     public function destroy(Contact $contact)

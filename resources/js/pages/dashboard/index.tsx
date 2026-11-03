@@ -8,9 +8,8 @@ const breadcrumbs: BreadcrumbItem[] = [{ title: 'Dashboard', href: '/dashboard' 
 
 export default function DashboardPage() {
     return (
-        <>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
-            <AppLayout breadcrumbs={breadcrumbs}>
                 <div className="flex flex-col h-full">
 
                     {/* ── SF-style record header ── */}
@@ -30,7 +29,6 @@ export default function DashboardPage() {
                         <Dashboard />
                     </div>
                 </div>
-            </AppLayout>
-        </>
+        </AppLayout>
     );
 }

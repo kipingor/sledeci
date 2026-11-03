@@ -255,3 +255,418 @@ promise callback*createInertiaApp@http://127.0.0.1:5173/node_modules/.vite/deps/
 [2026-10-31 08:32:11] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/contacts/2","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-31T08:32:11.035Z"} 
 [2026-10-31 08:32:11] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/contacts/2","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-31T08:32:11.393Z"} 
 [2026-10-31 08:32:16] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/contacts/2","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-31T08:32:15.078Z"} 
+[2026-10-31 10:02:30] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-31T10:02:24.869Z"} 
+[2026-10-31 10:02:34] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-31T10:02:28.278Z"} 
+[2026-10-31 10:02:34] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-31T10:02:28.278Z"} 
+[2026-10-31 10:02:47] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-31T10:02:44.023Z"} 
+[2026-10-31 10:02:47] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-31T10:02:44.990Z"} 
+[2026-10-31 10:03:10] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-31T10:02:59.625Z"} 
+[2026-10-31 10:08:23] local.DEBUG: [vite] server connection lost. Polling for restart... {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-31T10:08:21.365Z"} 
+[2026-10-31 10:18:33] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-31T10:18:02.806Z"} 
+[2026-10-31 10:18:34] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-31T10:18:04.949Z"} 
+[2026-10-31 10:18:34] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-31T10:18:08.810Z"} 
+[2026-10-31 11:49:22] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-31T11:49:17.206Z"} 
+[2026-10-31 11:49:26] local.ERROR: [vite] failed to connect to websocket.
+your current setup:
+  (browser) 127.0.0.1:5173/ <--[HTTP]--> localhost:5173/ (server)
+  (browser) 127.0.0.1:5173/ <--[WebSocket (failing)]--> localhost:5173/ (server)
+Check out your Vite / network configuration and https://vite.dev/config/server-options.html#server-hmr . {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-31T11:49:17.723Z"} 
+[2026-10-31 11:49:26] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-31T11:49:20.859Z"} 
+[2026-10-31 12:06:58] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/settings/company","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-31T12:06:57.741Z"} 
+[2026-10-31 12:06:58] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/settings/company","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-31T12:06:57.822Z"} 
+[2026-10-31 12:06:59] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/settings/company","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-31T12:06:57.955Z"} 
+[2026-10-31 12:25:14] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/settings/company","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-31T12:25:13.796Z"} 
+[2026-10-31 12:25:15] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/settings/company","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-31T12:25:14.872Z"} 
+[2026-10-31 12:25:22] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/settings/company","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-31T12:25:18.217Z"} 
+[2026-10-31 12:25:22] local.ERROR: A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch ...
+    <Inertia initialPage={{...}} initialComponent={function CompanySettings} resolveComponent={function resolveComponent} ...>
+      <AppLayout errors={{}} name="Sledeci" auth={{...}} flash={{success:null, ...}} sidebarOpen={true} ...>
+        <BrandTheme>
+        <AppSidebarLayout breadcrumbs={[...]}>
+          <AppShell variant="sidebar">
+            <SidebarProvider defaultOpen={true}>
+              <div data-slot="sidebar-wr..." style={{...}} className="group/side...">
+                <AppSidebar>
+                <AppContent variant="sidebar" className="min-w-0 ov...">
+                  <SidebarInset className="min-w-0 ov...">
+                    <main data-slot="sidebar-inset" className="bg-backgro...">
+                      <AppSidebarHeader>
+                      <SettingsLayout errors={{}} name="Sledeci" auth={{...}} flash={{success:null, ...}} ...>
+                        <div className="px-4 py-6">
+                          <Heading>
+                          <div className="flex flex-...">
+                            <aside>
+                            <Separator>
+                            <div
++                             className="flex-1 md:max-w-2xl"
+-                             className="flex-1 md:max-w-6xl"
+                            >
+                              ...
+                                <SettingsLayout>
+                                  <div className="px-4 py-6">
+                                    <Heading>
+                                    <div className="flex flex-...">
+                                      <aside>
+                                      <Separator>
+                                      <div
++                                       className="flex-1 md:max-w-2xl"
+-                                       className="flex-1 md:max-w-6xl"
+                                      > {"url":"http://localhost:8000/settings/company","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-10-31T12:25:21.710Z"} 
+[2026-11-03 07:29:48] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/login","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:29:45.021Z"} 
+[2026-11-03 07:29:51] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/login","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:29:46.806Z"} 
+[2026-11-03 07:30:19] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/login","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:30:02.975Z"} 
+[2026-11-03 07:31:23] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:31:22.848Z"} 
+[2026-11-03 07:31:25] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:31:24.918Z"} 
+[2026-11-03 07:31:40] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:31:39.955Z"} 
+[2026-11-03 07:33:02] local.DEBUG: [vite] hot updated: /resources/js/pages/dashboard/index.tsx {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:32:58.372Z"} 
+[2026-11-03 07:33:02] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:32:58.739Z"} 
+[2026-11-03 07:36:59] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/settings/company","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:36:58.471Z"} 
+[2026-11-03 07:36:59] local.DEBUG: [vite] hot updated: /resources/js/pages/settings/company.tsx {"url":"http://localhost:8000/settings/company","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:36:58.658Z"} 
+[2026-11-03 07:39:33] local.DEBUG: [vite] hot updated: /resources/js/pages/settings/ai.tsx {"url":"http://localhost:8000/settings/ai","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:39:31.385Z"} 
+[2026-11-03 07:39:33] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/settings/ai","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:39:31.490Z"} 
+[2026-11-03 07:39:42] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/settings/ai","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:39:41.932Z"} 
+[2026-11-03 07:39:42] local.DEBUG: [vite] hot updated: /resources/js/pages/settings/ai.tsx {"url":"http://localhost:8000/settings/ai","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:39:42.189Z"} 
+[2026-11-03 07:42:19] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/leads","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:42:18.006Z"} 
+[2026-11-03 07:42:19] local.DEBUG: [vite] hot updated: /resources/js/pages/leads/index.tsx {"url":"http://localhost:8000/leads","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:42:18.900Z"} 
+[2026-11-03 07:43:58] local.ERROR: [vite] TypeError error loading dynamically imported module: http://127.0.0.1:5173/resources/js/pages/leads/create.tsx?t=1793691835845 null {"url":"http://localhost:8000/leads/create","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:43:57.364Z"} 
+[2026-11-03 07:43:58] local.ERROR: [vite] Failed to reload /resources/js/pages/leads/create.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) {"url":"http://localhost:8000/leads/create","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:43:57.364Z"} 
+[2026-11-03 07:43:58] local.DEBUG: [vite] hot updated: /resources/js/pages/leads/create.tsx {"url":"http://localhost:8000/leads/create","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:43:57.365Z"} 
+[2026-11-03 07:43:58] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/leads/create","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:43:57.426Z"} 
+[2026-11-03 07:44:53] local.DEBUG: [vite] hot updated: /resources/js/pages/leads/create.tsx {"url":"http://localhost:8000/leads/create","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:44:50.912Z"} 
+[2026-11-03 07:44:53] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/leads/create","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:44:50.943Z"} 
+[2026-11-03 07:44:57] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/leads/create","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:44:56.909Z"} 
+[2026-11-03 07:44:57] local.DEBUG: [vite] hot updated: /resources/js/pages/leads/create.tsx {"url":"http://localhost:8000/leads/create","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:44:57.256Z"} 
+[2026-11-03 07:45:47] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/leads/create","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:45:46.745Z"} 
+[2026-11-03 07:46:35] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/leads/create","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:46:35.321Z"} 
+[2026-11-03 07:48:04] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/clients","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:48:02.751Z"} 
+[2026-11-03 07:48:06] local.DEBUG: [vite] hot updated: /resources/js/pages/clients/index.tsx {"url":"http://localhost:8000/clients","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:48:04.198Z"} 
+[2026-11-03 07:48:33] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/clients","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:48:32.630Z"} 
+[2026-11-03 07:49:00] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/clients","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:48:59.367Z"} 
+[2026-11-03 07:49:56] local.DEBUG: [vite] hot updated: /resources/js/pages/contacts/index.tsx {"url":"http://localhost:8000/contacts","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:49:53.496Z"} 
+[2026-11-03 07:49:56] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/contacts","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:49:53.496Z"} 
+[2026-11-03 07:50:21] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/contacts","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:50:20.470Z"} 
+[2026-11-03 07:50:55] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/contacts","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:50:54.009Z"} 
+[2026-11-03 07:58:09] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:57:26.445Z"} 
+[2026-11-03 07:58:38] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:58:35.909Z"} 
+[2026-11-03 07:58:43] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:58:39.838Z"} 
+[2026-11-03 07:58:51] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T07:58:48.932Z"} 
+[2026-11-03 08:08:52] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T08:08:47.629Z"} 
+[2026-11-03 08:16:47] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T08:16:46.979Z"} 
+[2026-11-03 08:16:55] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T08:16:54.676Z"} 
+[2026-11-03 08:16:59] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T08:16:59.047Z"} 
+[2026-11-03 08:17:05] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T08:17:05.318Z"} 
+[2026-11-03 08:17:12] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T08:17:10.806Z"} 
+[2026-11-03 08:17:12] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T08:17:12.107Z"} 
+[2026-11-03 08:17:16] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T08:17:16.380Z"} 
+[2026-11-03 08:17:25] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T08:17:24.978Z"} 
+[2026-11-03 08:17:33] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T08:17:33.096Z"} 
+[2026-11-03 08:18:31] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T08:18:30.652Z"} 
+[2026-11-03 08:19:03] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T08:19:03.490Z"} 
+[2026-11-03 08:19:12] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T08:19:12.659Z"} 
+[2026-11-03 08:19:24] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T08:19:24.279Z"} 
+[2026-11-03 08:19:35] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T08:19:35.454Z"} 
+[2026-11-03 08:19:50] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T08:19:50.113Z"} 
+[2026-11-03 08:19:58] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T08:19:57.866Z"} 
+[2026-11-03 08:22:50] local.ERROR: Unhandled Promise Rejection TypeError error loading dynamically imported module: http://127.0.0.1:5173/resources/js/pages/contacts/create.tsx?t=1793692644873 null {"url":"http://localhost:8000/contacts/1","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T08:22:47.748Z"} 
+[2026-11-03 08:25:51] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/contacts/1/edit","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T08:25:45.135Z"} 
+[2026-11-03 08:25:51] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/contacts/1/edit","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T08:25:50.488Z"} 
+[2026-11-03 08:27:11] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/contacts/1/edit","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T08:27:09.515Z"} 
+[2026-11-03 09:10:01] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/contacts/1/edit","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:09:57.322Z"} 
+[2026-11-03 09:10:02] local.ERROR: [vite] failed to connect to websocket.
+your current setup:
+  (browser) 127.0.0.1:5173/ <--[HTTP]--> localhost:5173/ (server)
+  (browser) 127.0.0.1:5173/ <--[WebSocket (failing)]--> localhost:5173/ (server)
+Check out your Vite / network configuration and https://vite.dev/config/server-options.html#server-hmr . {"url":"http://localhost:8000/contacts/1/edit","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:09:59.255Z"} 
+[2026-11-03 09:10:07] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/contacts/1/edit","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:10:06.697Z"} 
+[2026-11-03 09:15:06] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:15:05.570Z"} 
+[2026-11-03 09:15:09] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:15:07.380Z"} 
+[2026-11-03 09:15:12] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:15:11.685Z"} 
+[2026-11-03 09:21:06] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:21:05.270Z"} 
+[2026-11-03 09:22:02] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:21:58.040Z"} 
+[2026-11-03 09:22:02] local.DEBUG: [vite] hot updated: /resources/js/layouts/app/app-sidebar-layout.tsx {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:21:58.298Z"} 
+[2026-11-03 09:23:18] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:23:16.986Z"} 
+[2026-11-03 09:24:31] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:24:30.153Z"} 
+[2026-11-03 09:25:24] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:25:23.295Z"} 
+[2026-11-03 09:29:04] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:29:01.751Z"} 
+[2026-11-03 09:29:05] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:29:03.179Z"} 
+[2026-11-03 09:29:19] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:29:12.188Z"} 
+[2026-11-03 09:52:23] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:52:21.804Z"} 
+[2026-11-03 09:52:25] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:52:22.780Z"} 
+[2026-11-03 09:52:31] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:52:29.807Z"} 
+[2026-11-03 09:52:32] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:52:31.396Z"} 
+[2026-11-03 09:52:37] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/dashboard","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:52:36.868Z"} 
+[2026-11-03 09:58:48] local.ERROR: TypeError: can't access property "search", filters is undefined http://127.0.0.1:5173/resources/js/pages/products/index.tsx 60 39 TypeError can't access property "search", filters is undefined ProductsIndex@http://127.0.0.1:5173/resources/js/pages/products/index.tsx:60:39
+react_stack_bottom_frame@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:21148:12
+renderWithHooks@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:11406:37
+updateFunctionComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:12781:16
+beginWork@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:13397:20
+runWithFiberInDEV@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7950:123
+performUnitOfWork@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16154:92
+workLoopSync@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16050:54
+renderRootSync@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16034:6
+performWorkOnRoot@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:15721:27
+performSyncWorkOnRoot@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16848:21
+flushSyncWorkAcrossRoots_impl@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16765:302
+flushSyncWork$1@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:15850:81
+f@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22524:71
+require_react_dom_development</exports.flushSync@http://127.0.0.1:5173/node_modules/.vite/deps/react-dom-1NzbVbKu.js?v=cfabfbe3:92:100
+swapComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22928:35
+swapComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22911:48
+doSwap@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:3623:29
+swap@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:3629:106
+set/</<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:3537:17 {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:58:47.780Z"} 
+[2026-11-03 09:58:48] local.ERROR: TypeError: can't access property "search", filters is undefined http://127.0.0.1:5173/resources/js/pages/products/index.tsx 60 39 TypeError can't access property "search", filters is undefined ProductsIndex@http://127.0.0.1:5173/resources/js/pages/products/index.tsx:60:39
+react_stack_bottom_frame@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:21148:12
+renderWithHooks@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:11406:37
+updateFunctionComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:12781:16
+beginWork@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:13397:20
+runWithFiberInDEV@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7950:123
+performUnitOfWork@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16154:92
+workLoopSync@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16050:54
+renderRootSync@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16034:6
+performWorkOnRoot@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:15721:27
+performSyncWorkOnRoot@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16848:21
+flushSyncWorkAcrossRoots_impl@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16765:302
+flushSyncWork$1@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:15850:81
+f@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22524:71
+require_react_dom_development</exports.flushSync@http://127.0.0.1:5173/node_modules/.vite/deps/react-dom-1NzbVbKu.js?v=cfabfbe3:92:100
+swapComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22928:35
+swapComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22911:48
+doSwap@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:3623:29
+swap@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:3629:106
+set/</<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:3537:17 {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:58:47.780Z"} 
+[2026-11-03 09:58:48] local.WARNING: %s
+
+%s An error occurred in the <ProductsIndex> component. Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries. {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:58:47.781Z"} 
+[2026-11-03 09:59:05] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:59:04.091Z"} 
+[2026-11-03 09:59:05] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:59:04.972Z"} 
+[2026-11-03 09:59:09] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:59:08.738Z"} 
+[2026-11-03 09:59:09] local.ERROR: TypeError: can't access property "search", filters is undefined http://127.0.0.1:5173/resources/js/pages/products/index.tsx 60 39 TypeError can't access property "search", filters is undefined ProductsIndex@http://127.0.0.1:5173/resources/js/pages/products/index.tsx:60:39
+react_stack_bottom_frame@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:21148:12
+renderWithHooks@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:11406:37
+updateFunctionComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:12781:16
+beginWork@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:13397:20
+runWithFiberInDEV@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7950:123
+performUnitOfWork@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16154:92
+workLoopSync@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16050:54
+renderRootSync@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16034:6
+performWorkOnRoot@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:15721:27
+performWorkOnRootViaSchedulerTask@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16840:21
+performWorkUntilDeadline@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7044:46 {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:59:08.884Z"} 
+[2026-11-03 09:59:09] local.ERROR: TypeError: can't access property "search", filters is undefined http://127.0.0.1:5173/resources/js/pages/products/index.tsx 60 39 TypeError can't access property "search", filters is undefined ProductsIndex@http://127.0.0.1:5173/resources/js/pages/products/index.tsx:60:39
+react_stack_bottom_frame@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:21148:12
+renderWithHooks@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:11406:37
+updateFunctionComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:12781:16
+beginWork@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:13397:20
+runWithFiberInDEV@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7950:123
+performUnitOfWork@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16154:92
+workLoopSync@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16050:54
+renderRootSync@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16034:6
+performWorkOnRoot@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:15721:27
+performWorkOnRootViaSchedulerTask@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16840:21
+performWorkUntilDeadline@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7044:46 {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:59:08.884Z"} 
+[2026-11-03 09:59:09] local.WARNING: %s
+
+%s An error occurred in the <ProductsIndex> component. Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries. {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:59:08.885Z"} 
+[2026-11-03 09:59:28] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/financing/report","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:59:27.828Z"} 
+[2026-11-03 09:59:29] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/financing/report","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:59:28.857Z"} 
+[2026-11-03 09:59:36] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/financing/report","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T09:59:34.465Z"} 
+[2026-11-03 10:00:43] local.ERROR: Unhandled Promise Rejection Error Page not found: ./pages/inventory/valuation.tsx resolvePageComponent@http://127.0.0.1:5173/node_modules/.vite/deps/laravel-vite-plugin_inertia-helpers.js?v=cfabfbe3:8:8
+resolveInertiaPage@http://127.0.0.1:5173/resources/js/lib/inertia-config.ts?t=1793698422959:7:65
+resolveComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:23003:60
+resolve@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:3645:31
+set@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:3512:15
+setPage@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:4855:15 {"url":"http://localhost:8000/inventory","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:00:43.618Z"} 
+[2026-11-03 10:00:51] local.ERROR: Unhandled Promise Rejection Error Page not found: ./pages/inventory/valuation.tsx resolvePageComponent@http://127.0.0.1:5173/node_modules/.vite/deps/laravel-vite-plugin_inertia-helpers.js?v=cfabfbe3:8:8
+resolveInertiaPage@http://127.0.0.1:5173/resources/js/lib/inertia-config.ts?t=1793698422959:7:65
+resolveComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:23003:60
+resolve@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:3645:31
+set@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:3512:15
+setPage@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:4855:15 {"url":"http://localhost:8000/inventory","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:00:51.741Z"} 
+[2026-11-03 10:01:25] local.ERROR: TypeError: can't access property "search", filters is undefined http://127.0.0.1:5173/resources/js/pages/products/index.tsx 60 39 TypeError can't access property "search", filters is undefined ProductsIndex@http://127.0.0.1:5173/resources/js/pages/products/index.tsx:60:39
+react_stack_bottom_frame@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:21148:12
+renderWithHooks@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:11406:37
+updateFunctionComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:12781:16
+beginWork@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:13397:20
+runWithFiberInDEV@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7950:123
+performUnitOfWork@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16154:92
+workLoopSync@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16050:54
+renderRootSync@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16034:6
+performWorkOnRoot@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:15721:27
+performSyncWorkOnRoot@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16848:21
+flushSyncWorkAcrossRoots_impl@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16765:302
+flushSyncWork$1@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:15850:81
+f@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22524:71
+require_react_dom_development</exports.flushSync@http://127.0.0.1:5173/node_modules/.vite/deps/react-dom-1NzbVbKu.js?v=cfabfbe3:92:100
+swapComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22928:35
+swapComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22911:48
+doSwap@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:3623:29
+swap@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:3629:106
+set/</<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:3537:17 {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:01:24.842Z"} 
+[2026-11-03 10:01:25] local.ERROR: TypeError: can't access property "search", filters is undefined http://127.0.0.1:5173/resources/js/pages/products/index.tsx 60 39 TypeError can't access property "search", filters is undefined ProductsIndex@http://127.0.0.1:5173/resources/js/pages/products/index.tsx:60:39
+react_stack_bottom_frame@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:21148:12
+renderWithHooks@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:11406:37
+updateFunctionComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:12781:16
+beginWork@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:13397:20
+runWithFiberInDEV@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7950:123
+performUnitOfWork@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16154:92
+workLoopSync@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16050:54
+renderRootSync@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16034:6
+performWorkOnRoot@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:15721:27
+performSyncWorkOnRoot@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16848:21
+flushSyncWorkAcrossRoots_impl@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16765:302
+flushSyncWork$1@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:15850:81
+f@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22524:71
+require_react_dom_development</exports.flushSync@http://127.0.0.1:5173/node_modules/.vite/deps/react-dom-1NzbVbKu.js?v=cfabfbe3:92:100
+swapComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22928:35
+swapComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22911:48
+doSwap@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:3623:29
+swap@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:3629:106
+set/</<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:3537:17 {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:01:24.843Z"} 
+[2026-11-03 10:01:25] local.WARNING: %s
+
+%s An error occurred in the <ProductsIndex> component. Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries. {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:01:24.843Z"} 
+[2026-11-03 10:07:04] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:07:02.795Z"} 
+[2026-11-03 10:07:06] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:07:04.094Z"} 
+[2026-11-03 10:07:14] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:07:12.242Z"} 
+[2026-11-03 10:07:14] local.ERROR: TypeError: can't access property "search", filters is undefined http://127.0.0.1:5173/resources/js/pages/products/index.tsx 60 39 TypeError can't access property "search", filters is undefined ProductsIndex@http://127.0.0.1:5173/resources/js/pages/products/index.tsx:60:39
+react_stack_bottom_frame@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:21148:12
+renderWithHooks@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:11406:37
+updateFunctionComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:12781:16
+beginWork@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:13397:20
+runWithFiberInDEV@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7950:123
+performUnitOfWork@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16154:92
+workLoopSync@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16050:54
+renderRootSync@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16034:6
+performWorkOnRoot@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:15721:27
+performWorkOnRootViaSchedulerTask@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16840:21
+performWorkUntilDeadline@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7044:46
+EventHandlerNonNull*require_scheduler_development</<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7149:4
+require_scheduler_development<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7252:4
+__commonJSMin/<@http://127.0.0.1:5173/node_modules/.vite/deps/rolldown-runtime-SbdDWaPq.js?v=cfabfbe3:8:49
+require_scheduler<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7256:19
+__commonJSMin/<@http://127.0.0.1:5173/node_modules/.vite/deps/rolldown-runtime-SbdDWaPq.js?v=cfabfbe3:8:49
+require_react_dom_client_development</<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:19873:19
+require_react_dom_client_development<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22848:4
+__commonJSMin/<@http://127.0.0.1:5173/node_modules/.vite/deps/rolldown-runtime-SbdDWaPq.js?v=cfabfbe3:8:49
+require_client<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22852:19
+__commonJSMin/<@http://127.0.0.1:5173/node_modules/.vite/deps/rolldown-runtime-SbdDWaPq.js?v=cfabfbe3:8:49
+@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22857:21 {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:07:12.439Z"} 
+[2026-11-03 10:07:14] local.ERROR: TypeError: can't access property "search", filters is undefined http://127.0.0.1:5173/resources/js/pages/products/index.tsx 60 39 TypeError can't access property "search", filters is undefined ProductsIndex@http://127.0.0.1:5173/resources/js/pages/products/index.tsx:60:39
+react_stack_bottom_frame@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:21148:12
+renderWithHooks@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:11406:37
+updateFunctionComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:12781:16
+beginWork@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:13397:20
+runWithFiberInDEV@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7950:123
+performUnitOfWork@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16154:92
+workLoopSync@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16050:54
+renderRootSync@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16034:6
+performWorkOnRoot@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:15721:27
+performWorkOnRootViaSchedulerTask@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16840:21
+performWorkUntilDeadline@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7044:46
+EventHandlerNonNull*require_scheduler_development</<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7149:4
+require_scheduler_development<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7252:4
+__commonJSMin/<@http://127.0.0.1:5173/node_modules/.vite/deps/rolldown-runtime-SbdDWaPq.js?v=cfabfbe3:8:49
+require_scheduler<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7256:19
+__commonJSMin/<@http://127.0.0.1:5173/node_modules/.vite/deps/rolldown-runtime-SbdDWaPq.js?v=cfabfbe3:8:49
+require_react_dom_client_development</<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:19873:19
+require_react_dom_client_development<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22848:4
+__commonJSMin/<@http://127.0.0.1:5173/node_modules/.vite/deps/rolldown-runtime-SbdDWaPq.js?v=cfabfbe3:8:49
+require_client<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22852:19
+__commonJSMin/<@http://127.0.0.1:5173/node_modules/.vite/deps/rolldown-runtime-SbdDWaPq.js?v=cfabfbe3:8:49
+@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22857:21 {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:07:12.440Z"} 
+[2026-11-03 10:07:14] local.WARNING: %s
+
+%s An error occurred in the <ProductsIndex> component. Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries. {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:07:12.441Z"} 
+[2026-11-03 10:10:04] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:10:02.872Z"} 
+[2026-11-03 10:10:07] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:10:05.129Z"} 
+[2026-11-03 10:10:14] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:10:13.459Z"} 
+[2026-11-03 10:10:15] local.ERROR: TypeError: can't access property "search", filters is undefined http://127.0.0.1:5173/resources/js/pages/products/index.tsx 60 39 TypeError can't access property "search", filters is undefined ProductsIndex@http://127.0.0.1:5173/resources/js/pages/products/index.tsx:60:39
+react_stack_bottom_frame@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:21148:12
+renderWithHooks@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:11406:37
+updateFunctionComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:12781:16
+beginWork@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:13397:20
+runWithFiberInDEV@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7950:123
+performUnitOfWork@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16154:92
+workLoopSync@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16050:54
+renderRootSync@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16034:6
+performWorkOnRoot@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:15721:27
+performWorkOnRootViaSchedulerTask@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16840:21
+performWorkUntilDeadline@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7044:46
+EventHandlerNonNull*require_scheduler_development</<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7149:4
+require_scheduler_development<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7252:4
+__commonJSMin/<@http://127.0.0.1:5173/node_modules/.vite/deps/rolldown-runtime-SbdDWaPq.js?v=cfabfbe3:8:49
+require_scheduler<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7256:19
+__commonJSMin/<@http://127.0.0.1:5173/node_modules/.vite/deps/rolldown-runtime-SbdDWaPq.js?v=cfabfbe3:8:49
+require_react_dom_client_development</<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:19873:19
+require_react_dom_client_development<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22848:4
+__commonJSMin/<@http://127.0.0.1:5173/node_modules/.vite/deps/rolldown-runtime-SbdDWaPq.js?v=cfabfbe3:8:49
+require_client<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22852:19
+__commonJSMin/<@http://127.0.0.1:5173/node_modules/.vite/deps/rolldown-runtime-SbdDWaPq.js?v=cfabfbe3:8:49
+@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22857:21 {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:10:13.728Z"} 
+[2026-11-03 10:10:15] local.ERROR: TypeError: can't access property "search", filters is undefined http://127.0.0.1:5173/resources/js/pages/products/index.tsx 60 39 TypeError can't access property "search", filters is undefined ProductsIndex@http://127.0.0.1:5173/resources/js/pages/products/index.tsx:60:39
+react_stack_bottom_frame@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:21148:12
+renderWithHooks@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:11406:37
+updateFunctionComponent@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:12781:16
+beginWork@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:13397:20
+runWithFiberInDEV@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7950:123
+performUnitOfWork@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16154:92
+workLoopSync@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16050:54
+renderRootSync@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16034:6
+performWorkOnRoot@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:15721:27
+performWorkOnRootViaSchedulerTask@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:16840:21
+performWorkUntilDeadline@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7044:46
+EventHandlerNonNull*require_scheduler_development</<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7149:4
+require_scheduler_development<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7252:4
+__commonJSMin/<@http://127.0.0.1:5173/node_modules/.vite/deps/rolldown-runtime-SbdDWaPq.js?v=cfabfbe3:8:49
+require_scheduler<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:7256:19
+__commonJSMin/<@http://127.0.0.1:5173/node_modules/.vite/deps/rolldown-runtime-SbdDWaPq.js?v=cfabfbe3:8:49
+require_react_dom_client_development</<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:19873:19
+require_react_dom_client_development<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22848:4
+__commonJSMin/<@http://127.0.0.1:5173/node_modules/.vite/deps/rolldown-runtime-SbdDWaPq.js?v=cfabfbe3:8:49
+require_client<@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22852:19
+__commonJSMin/<@http://127.0.0.1:5173/node_modules/.vite/deps/rolldown-runtime-SbdDWaPq.js?v=cfabfbe3:8:49
+@http://127.0.0.1:5173/node_modules/.vite/deps/@inertiajs_react.js?v=cfabfbe3:22857:21 {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:10:13.729Z"} 
+[2026-11-03 10:10:15] local.WARNING: %s
+
+%s An error occurred in the <ProductsIndex> component. Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries. {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:10:13.730Z"} 
+[2026-11-03 10:12:56] local.ERROR: [vite] TypeError error loading dynamically imported module: http://127.0.0.1:5173/resources/js/pages/products/index.tsx?t=1793700773922 null {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:12:54.630Z"} 
+[2026-11-03 10:12:56] local.ERROR: [vite] Failed to reload /resources/js/pages/products/index.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:12:54.637Z"} 
+[2026-11-03 10:12:56] local.DEBUG: [vite] hot updated: /resources/js/pages/products/index.tsx {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:12:54.640Z"} 
+[2026-11-03 10:12:56] local.DEBUG: [vite] css hot updated: /resources/css/app.css {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:12:54.647Z"} 
+[2026-11-03 10:13:06] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:13:02.801Z"} 
+[2026-11-03 10:13:08] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:13:05.478Z"} 
+[2026-11-03 10:13:22] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:13:21.379Z"} 
+[2026-11-03 10:16:39] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:16:36.677Z"} 
+[2026-11-03 10:16:41] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:16:39.710Z"} 
+[2026-11-03 10:16:53] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:16:51.180Z"} 
+[2026-11-03 10:17:03] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:17:00.716Z"} 
+[2026-11-03 10:17:06] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:17:03.592Z"} 
+[2026-11-03 10:17:17] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:17:15.321Z"} 
+[2026-11-03 10:17:28] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:17:25.513Z"} 
+[2026-11-03 10:17:30] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:17:28.373Z"} 
+[2026-11-03 10:17:43] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:17:41.056Z"} 
+[2026-11-03 10:18:02] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:17:59.170Z"} 
+[2026-11-03 10:18:04] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:18:01.457Z"} 
+[2026-11-03 10:18:17] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:18:14.848Z"} 
+[2026-11-03 10:22:01] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:21:58.917Z"} 
+[2026-11-03 10:22:02] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:22:00.664Z"} 
+[2026-11-03 10:22:03] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:22:00.664Z"} 
+[2026-11-03 10:22:07] local.DEBUG: [vite] connecting... {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:22:06.471Z"} 
+[2026-11-03 10:22:09] local.DEBUG: [vite] connected. {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:22:07.628Z"} 
+[2026-11-03 10:22:15] local.INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold {"url":"http://localhost:8000/products","user_agent":"Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0","timestamp":"2026-11-03T10:22:14.495Z"} 
