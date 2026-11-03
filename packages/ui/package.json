@@ -50,7 +50,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sledeci/ui"
+    "url": "https://github.com/kipingor/sledeci-ui"
   },
+  "bugs": {
+    "url": "https://github.com/kipingor/sledeci-ui/issues"
+  },
+  "funding": "https://github.com/sponsors/kipingor",
   "keywords": ["react", "ui", "sledeci", "shadcn", "inertia", "laravel", "tailwind"]
 }

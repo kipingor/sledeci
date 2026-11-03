@@ -5,8 +5,8 @@
     "license": "MIT",
     "require": {
         "php": "^8.4",
-        "sledeci/core": "^0.1 || @dev",
-        "sledeci/accounting": "^0.1 || @dev"
+        "sledeci/core": "^0.1",
+        "sledeci/accounting": "^0.1"
     },
     "autoload": {
         "psr-4": {
@@ -21,12 +21,15 @@
         }
     },
     "minimum-stability": "stable",
-    "version": "0.1.0",
     "authors": [
         {
             "name": "Antony Kipingor",
             "email": "kipingor@gmail.com"
         }
     ],
-    "homepage": "https://github.com/kipingor/sledeci/kenya-tax"
+    "homepage": "https://github.com/kipingor/sledeci-kenya-tax",
+    "support": {
+        "issues": "https://github.com/kipingor/sledeci-kenya-tax/issues",
+        "source": "https://github.com/kipingor/sledeci-kenya-tax"
+    }
 }

@@ -5,8 +5,8 @@
     "license": "MIT",
     "require": {
         "php": "^8.4",
-        "sledeci/core": "^0.1 || @dev",
-        "sledeci/accounting": "^0.1 || @dev"
+        "sledeci/core": "^0.1",
+        "sledeci/accounting": "^0.1"
     },
     "suggest": {
         "sledeci/pos": "Take M-Pesa payments at the till."
@@ -24,12 +24,15 @@
         }
     },
     "minimum-stability": "stable",
-    "version": "0.1.0",
     "authors": [
         {
             "name": "Antony Kipingor",
             "email": "kipingor@gmail.com"
         }
     ],
-    "homepage": "https://github.com/kipingor/sledeci/kenya-payments"
+    "homepage": "https://github.com/kipingor/sledeci-kenya-payments",
+    "support": {
+        "issues": "https://github.com/kipingor/sledeci-kenya-payments/issues",
+        "source": "https://github.com/kipingor/sledeci-kenya-payments"
+    }
 }
