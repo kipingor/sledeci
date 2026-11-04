@@ -1,5 +1,7 @@
 # Sledeci — Quick start
 
+[![Sponsor](https://img.shields.io/badge/Sponsor-GitHub-ea4aaa?logo=github)](https://github.com/sponsors/kipingor)
+
 A modular Laravel 13.x application (Inertia + React frontend). This README covers the shortest path to get the app running locally and the recommended queue/session settings.
 
 Requirements
