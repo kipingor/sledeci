@@ -1,16 +1,36 @@
 <?php
 
+namespace Tests\Feature;
+
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Role;
+use Tests\TestCase;
 use App\Models\User;
 
-test('guests are redirected to the login page', function () {
-    $response = $this->get(route('web.dashboard'));
-    $response->assertRedirect(route('login'));
-});
+class DashboardTest extends TestCase
+{
+    use RefreshDatabase;
 
-test('authenticated users can visit the dashboard', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user);
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Role::findOrCreate('admin');
+    }
 
-    $response = $this->get(route('web.dashboard'));
-    $response->assertOk();
-});
+    public function test_guests_are_redirected_to_the_login_page()
+    {
+        $response = $this->get(route('web.dashboard'));
+        $response->assertRedirect(route('login'));
+    }
+
+    public function test_authenticated_users_can_visit_the_dashboard()
+    {
+        $user = User::factory()->create();
+        $user->assignRole('admin');
+
+        $this->actingAs($user);
+
+        $response = $this->get(route('web.dashboard'));
+        $response->assertOk();
+    }
+}

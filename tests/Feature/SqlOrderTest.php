@@ -1,36 +1,65 @@
 <?php
 
+namespace Tests\Feature;
+
 use App\Support\SqlOrder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use InvalidArgumentException;
+use Tests\TestCase;
+use \Illuminate\Foundation\Testing\RefreshDatabase;
 
-beforeEach(function () {
-    Schema::create('sql_order_probe', function ($table) {
-        $table->id();
-        $table->string('severity');
-    });
+class SqlOrderTest extends TestCase
+{
 
-    foreach (['low', 'critical', 'medium', 'unknown', 'high'] as $severity) {
-        DB::table('sql_order_probe')->insert(['severity' => $severity]);
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Schema::dropIfExists('sql_order_probe');
+        Schema::create('sql_order_probe', function ($table) {
+            $table->id();
+            $table->string('severity');
+        });
+        foreach (['low', 'critical', 'medium', 'unknown', 'high'] as $severity) {
+            DB::table('sql_order_probe')->insert(['severity' => $severity]);
+        }
     }
-});
 
-afterEach(fn () => Schema::dropIfExists('sql_order_probe'));
+    protected function tearDown(): void
+    {
+        Schema::dropIfExists('sql_order_probe');
+        parent::tearDown();
+    }
 
-it('orders rows by an explicit value list on any database driver', function () {
-    $ordered = DB::table('sql_order_probe')
-        ->orderByRaw(SqlOrder::byList('severity', ['critical', 'high', 'medium', 'low']))
-        ->pluck('severity')
-        ->all();
+    public function test_orders_rows_by_an_explicit_value_list_on_mysql()
+    {
+        $ordered = DB::table('sql_order_probe')
+            ->orderByRaw(SqlOrder::byList('severity', ['critical', 'high', 'medium', 'low']))
+            ->pluck('severity')
+            ->all();
 
-    // listed values in list order, unlisted values last
-    expect($ordered)->toBe(['critical', 'high', 'medium', 'low', 'unknown']);
-});
+        // listed values in list order, unlisted values last
+        expect($ordered)->toBe(['critical', 'high', 'medium', 'low', 'unknown']);
+    }
 
-it('escapes quotes in list values', function () {
-    expect(SqlOrder::byList('severity', ["o'brien"]))->toContain("'o''brien'");
-});
+    public function test_escapes_quotes_in_list_values()
+    {
+        $ordered = DB::table('sql_order_probe')
+            ->orderByRaw(SqlOrder::byList('severity', ["o'brien"]))
+            ->pluck('severity')
+            ->all();
 
-it('rejects unsafe column names', function () {
-    SqlOrder::byList('severity; DROP TABLE users', ['a']);
-})->throws(InvalidArgumentException::class);
+        expect($ordered)->toBe(['o\'brien', 'critical', 'high', 'medium', 'low', 'unknown']);
+    }
+
+    public function test_rejects_unsafe_column_names()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        DB::table('sql_order_probe')
+            ->orderByRaw(SqlOrder::byList('severity; DROP TABLE users', ['a']))
+            ->pluck('severity')
+            ->all();
+    }
+}

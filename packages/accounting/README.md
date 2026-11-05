@@ -1,5 +1,7 @@
 # Sledeci Accounting
 
+[![Sponsor](https://img.shields.io/badge/Sponsor-GitHub-ea4aaa?logo=github)](https://github.com/sponsors/kipingor)
+
 Accounting for the Sledeci suite: chart of accounts, journals, invoices, payments, expenses, financial statements, multi-currency and invoice financing.
 
 ## Installation

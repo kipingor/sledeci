@@ -12042,3 +12042,260 @@ Please retry in 19h5m4.414566644s. at /home/antony/MEGA/MEGAsync/sites/sledeci/a
 #86 /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('...')
 #87 {main}
 "} 
+[2026-11-05 09:20:53] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-8be06a115cda08ee.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-8be06a115cda08ee.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-8be06a115cda08ee.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-8be06a115cda08ee.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-8be06a115cda08ee.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-8be06a115cda08ee.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:37:37] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-ca89974ff98d13ec.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-ca89974ff98d13ec.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-ca89974ff98d13ec.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-ca89974ff98d13ec.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-ca89974ff98d13ec.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-ca89974ff98d13ec.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:37:41] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-2726074e824966ae.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-2726074e824966ae.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-2726074e824966ae.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-2726074e824966ae.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-2726074e824966ae.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-2726074e824966ae.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:37:46] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-ae08675e53ca20fa.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-ae08675e53ca20fa.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-ae08675e53ca20fa.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-ae08675e53ca20fa.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-ae08675e53ca20fa.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-ae08675e53ca20fa.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:40:40] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-cabbb7788caceb91.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-cabbb7788caceb91.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-cabbb7788caceb91.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-cabbb7788caceb91.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-cabbb7788caceb91.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-cabbb7788caceb91.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:40:45] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-dfc85eab7082f058.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-dfc85eab7082f058.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-dfc85eab7082f058.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-dfc85eab7082f058.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-dfc85eab7082f058.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-dfc85eab7082f058.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:40:48] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-f9ead3606a9958d3.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-f9ead3606a9958d3.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-f9ead3606a9958d3.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-f9ead3606a9958d3.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-f9ead3606a9958d3.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-f9ead3606a9958d3.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:43:41] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-fffa06ea589f2ee3.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-fffa06ea589f2ee3.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-fffa06ea589f2ee3.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-fffa06ea589f2ee3.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-fffa06ea589f2ee3.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-fffa06ea589f2ee3.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:43:49] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-ef0d9ecf8f025929.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-ef0d9ecf8f025929.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-ef0d9ecf8f025929.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-ef0d9ecf8f025929.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-ef0d9ecf8f025929.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-ef0d9ecf8f025929.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:43:53] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-890bdf7b9ab42378.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-890bdf7b9ab42378.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-890bdf7b9ab42378.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-890bdf7b9ab42378.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-890bdf7b9ab42378.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-890bdf7b9ab42378.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:43:57] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-eb861a63fc7e48c3.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-eb861a63fc7e48c3.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-eb861a63fc7e48c3.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-eb861a63fc7e48c3.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-eb861a63fc7e48c3.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-eb861a63fc7e48c3.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:46:50] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-4ab144aca4f9785e.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-4ab144aca4f9785e.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-4ab144aca4f9785e.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-4ab144aca4f9785e.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-4ab144aca4f9785e.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-4ab144aca4f9785e.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:46:54] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-f80e612ffe537e4f.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-f80e612ffe537e4f.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-f80e612ffe537e4f.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-f80e612ffe537e4f.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-f80e612ffe537e4f.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-f80e612ffe537e4f.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:46:58] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-a62efe34bbb9c441.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-a62efe34bbb9c441.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-a62efe34bbb9c441.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-a62efe34bbb9c441.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-a62efe34bbb9c441.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-a62efe34bbb9c441.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:48:33] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-3ec78d71beae88c0.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-3ec78d71beae88c0.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-3ec78d71beae88c0.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-3ec78d71beae88c0.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-3ec78d71beae88c0.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-3ec78d71beae88c0.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:49:54] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-074a4f8fcc9eb2d6.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-074a4f8fcc9eb2d6.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-074a4f8fcc9eb2d6.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-074a4f8fcc9eb2d6.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-074a4f8fcc9eb2d6.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-074a4f8fcc9eb2d6.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:49:58] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-4b1d5c16c6fbea14.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-4b1d5c16c6fbea14.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-4b1d5c16c6fbea14.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-4b1d5c16c6fbea14.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-4b1d5c16c6fbea14.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-4b1d5c16c6fbea14.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:50:01] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-694a3074e0dbf1ac.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-694a3074e0dbf1ac.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-694a3074e0dbf1ac.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-694a3074e0dbf1ac.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-694a3074e0dbf1ac.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-694a3074e0dbf1ac.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:52:10] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-bfbcf3e1183f1d4d.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-bfbcf3e1183f1d4d.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-bfbcf3e1183f1d4d.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-bfbcf3e1183f1d4d.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-bfbcf3e1183f1d4d.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-bfbcf3e1183f1d4d.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:52:20] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-83005d14dc7d5811.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-83005d14dc7d5811.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-83005d14dc7d5811.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-83005d14dc7d5811.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-83005d14dc7d5811.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-83005d14dc7d5811.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:52:43] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-e4557960f88a77a5.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-e4557960f88a77a5.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-e4557960f88a77a5.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-e4557960f88a77a5.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-e4557960f88a77a5.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-e4557960f88a77a5.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:52:59] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-6518b2b23b3fc3be.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-6518b2b23b3fc3be.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-6518b2b23b3fc3be.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-6518b2b23b3fc3be.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-6518b2b23b3fc3be.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-6518b2b23b3fc3be.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:53:04] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-8e6d2f6a175f804f.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-8e6d2f6a175f804f.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-8e6d2f6a175f804f.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-8e6d2f6a175f804f.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-8e6d2f6a175f804f.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-8e6d2f6a175f804f.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:53:08] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-5b475d0846e01b08.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-5b475d0846e01b08.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-5b475d0846e01b08.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-5b475d0846e01b08.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-5b475d0846e01b08.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-5b475d0846e01b08.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:56:06] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-77fdafea4d4c3fa9.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-77fdafea4d4c3fa9.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-77fdafea4d4c3fa9.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-77fdafea4d4c3fa9.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-77fdafea4d4c3fa9.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-77fdafea4d4c3fa9.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:56:10] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-e7a8b4cd6ff32575.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-e7a8b4cd6ff32575.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-e7a8b4cd6ff32575.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-e7a8b4cd6ff32575.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-e7a8b4cd6ff32575.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-e7a8b4cd6ff32575.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:59:13] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-37efee280bf67f38.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-37efee280bf67f38.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-37efee280bf67f38.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-37efee280bf67f38.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-37efee280bf67f38.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-37efee280bf67f38.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 09:59:18] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-f5602ef56fb77af3.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-f5602ef56fb77af3.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-f5602ef56fb77af3.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-f5602ef56fb77af3.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-f5602ef56fb77af3.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-f5602ef56fb77af3.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 10:02:17] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-2ab334e6b687b06e.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-2ab334e6b687b06e.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-2ab334e6b687b06e.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-2ab334e6b687b06e.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-2ab334e6b687b06e.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-2ab334e6b687b06e.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 10:02:23] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-7e522ea1c1a21c7a.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-7e522ea1c1a21c7a.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-7e522ea1c1a21c7a.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-7e522ea1c1a21c7a.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-7e522ea1c1a21c7a.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-7e522ea1c1a21c7a.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 10:04:58] testing.WARNING: AI provider request timed out {"operation":"test generation","exception":"Illuminate\\Http\\Client\\ConnectionException"} 
+[2026-11-05 10:05:44] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-1083bcdabfa34eca.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-1083bcdabfa34eca.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-1083bcdabfa34eca.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-1083bcdabfa34eca.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-1083bcdabfa34eca.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-1083bcdabfa34eca.php(294): class@anonymous->all()
+#4 {main}
+"} 
+[2026-11-05 10:05:50] local.ERROR: Too few arguments to function PHPUnit\TextUI\XmlConfiguration\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-90b698e686f1cefb.php on line 166 and exactly 1 expected {"exception":"[object] (ArgumentCountError(code: 0): Too few arguments to function PHPUnit\\TextUI\\XmlConfiguration\\Loader::__construct(), 0 passed in /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-90b698e686f1cefb.php on line 166 and exactly 1 expected at /home/antony/MEGA/MEGAsync/sites/sledeci/vendor/phpunit/phpunit/src/TextUI/Configuration/Xml/Loader.php:99)
+[stacktrace]
+#0 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-90b698e686f1cefb.php(166): PHPUnit\\TextUI\\XmlConfiguration\\Loader->__construct()
+#1 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-90b698e686f1cefb.php(128): class@anonymous->loadConfig()
+#2 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-90b698e686f1cefb.php(75): class@anonymous->getTestSuites()
+#3 /home/antony/MEGA/MEGAsync/sites/sledeci/storage/framework/lsp-90b698e686f1cefb.php(294): class@anonymous->all()
+#4 {main}
+"} 

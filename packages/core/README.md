@@ -1,5 +1,7 @@
 # Sledeci Core
 
+[![Sponsor](https://img.shields.io/badge/Sponsor-GitHub-ea4aaa?logo=github)](https://github.com/sponsors/kipingor)
+
 Foundation for the Sledeci module suite: module registry, shared contracts, and role-based policy helpers.
 
 ## Installation

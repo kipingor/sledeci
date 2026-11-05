@@ -1,5 +1,7 @@
 # @sledeci/ui
 
+[![Sponsor](https://img.shields.io/badge/Sponsor-GitHub-ea4aaa?logo=github)](https://github.com/sponsors/kipingor)
+
 Shared React UI primitives for the Sledeci suite (shadcn-style components + domain helpers).
 
 ## Install
